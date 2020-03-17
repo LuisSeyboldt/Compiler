@@ -22,5 +22,18 @@
 %%
 
 int						{ return INT; }
-[a-zA-Z][a-zA-Z0-9]* 	{ yylval.id = strdup(yytext); return ID; }
 ; 						{ return SEMICOLON; }
+[do]					{ return DO; }
+while					{ return WHILE; }
+if						{ return IF; }
+else 					{ return ELSE; }
+void 					{ return VOID; }
+return 					{ return RETURN; }
+,						{ return COMMA; }
+\(						{ return PARA_OPEN; }
+\)						{ return PARA_CLOSE; }
+\{						{ return BRACE_OPEN; }
+\}						{ return BRACE_CLOSE; }
+\[						{ return BRACKET_OPEN; }
+\]						{ return BRACKET_CLOSE; }
+[a-zA-Z][a-zA-Z0-9]* 	{ yylval.id = strdup(yytext); return ID; }
