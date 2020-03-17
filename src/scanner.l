@@ -24,3 +24,22 @@
 int						{ return INT; }
 [a-zA-Z][a-zA-Z0-9]* 	{ yylval.id = strdup(yytext); return ID; }
 ; 						{ return SEMICOLON; }
+=                       { return ASSIGN; }
+[||]                    { return LOGICAL_OR; }
+[&&]                    { return LOGICAL_AND; }
+[==]                    { return EQ; }
+[!=]                    { return NE; }
+\<                      { return LS; }
+[<=]                    { return LSEQ; }
+[>=]                    { return GTEQ; }
+\>                      { return GT; }
+[<<]                    { return SHIFT_LEFT; }
+[>>]                    { return SHIFT_RIGHT; }
+\+                      { return PLUS; }
+\-                      { return MINUS; }
+\*                      { return MUL; }
+\/                      { return DIV; }
+%                       { return MOD; }
+!                       { return LOGICAL_NOT; }
+\+                      { return UNARY_PLUS; }
+\-                      { return UNARY_MINUS; }
