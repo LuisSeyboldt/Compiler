@@ -146,7 +146,7 @@ stmt_loop
      ;
 									
 expression
-     : expression ASSIGN expression
+     : /*expression ASSIGN expression
      | expression LOGICAL_OR expression
      | expression LOGICAL_AND expression
      | LOGICAL_NOT expression
@@ -165,8 +165,8 @@ expression
      | MINUS expression %prec UNARY_MINUS
      | PLUS expression %prec UNARY_PLUS
      | ID BRACKET_OPEN primary BRACKET_CLOSE
-     | PARA_OPEN expression PARA_CLOSE
-     | function_call
+     | PARA_OPEN expression PARA_CLOSE 
+     | */function_call
      | primary
      ;
 
