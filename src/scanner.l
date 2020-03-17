@@ -21,9 +21,8 @@
 
 %%
 
-int						{ return INT; }
-[a-zA-Z][a-zA-Z0-9]* 	{ yylval.id = strdup(yytext); return ID; }
-; 						{ return SEMICOLON; }
+int						          { return INT; }
+; 						          { return SEMICOLON; }
 =                       { return ASSIGN; }
 [||]                    { return LOGICAL_OR; }
 [&&]                    { return LOGICAL_AND; }
@@ -44,3 +43,17 @@ int						{ return INT; }
 \+                      { return UNARY_PLUS; }
 \-                      { return UNARY_MINUS; }
 [0-9]+                  { return NUM; }
+[do]					          { return DO; }
+while					          { return WHILE; }
+if						          { return IF; }
+else 					          { return ELSE; }
+void 					          { return VOID; }
+return 					        { return RETURN; }
+,						            { return COMMA; }
+\(						          { return PARA_OPEN; }
+\)						          { return PARA_CLOSE; }
+\{						          { return BRACE_OPEN; }
+\}						          { return BRACE_CLOSE; }
+\[						          { return BRACKET_OPEN; }
+\]						          { return BRACKET_CLOSE; }
+[a-zA-Z][a-zA-Z0-9]* 	  { yylval.id = strdup(yytext); return ID; }
