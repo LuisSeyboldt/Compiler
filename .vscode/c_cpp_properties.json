@@ -1,0 +1,23 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "intelliSenseMode": "clang-x64",
+            "includePath": [],
+            "defines": [],
+            "forcedInclude": [],
+            "compileCommands": "${workspaceRoot}/bin/compile_commands.json",
+            "browse": {
+                "path": [
+                    "${workspaceRoot}",
+                    "/usr/include"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            },
+            "cStandard": "c11",
+            "cppStandard": "c++17"
+        }
+    ],
+    "version": 4
+}

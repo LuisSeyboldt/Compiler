@@ -1,0 +1,16 @@
+image: gcc:latest
+
+before_script:
+   - apt-get update
+   - apt-get install --yes build-essential cmake ninja-build flex bison uthash-dev
+
+stages:
+    - build
+
+compile:
+    stage: build
+    script:
+        - ./build.sh
+    artifacts:
+        paths:
+            - bin/dhbwcc
