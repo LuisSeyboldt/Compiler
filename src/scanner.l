@@ -43,3 +43,4 @@ int						{ return INT; }
 !                       { return LOGICAL_NOT; }
 \+                      { return UNARY_PLUS; }
 \-                      { return UNARY_MINUS; }
+[0-9]+                  { return NUM; }
