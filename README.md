@@ -8,6 +8,9 @@ Compilerbau Labor repo
 
 
 --- Symboltabelle ---
+
 Datenstruktur implementieren: soll ID, Typ, Anzahl Parameter enthalten
+
 Soll in Datei oder in stdout ausgegeben werden können
+
 Funktionsaufrufe in der parser.y die die Variablen zur Struktur hinzufügen
