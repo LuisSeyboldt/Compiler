@@ -4,7 +4,7 @@
 // enum for different symbol types
 typedef enum symbol_type_enum 
 {
-    INT, ARRAY, FUNC
+    NUM, ARRAY, FUNC
 } symbol_type;
 
 // enum for different function return types
@@ -22,7 +22,7 @@ typedef struct symbol_table_struct
     // general variables for all symbols:
     char* id; // name of the element
     symbol_type type; // type of the symbol
-    symbol_table_struct *next; // next element in the symbol table 
+    struct symbol_table_struct *next; // next element in the symbol table 
 
     // variables for functions:
     func_return_type return_type; // return type of the function 
@@ -31,6 +31,8 @@ typedef struct symbol_table_struct
     // variables for arrays:
     unsigned int length; // array length
 
-} symbol_table;
+} symbol_table_element;
+
+extern symbol_table_element *get_last_table_element(symbol_table_element *first_element);
 
 #endif
