@@ -33,6 +33,9 @@ typedef struct symbol_table_struct
 
 } symbol_table_element;
 
-extern symbol_table_element *get_last_table_element(symbol_table_element *first_element);
+// Global first elemnt of the symbol table
+symbol_table_element first_element;
+
+extern symbol_table_element *get_last_table_element();
 
 #endif
