@@ -10,7 +10,7 @@ typedef enum symbol_type_enum
 // enum for different function return types
 typedef enum func_return_type_enum
 {
-    INT, VOID
+    NONE, INT, VOID
 } func_return_type;
 
 // id, typ (int, array, func), 
