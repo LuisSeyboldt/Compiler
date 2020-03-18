@@ -2,16 +2,16 @@
 #define SYMBOL_TABLE_H
 
 // enum for different symbol types
-enum symbol_type 
+typedef enum symbol_type_enum 
 {
     INT, ARRAY, FUNC
-};
+} symbol_type;
 
 // enum for different function return types
-enum func_return_type
+typedef enum func_return_type_enum
 {
     INT, VOID
-};
+} func_return_type;
 
 // id, typ (int, array, func), 
 // func: return type, num param
@@ -31,8 +31,6 @@ typedef struct symbol_table_struct
     // variables for arrays:
     unsigned int length; // array length
 
-} symbol_table_type;
-
-extern symbol_table_type symbol_table;
+} symbol_table;
 
 #endif
