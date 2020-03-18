@@ -23,24 +23,24 @@
 
 int						{ return INT; }
 ; 						{ return SEMICOLON; }
-=                       { return ASSIGN; }
+(==)                    { return EQ; }
+(=)                     { return ASSIGN; }
 [||]                    { return LOGICAL_OR; }
-[&&]                    { return LOGICAL_AND; }
-[==]                    { return EQ; }
-[!=]                    { return NE; }
-\<                      { return LS; }
-[<=]                    { return LSEQ; }
-[>=]                    { return GTEQ; }
-\>                      { return GT; }
-[<<]                    { return SHIFT_LEFT; }
-[>>]                    { return SHIFT_RIGHT; }
+(&&)                    { return LOGICAL_AND; }
+(!=)                    { return NE; }
+(<=)                    { return LSEQ; }
+"="                     { return GTEQ; }
+(<<)                    { return SHIFT_LEFT; }
+(>>)                    { return SHIFT_RIGHT; }
+(\<)                    { return LS; }
+(\>)                    { return GT; }
 \+                      { return PLUS; }
 \-                      { return MINUS; }
 \*                      { return MUL; }
 \/                      { return DIV; }
 %                       { return MOD; }
-!                       { return LOGICAL_NOT; }
-\+                      { return UNARY_PLUS; }
+(!)                     { return LOGICAL_NOT; }
+"+"                     { return UNARY_PLUS; }
 \-                      { return UNARY_MINUS; }
 [0-9]+                  { yylval.i = atoi(yytext); return NUM; }
 [do]					{ return DO; }

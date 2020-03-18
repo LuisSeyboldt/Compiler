@@ -10,9 +10,12 @@
 	#include "diag.h"
 %}
 
+%code requires {#include "symbol_table.h"}
+
 %union {
   int i;
   char *id;
+  func_return_type rtype;
 }
  
 // Verbose messages on parser error
@@ -74,6 +77,10 @@
 %right UNARY_MINUS UNARY_PLUS LOGICAL_NOT
 %left PARA_OPEN PARA_CLOSE BRACKET_OPEN BRACKET_CLOSE 
 
+%type<rtype> type INT VOID
+%type<id>    identifier_declaration ID
+%type<i>     NUM function_parameter_list
+
 %%
 
 program
@@ -93,33 +100,33 @@ program_element
      ;
 									
 type
-     : INT
-     | VOID
+     : INT     { $$ = FUNC_RETURN_TYPE_INT; }
+     | VOID    { $$ = FUNC_RETURN_TYPE_VOID; }
      ;
 
 variable_declaration
-     : variable_declaration COMMA identifier_declaration
-     | type identifier_declaration
+     : variable_declaration COMMA identifier_declaration  { add_var($3); }
+     | type identifier_declaration                        { add_var($2); }
      ;
 
 identifier_declaration
-     : ID BRACKET_OPEN NUM BRACKET_CLOSE
-     | ID
+     : ID BRACKET_OPEN NUM BRACKET_CLOSE { add_arr($1, $3); }
+     | ID                                { $$ = $1; }
      ;
 
 function_definition
-     : type ID PARA_OPEN PARA_CLOSE BRACE_OPEN stmt_list BRACE_CLOSE
-     | type ID PARA_OPEN function_parameter_list PARA_CLOSE BRACE_OPEN stmt_list BRACE_CLOSE
+     : type ID PARA_OPEN PARA_CLOSE BRACE_OPEN stmt_list BRACE_CLOSE                           { add_fun($2, $1, 0); }
+     | type ID PARA_OPEN function_parameter_list PARA_CLOSE BRACE_OPEN stmt_list BRACE_CLOSE   { add_fun($2, $1, $4); }
      ;
 
 function_declaration
-     : type ID PARA_OPEN PARA_CLOSE
+     : type ID PARA_OPEN PARA_CLOSE                             
      | type ID PARA_OPEN function_parameter_list PARA_CLOSE
      ;
 
 function_parameter_list
-     : function_parameter
-     | function_parameter_list COMMA function_parameter
+     : function_parameter                                   { $$ = 1; }
+     | function_parameter_list COMMA function_parameter     { $$ = $1 + 1; }
      ;
 	
 function_parameter
