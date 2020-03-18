@@ -56,12 +56,23 @@
 %token ASSIGN 
 %token LOGICAL_OR
 %token LOGICAL_AND
-%token EQ NE     
+%token EQ NE
 %token LS LSEQ GTEQ GT 
 %token SHIFT_LEFT SHIFT_RIGHT
 %token PLUS MINUS     
 %token MUL DIV MOD
 %token LOGICAL_NOT UNARY_MINUS UNARY_PLUS
+
+%precedence ASSIGN
+%precedence LOGICAL_OR
+%precedence LOGICAL_AND
+%precedence EQ NE
+%precedence LS LSEQ GTEQ GT
+%precedence SHIFT_LEFT SHIFT_RIGHT
+%precedence PLUS MINUS
+%precedence MUL DIV MOD
+%precedence UNARY_MINUS UNARY_PLUS LOGICAL_NOT
+%precedence PARA_OPEN PARA_CLOSE BRACKET_OPEN BRACKET_CLOSE
 
 %%
 
@@ -146,7 +157,7 @@ stmt_loop
      ;
 									
 expression
-     : /*expression ASSIGN expression
+     : expression ASSIGN expression
      | expression LOGICAL_OR expression
      | expression LOGICAL_AND expression
      | LOGICAL_NOT expression
@@ -166,7 +177,7 @@ expression
      | PLUS expression %prec UNARY_PLUS
      | ID BRACKET_OPEN primary BRACKET_CLOSE
      | PARA_OPEN expression PARA_CLOSE 
-     | */function_call
+     | function_call
      | primary
      ;
 
