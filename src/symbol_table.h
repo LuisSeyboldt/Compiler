@@ -4,13 +4,13 @@
 // enum for different symbol types
 typedef enum symbol_type_enum 
 {
-    NUM, ARRAY, FUNC
+    SYMBOL_TYPE_NUM, SYMBOL_TYPE_ARRAY, SYMBOL_TYPE_FUNC
 } symbol_type;
 
 // enum for different function return types
 typedef enum func_return_type_enum
 {
-    NONE, INT, VOID
+    FUNC_RETURN_TYPE_NONE, FUNC_RETURN_TYPE_INT, FUNC_RETURN_TYPE_VOID
 } func_return_type;
 
 // id, typ (int, array, func), 
