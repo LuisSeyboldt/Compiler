@@ -42,7 +42,7 @@ int						{ return INT; }
 !                       { return LOGICAL_NOT; }
 \+                      { return UNARY_PLUS; }
 \-                      { return UNARY_MINUS; }
-[0-9]+                  { return NUM; }
+[0-9]+                  { yylval.i = atoi(yytext); return NUM; }
 [do]					{ return DO; }
 while					{ return WHILE; }
 if						{ return IF; }
