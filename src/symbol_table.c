@@ -71,12 +71,42 @@ void print_symbol_table ()
     
     FILE *fp;
     fp = fopen("symbol_table.txt", "w");
+    fprintf (fp, "Symbol table:\n");
 
     do 
     {
         
-        fprintf(fp, "Type: %d, ID: %s", (int)currentElement->type, currentElement->id);
-        
+        switch (currentElement->type)
+        {
+            case SYMBOL_TYPE_VAR:
+            fprintf(fp, "Type: Variable, ID: %s\n", (int)currentElement->type, currentElement->id);
+            break;
+
+            case SYMBOL_TYPE_FUNC:
+            fprintf(fp, "Type: Function, ID: %s, ", (int)currentElement->type, currentElement->id);
+            
+            if (currentElement->return_type == FUNC_RETURN_TYPE_INT)
+                fprintf(fp, "Return type: int, ");
+
+            if (currentElement->return_type == FUNC_RETURN_TYPE_VOID)
+                fprintf(fp, "Return type: void, ");
+
+            if (currentElement->return_type == FUNC_RETURN_TYPE_NONE)
+                fprintf(fp, "Return type: ERROR, ");
+
+            fprintf(fp, "Parameter count: %d\n", currentElement->param_count);
+            break;
+
+            case SYMBOL_TYPE_ARRAY:
+            fprintf(fp, "Type: Array, ID: %s, Array length: %d\n", (int)currentElement->type, currentElement->id, currentElement->length);
+            break;
+
+            default:
+                fprintf (fp, "Error! Unrecognized type!\n");
+            break;
+
+        };
+
         currentElement = currentElement->next;
 
     }
