@@ -63,6 +63,9 @@
 %token MUL DIV MOD
 %token LOGICAL_NOT UNARY_MINUS UNARY_PLUS
 
+%left BRACKET_OPEN BRACKET_CLOSE PARA_OPEN PARA_CLOSE PLUS MINUS MUL DIV MOD SHIFT_LEFT SHIFT_RIGHT LS LSEQ GT GTEQ EQ NE LOGICAL_AND LOGICAL_OR
+%right LOGICAL_NOT UNARY_MINUS UNARY_PLUS ASSIGN 
+
 %%
 
 program
@@ -146,7 +149,7 @@ stmt_loop
      ;
 									
 expression
-     : /*expression ASSIGN expression
+     : expression ASSIGN expression
      | expression LOGICAL_OR expression
      | expression LOGICAL_AND expression
      | LOGICAL_NOT expression
@@ -166,7 +169,7 @@ expression
      | PLUS expression %prec UNARY_PLUS
      | ID BRACKET_OPEN primary BRACKET_CLOSE
      | PARA_OPEN expression PARA_CLOSE 
-     | */function_call
+     | function_call
      | primary
      ;
 
