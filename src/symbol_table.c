@@ -13,6 +13,8 @@ void add_var (char* id)
     
     symbol_table_element *last = get_last_table_element();
     last->next = new_symbol;
+
+    print_symbol_table();
 }
 
 void add_fun (char* id, func_return_type rtype, unsigned int param_count)
@@ -70,8 +72,9 @@ void print_symbol_table ()
     symbol_table_element *currentElement = &first_element;
     
     FILE *fp;
-    fp = fopen("symbol_table.txt", "w");
-    fprintf (fp, "Symbol table:\n");
+    fp = fopen("symbol_table.txt", "w+");
+
+    fprintf(fp, "Start symbol table:");
 
     do 
     {
