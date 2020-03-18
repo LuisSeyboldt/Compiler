@@ -4,7 +4,7 @@ void add_var (char* id)
 {
     symbol_table_element *new_symbol;
     new_symbol = malloc(sizeof(symbol_table_element));
-    new_symbol->type = SYMBOL_TYPE_NUM;
+    new_symbol->type = SYMBOL_TYPE_VAR;
     new_symbol->id = strdup(id);
     new_symbol->next = 0;
     new_symbol->length = 0;

@@ -4,7 +4,7 @@
 // enum for different symbol types
 typedef enum symbol_type_enum 
 {
-    SYMBOL_TYPE_NUM, SYMBOL_TYPE_ARRAY, SYMBOL_TYPE_FUNC
+    SYMBOL_TYPE_VAR, SYMBOL_TYPE_ARRAY, SYMBOL_TYPE_FUNC
 } symbol_type;
 
 // enum for different function return types
