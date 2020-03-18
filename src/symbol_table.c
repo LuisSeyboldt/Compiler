@@ -63,3 +63,26 @@ symbol_table_element *get_last_table_element()
     return 0;
 
 }
+
+void print_symbol_table ()
+{
+
+    symbol_table_element *currentElement = &first_element;
+    
+    FILE *fp;
+    fp = fopen("symbol_table.txt", "w");
+
+    do 
+    {
+        
+        fprintf(fp, "Type: %d, ID: %s", (int)currentElement->type, currentElement->id);
+        
+        currentElement = currentElement->next;
+
+    }
+    while (currentElement->next != 0);
+
+    fclose(fp);
+    return;
+
+}

@@ -6,6 +6,7 @@
 #include <unistd.h>
 
 #include "main.h"
+#include "symbol_table.h"
 
 /* Constants */
 static const char *C_EXT = ".c";
@@ -264,6 +265,8 @@ int main (int argc, char *argv[]) {
   printf("Input: %s\n", cc_options.input_file);
   printf("Output: %s\n", cc_options.output_file);
   printf("IR: %s\n", cc_options.ir_file);
+
+  print_symbol_table();
 
   //yyparse();
 
