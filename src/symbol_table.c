@@ -14,7 +14,6 @@ void add_var (char* id)
     symbol_table_element *last = get_last_table_element();
     last->next = new_symbol;
 
-    print_symbol_table();
 }
 
 void add_fun (char* id, func_return_type rtype, unsigned int param_count)
@@ -56,8 +55,8 @@ symbol_table_element *get_last_table_element()
     {
         if (currentElement->next == 0)
             return currentElement;
-        
-        currentElement = currentElement->next;
+        else
+            currentElement = currentElement->next;
 
     }
     while (currentElement->next != 0);
@@ -74,7 +73,7 @@ void print_symbol_table ()
     FILE *fp;
     fp = fopen("symbol_table.txt", "w+");
 
-    fprintf(fp, "Start symbol table:");
+    fprintf(fp, "Start symbol table:\n");
 
     do 
     {
@@ -82,11 +81,11 @@ void print_symbol_table ()
         switch (currentElement->type)
         {
             case SYMBOL_TYPE_VAR:
-            fprintf(fp, "Type: Variable, ID: %s\n", (int)currentElement->type, currentElement->id);
+            fprintf(fp, "Type: Variable, ID: %s\n", currentElement->id);
             break;
 
             case SYMBOL_TYPE_FUNC:
-            fprintf(fp, "Type: Function, ID: %s, ", (int)currentElement->type, currentElement->id);
+            fprintf(fp, "Type: Function, ID: %s, ", currentElement->id);
             
             if (currentElement->return_type == FUNC_RETURN_TYPE_INT)
                 fprintf(fp, "Return type: int, ");
@@ -101,7 +100,7 @@ void print_symbol_table ()
             break;
 
             case SYMBOL_TYPE_ARRAY:
-            fprintf(fp, "Type: Array, ID: %s, Array length: %d\n", (int)currentElement->type, currentElement->id, currentElement->length);
+            fprintf(fp, "Type: Array, ID: %s, Array length: %d\n", currentElement->id, currentElement->length);
             break;
 
             default:
@@ -110,7 +109,8 @@ void print_symbol_table ()
 
         };
 
-        currentElement = currentElement->next;
+        if (currentElement->next != 0)
+            currentElement = currentElement->next;
 
     }
     while (currentElement->next != 0);
