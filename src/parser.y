@@ -84,7 +84,7 @@
 %%
 
 program
-     : program_element_list
+     : program_element_list { print_symbol_table(); }
      ;
 
 program_element_list
