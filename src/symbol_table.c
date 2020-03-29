@@ -65,6 +65,31 @@ symbol_table_element *get_last_table_element()
 
 }
 
+bool element_in_table(symbol_table_element *element)
+{
+
+    symbol_table_element *currentElement = &first_element;
+
+    do
+    {
+        
+        if (currentElement->id == element->id && 
+        currentElement->type == element->type && 
+        currentElement->param_count == element->param_count && 
+        currentElement->return_type == element->return_type)
+            return true;
+
+        if (currentElement->next == 0)
+            return false;
+        else
+            currentElement = currentElement->next; 
+
+    } while (currentElement->next != 0);
+    
+    return false;
+
+}
+
 void print_symbol_table ()
 {
 
