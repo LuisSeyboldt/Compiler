@@ -114,7 +114,7 @@ void print_symbol_table ()
 
     fprintf(fp, "Start symbol table:\n");
 
-    do 
+    while (true)
     {
         
         switch (currentElement->type)
@@ -148,17 +148,16 @@ void print_symbol_table ()
 
         };
 
-        if (currentElement->next != 0)
-            currentElement = currentElement->next;
-
         if (currentElement->next == 0)
         {
             fclose(fp);
             return;
         }
 
+        if (currentElement->next != 0)
+            currentElement = currentElement->next;
+
     }
-    while (currentElement->next != 0);
 
     fclose(fp);
     return;
