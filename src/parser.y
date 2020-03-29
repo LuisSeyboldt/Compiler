@@ -17,7 +17,6 @@
   char *id;
   func_return_type rtype;
 }
- 
 // Verbose messages on parser error
 %define parse.error verbose
 
@@ -84,12 +83,12 @@
 %%
 
 program
-     : program_element_list { print_symbol_table(); }
+     : program_element_list 
      ;
 
 program_element_list
      : program_element_list program_element 
-     | program_element 
+     | program_element
      ;
 
 program_element
@@ -120,8 +119,8 @@ function_definition
      ;
 
 function_declaration
-     : type ID PARA_OPEN PARA_CLOSE                             
-     | type ID PARA_OPEN function_parameter_list PARA_CLOSE
+     : type ID PARA_OPEN PARA_CLOSE                                                            { add_fun($2, $1, 0); }
+     | type ID PARA_OPEN function_parameter_list PARA_CLOSE                                    { add_fun($2, $1, $4); }
      ;
 
 function_parameter_list

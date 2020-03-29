@@ -18,6 +18,7 @@ void add_var (char* id)
     symbol_table_element *last = get_last_table_element();
     last->next = new_symbol;
 
+    print_symbol_table();
 }
 
 void add_fun (char* id, func_return_type rtype, unsigned int param_count)
@@ -34,6 +35,8 @@ void add_fun (char* id, func_return_type rtype, unsigned int param_count)
 
     symbol_table_element *last = get_last_table_element();
     last->next = new_symbol;
+
+    print_symbol_table();
 }
 
 void add_arr (char* id, unsigned int length)
@@ -50,6 +53,8 @@ void add_arr (char* id, unsigned int length)
 
     symbol_table_element *last = get_last_table_element();
     last->next = new_symbol;
+
+    print_symbol_table();
 }
 
 symbol_table_element *get_last_table_element()
