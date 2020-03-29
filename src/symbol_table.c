@@ -151,6 +151,12 @@ void print_symbol_table ()
         if (currentElement->next != 0)
             currentElement = currentElement->next;
 
+        if (currentElement->next == 0)
+        {
+            fclose(fp);
+            return;
+        }
+
     }
     while (currentElement->next != 0);
 
