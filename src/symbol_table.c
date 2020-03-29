@@ -1,11 +1,14 @@
 #include "symbol_table.h"
+#include <stdlib.h>
+#include <string.h>
+
 
 void add_var (char* id)
 {
     symbol_table_element *new_symbol;
     new_symbol = malloc(sizeof(symbol_table_element));
     new_symbol->type = SYMBOL_TYPE_VAR;
-    new_symbol->id = strdup(id);
+    strcpy(new_symbol->id, id);
     new_symbol->next = 0;
     new_symbol->length = 0;
     new_symbol->param_count = 0;
@@ -21,7 +24,7 @@ void add_fun (char* id, func_return_type rtype, unsigned int param_count)
     symbol_table_element *new_symbol;
     new_symbol = malloc(sizeof(symbol_table_element));
     new_symbol->type = SYMBOL_TYPE_FUNC;
-    new_symbol->id = strdup(id);
+    strcpy(new_symbol->id, id);
     new_symbol->next = 0;
     new_symbol->length = 0;
     new_symbol->param_count = param_count;
@@ -36,7 +39,7 @@ void add_arr (char* id, unsigned int length)
     symbol_table_element *new_symbol;
     new_symbol = malloc(sizeof(symbol_table_element));
     new_symbol->type = SYMBOL_TYPE_ARRAY;
-    new_symbol->id = strdup(id);
+    strcpy(new_symbol->id, id);
     new_symbol->next = 0;
     new_symbol->length =length;
     new_symbol->param_count = 0;

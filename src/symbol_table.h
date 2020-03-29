@@ -2,6 +2,7 @@
 #define SYMBOL_TABLE_H
 
 #include <stdio.h>
+#include <string.h>
 
 // enum for different symbol types
 typedef enum symbol_type_enum 
