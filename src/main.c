@@ -266,6 +266,7 @@ int main (int argc, char *argv[]) {
   printf("Output: %s\n", cc_options.output_file);
   printf("IR: %s\n", cc_options.ir_file);
 
+  yyparse();
 
   rm_cleanup_resources(&resource_mgr);
   return 0;

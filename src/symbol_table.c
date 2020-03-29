@@ -8,6 +8,7 @@ void add_var (char* id)
     symbol_table_element *new_symbol;
     new_symbol = malloc(sizeof(symbol_table_element));
     new_symbol->type = SYMBOL_TYPE_VAR;
+    new_symbol->id = malloc(sizeof(id));
     strcpy(new_symbol->id, id);
     new_symbol->next = 0;
     new_symbol->length = 0;
@@ -24,6 +25,7 @@ void add_fun (char* id, func_return_type rtype, unsigned int param_count)
     symbol_table_element *new_symbol;
     new_symbol = malloc(sizeof(symbol_table_element));
     new_symbol->type = SYMBOL_TYPE_FUNC;
+    new_symbol->id = malloc(sizeof(id));
     strcpy(new_symbol->id, id);
     new_symbol->next = 0;
     new_symbol->length = 0;
@@ -39,6 +41,7 @@ void add_arr (char* id, unsigned int length)
     symbol_table_element *new_symbol;
     new_symbol = malloc(sizeof(symbol_table_element));
     new_symbol->type = SYMBOL_TYPE_ARRAY;
+    new_symbol->id = malloc(sizeof(id));
     strcpy(new_symbol->id, id);
     new_symbol->next = 0;
     new_symbol->length =length;
@@ -56,10 +59,12 @@ symbol_table_element *get_last_table_element()
     
     do 
     {
+
+        if (currentElement->next != 0)
+            currentElement = currentElement->next;
+
         if (currentElement->next == 0)
             return currentElement;
-        else
-            currentElement = currentElement->next;
 
     }
     while (currentElement->next != 0);
@@ -82,10 +87,11 @@ bool element_in_table(symbol_table_element *element)
         currentElement->return_type == element->return_type)
             return true;
 
+        if (currentElement->next != 0)
+            currentElement = currentElement->next; 
+
         if (currentElement->next == 0)
             return false;
-        else
-            currentElement = currentElement->next; 
 
     } while (currentElement->next != 0);
     
