@@ -43,7 +43,7 @@ void add_fun (char* id, func_return_type rtype, unsigned int param_count)
     // if the element is already in the namsepace: do not add to symbol table 
     if (element_in_namespace(new_symbol))
     {
-        yyerror("Duplicate definition of function!\n");
+        printf("Duplicate definition of function!\n");
         return;
     }
 
@@ -68,7 +68,7 @@ void add_arr (char* id, unsigned int length)
     // if the element is already in the namsepace: do not add to symbol table 
     if (element_in_namespace(new_symbol))
     {
-        yyerror("Duplicate definition of variable!\n");
+        printf("Duplicate definition of variable!\n");
         return;
     }
 
