@@ -166,3 +166,32 @@ void print_symbol_table ()
     return;
 
 }
+
+
+// funktion to free allocated memory of the symbol table
+void cleanMem()
+{
+    symbol_table_element* current_element = &first_element;
+
+    while(true)
+    {
+        if(current_element->next != NULL)
+        {
+            symbol_table_element* tmp = current_element->next;
+
+            // check for first element
+            if (current_element->id != NULL)
+            {
+                free(current_element);
+            }
+            current_element = tmp;
+        }
+        else
+        {
+            free(current_element);
+            return;
+        }
+    }
+
+    return;
+}
