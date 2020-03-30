@@ -18,7 +18,7 @@ void add_var (char* id)
     // if the element is already in the namsepace: do not add to symbol table 
     if (element_in_namespace(new_symbol))
     {
-        yyerror("Duplicate definition of variable!\n");
+        printf("Duplicate definition of variable!\n");
         return;
     }
 
