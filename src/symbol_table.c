@@ -117,36 +117,39 @@ void print_symbol_table ()
     while (true)
     {
         
-        switch (currentElement->type)
+        if (currentElement->id != 0)
         {
-            case SYMBOL_TYPE_VAR:
-            fprintf(fp, "Type: Variable, ID: %s\n", currentElement->id);
-            break;
+            switch (currentElement->type)
+            {
+                case SYMBOL_TYPE_VAR:
+                fprintf(fp, "Type: Variable, ID: %s\n", currentElement->id);
+                break;
 
-            case SYMBOL_TYPE_FUNC:
-            fprintf(fp, "Type: Function, ID: %s, ", currentElement->id);
+                case SYMBOL_TYPE_FUNC:
+                fprintf(fp, "Type: Function, ID: %s, ", currentElement->id);
             
-            if (currentElement->return_type == FUNC_RETURN_TYPE_INT)
-                fprintf(fp, "Return type: int, ");
+                if (currentElement->return_type == FUNC_RETURN_TYPE_INT)
+                    fprintf(fp, "Return type: int, ");
 
-            if (currentElement->return_type == FUNC_RETURN_TYPE_VOID)
-                fprintf(fp, "Return type: void, ");
+                if (currentElement->return_type == FUNC_RETURN_TYPE_VOID)
+                    fprintf(fp, "Return type: void, ");
 
-            if (currentElement->return_type == FUNC_RETURN_TYPE_NONE)
-                fprintf(fp, "Return type: ERROR, ");
+                if (currentElement->return_type == FUNC_RETURN_TYPE_NONE)
+                    fprintf(fp, "Return type: ERROR, ");
 
-            fprintf(fp, "Parameter count: %d\n", currentElement->param_count);
-            break;
+                fprintf(fp, "Parameter count: %d\n", currentElement->param_count);
+                break;
 
-            case SYMBOL_TYPE_ARRAY:
-            fprintf(fp, "Type: Array, ID: %s, Array length: %d\n", currentElement->id, currentElement->length);
-            break;
+                case SYMBOL_TYPE_ARRAY:
+                fprintf(fp, "Type: Array, ID: %s, Array length: %d\n", currentElement->id, currentElement->length);
+                break;
 
-            default:
-                fprintf (fp, "Error! Unrecognized type!\n");
-            break;
+                default:
+                    fprintf (fp, "Error! Unrecognized type!\n");
+                break;
 
-        };
+            };
+        }
 
         if (currentElement->next == 0)
         {
