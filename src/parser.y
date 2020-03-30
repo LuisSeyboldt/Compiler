@@ -104,13 +104,12 @@ type
      ;
 
 variable_declaration
-     : variable_declaration COMMA identifier_declaration  { add_var($3); }
-     | type identifier_declaration                        { add_var($2); }
-     ;
+     : variable_declaration COMMA identifier_declaration
+     | type identifier_declaration                       
 
 identifier_declaration
      : ID BRACKET_OPEN NUM BRACKET_CLOSE { add_arr($1, $3); }
-     | ID                                { $$ = $1; }
+     | ID                                { add_var($1); }
      ;
 
 function_definition
