@@ -20,7 +20,7 @@ void add_var (char* id)
     {
         fprintf(stderr, "Duplicate definition of variable!\n");
         free(new_symbol);
-        return;
+        exit(1);
     }
 
     symbol_table_element *last = get_last_table_element();
@@ -46,7 +46,7 @@ void add_fun (char* id, func_return_type rtype, unsigned int param_count)
     {
         fprintf(stderr, "Duplicate definition of function!\n");
         free(new_symbol);
-        return;
+        exit(1);
     }
 
     symbol_table_element *last = get_last_table_element();
@@ -72,7 +72,7 @@ void add_arr (char* id, unsigned int length)
     {
         fprintf(stderr, "Duplicate definition of variable!\n");
         free(new_symbol);
-        return;
+        exit(1);
     }
 
     symbol_table_element *last = get_last_table_element();
