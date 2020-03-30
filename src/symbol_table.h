@@ -46,5 +46,7 @@ extern void add_var (char* id);
 extern void add_fun (char* id, func_return_type rtype, unsigned int param_count);
 extern void add_arr (char* id, unsigned int length);
 extern void print_symbol_table ();
+extern void cleanMem();
+
 
 #endif
