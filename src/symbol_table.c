@@ -19,6 +19,7 @@ void add_var (char* id)
     if (element_in_namespace(new_symbol))
     {
         printf("Duplicate definition of variable!\n");
+        free(new_symbol);
         return;
     }
 
@@ -44,6 +45,7 @@ void add_fun (char* id, func_return_type rtype, unsigned int param_count)
     if (element_in_namespace(new_symbol))
     {
         printf("Duplicate definition of function!\n");
+        free(new_symbol);
         return;
     }
 
@@ -69,6 +71,7 @@ void add_arr (char* id, unsigned int length)
     if (element_in_namespace(new_symbol))
     {
         printf("Duplicate definition of variable!\n");
+        free(new_symbol);
         return;
     }
 
@@ -104,7 +107,7 @@ bool element_in_namespace(symbol_table_element *element)
 
     symbol_table_element *currentElement = &first_element;
 
-    do
+    while (true)
     {
         
         if (currentElement->id == element->id && 
@@ -119,14 +122,13 @@ bool element_in_namespace(symbol_table_element *element)
 
         }
 
+        if (currentElement->next == 0)
+            return false;
 
         if (currentElement->next != 0)
             currentElement = currentElement->next; 
 
-        if (currentElement->next == 0)
-            return false;
-
-    } while (currentElement->next != 0);
+    }
     
     return false;
 
