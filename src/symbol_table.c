@@ -18,7 +18,7 @@ void add_var (char* id)
     // if the element is already in the namsepace: do not add to symbol table 
     if (element_in_namespace(new_symbol))
     {
-        printf("Duplicate definition of variable!\n");
+        fprintf(stderr, "Duplicate definition of variable!\n");
         free(new_symbol);
         return;
     }
@@ -44,7 +44,7 @@ void add_fun (char* id, func_return_type rtype, unsigned int param_count)
     // if the element is already in the namsepace: do not add to symbol table 
     if (element_in_namespace(new_symbol))
     {
-        printf("Duplicate definition of function!\n");
+        fprintf(stderr, "Duplicate definition of function!\n");
         free(new_symbol);
         return;
     }
@@ -70,7 +70,7 @@ void add_arr (char* id, unsigned int length)
     // if the element is already in the namsepace: do not add to symbol table 
     if (element_in_namespace(new_symbol))
     {
-        printf("Duplicate definition of variable!\n");
+        fprintf(stderr, "Duplicate definition of variable!\n");
         free(new_symbol);
         return;
     }
@@ -110,16 +110,19 @@ bool element_in_namespace(symbol_table_element *element)
     while (true)
     {
         
-        if (currentElement->id == element->id && 
-        currentElement->param_count == element->param_count && 
-        currentElement->return_type == element->return_type)
+        if (currentElement->id != 0)
         {
+            if (!strcmp(currentElement->id, element->id) && 
+            currentElement->param_count == element->param_count && 
+            currentElement->return_type == element->return_type)
+            {
 
-            if (((element->type == SYMBOL_TYPE_VAR || element->type == SYMBOL_TYPE_ARRAY) &&
-            (currentElement->type == SYMBOL_TYPE_VAR || currentElement->type == SYMBOL_TYPE_ARRAY)) ||
-            (element->type == SYMBOL_TYPE_FUNC && currentElement->type == SYMBOL_TYPE_FUNC))
-                return true;
+                if (((element->type == SYMBOL_TYPE_VAR || element->type == SYMBOL_TYPE_ARRAY) &&
+                (currentElement->type == SYMBOL_TYPE_VAR || currentElement->type == SYMBOL_TYPE_ARRAY)) ||
+                (element->type == SYMBOL_TYPE_FUNC && currentElement->type == SYMBOL_TYPE_FUNC))
+                    return true;
 
+            }
         }
 
         if (currentElement->next == 0)
