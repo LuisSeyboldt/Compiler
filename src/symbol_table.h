@@ -41,7 +41,7 @@ typedef struct symbol_table_struct
 symbol_table_element first_element;
 
 extern symbol_table_element *get_last_table_element();
-extern bool element_in_table(symbol_table_element *element);
+extern bool element_in_namespace(symbol_table_element *element);
 extern void add_var (char* id); 
 extern void add_fun (char* id, func_return_type rtype, unsigned int param_count);
 extern void add_arr (char* id, unsigned int length);

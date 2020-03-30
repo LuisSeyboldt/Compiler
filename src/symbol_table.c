@@ -15,6 +15,13 @@ void add_var (char* id)
     new_symbol->param_count = 0;
     new_symbol->return_type = FUNC_RETURN_TYPE_NONE;
     
+    // if the element is already in the namsepace: do not add to symbol table 
+    if (element_in_namespace(new_symbol))
+    {
+        yyerror("Duplicate definition of variable!\n");
+        return;
+    }
+
     symbol_table_element *last = get_last_table_element();
     last->next = new_symbol;
 
@@ -33,6 +40,13 @@ void add_fun (char* id, func_return_type rtype, unsigned int param_count)
     new_symbol->param_count = param_count;
     new_symbol->return_type = rtype;
 
+    // if the element is already in the namsepace: do not add to symbol table 
+    if (element_in_namespace(new_symbol))
+    {
+        yyerror("Duplicate definition of function!\n");
+        return;
+    }
+
     symbol_table_element *last = get_last_table_element();
     last->next = new_symbol;
 
@@ -50,6 +64,13 @@ void add_arr (char* id, unsigned int length)
     new_symbol->length =length;
     new_symbol->param_count = 0;
     new_symbol->return_type = FUNC_RETURN_TYPE_NONE;
+
+    // if the element is already in the namsepace: do not add to symbol table 
+    if (element_in_namespace(new_symbol))
+    {
+        yyerror("Duplicate definition of variable!\n");
+        return;
+    }
 
     symbol_table_element *last = get_last_table_element();
     last->next = new_symbol;
@@ -78,7 +99,7 @@ symbol_table_element *get_last_table_element()
 
 }
 
-bool element_in_table(symbol_table_element *element)
+bool element_in_namespace(symbol_table_element *element)
 {
 
     symbol_table_element *currentElement = &first_element;
@@ -87,10 +108,17 @@ bool element_in_table(symbol_table_element *element)
     {
         
         if (currentElement->id == element->id && 
-        currentElement->type == element->type && 
         currentElement->param_count == element->param_count && 
         currentElement->return_type == element->return_type)
-            return true;
+        {
+
+            if (((element->type == SYMBOL_TYPE_VAR || element->type == SYMBOL_TYPE_ARRAY) &&
+            (currentElement->type == SYMBOL_TYPE_VAR || currentElement->type == SYMBOL_TYPE_ARRAY)) ||
+            (element->type == SYMBOL_TYPE_FUNC && currentElement == SYMBOL_TYPE_FUNC))
+                return true;
+
+        }
+
 
         if (currentElement->next != 0)
             currentElement = currentElement->next; 
