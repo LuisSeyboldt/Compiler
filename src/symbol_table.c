@@ -114,7 +114,7 @@ bool element_in_namespace(symbol_table_element *element)
 
             if (((element->type == SYMBOL_TYPE_VAR || element->type == SYMBOL_TYPE_ARRAY) &&
             (currentElement->type == SYMBOL_TYPE_VAR || currentElement->type == SYMBOL_TYPE_ARRAY)) ||
-            (element->type == SYMBOL_TYPE_FUNC && currentElement == SYMBOL_TYPE_FUNC))
+            (element->type == SYMBOL_TYPE_FUNC && currentElement->type == SYMBOL_TYPE_FUNC))
                 return true;
 
         }
