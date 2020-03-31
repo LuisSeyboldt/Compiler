@@ -247,6 +247,7 @@ int process_options (int argc, char *argv[]) {
 }
 
 
+extern FILE* yyin;
 /**
  * \brief Entry point.
  * \param argc The number of input parameters.
@@ -265,6 +266,10 @@ int main (int argc, char *argv[]) {
   printf("Input: %s\n", cc_options.input_file);
   printf("Output: %s\n", cc_options.output_file);
   printf("IR: %s\n", cc_options.ir_file);
+
+  FILE* inputFile = fopen(cc_options.input_file, "r");
+
+  yyin = inputFile;
 
   yyparse();
 
