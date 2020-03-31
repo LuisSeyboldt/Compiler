@@ -115,8 +115,8 @@ identifier_declaration
      ;
 
 function_definition
-     : type ID PARA_OPEN PARA_CLOSE BRACE_OPEN stmt_list BRACE_CLOSE                           
-     | type ID PARA_OPEN function_parameter_list PARA_CLOSE BRACE_OPEN stmt_list BRACE_CLOSE   
+     : type ID PARA_OPEN PARA_CLOSE BRACE_OPEN stmt_list BRACE_CLOSE                           { numberOfScopes++; } 
+     | type ID PARA_OPEN function_parameter_list PARA_CLOSE BRACE_OPEN stmt_list BRACE_CLOSE   { numberOfScopes++; } 
      ;
 
 function_declaration
@@ -140,7 +140,7 @@ stmt_list
 
 stmt
      : stmt_block
-     | variable_declaration SEMICOLON                       { $1->isLocal = true; add_sbl($1); }
+     | variable_declaration SEMICOLON                       { add_sbl($1); }
      | expression SEMICOLON
      | stmt_conditional
      | stmt_loop
