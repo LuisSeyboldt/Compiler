@@ -13,12 +13,12 @@ symbol_table_element* init_sbl (char* id, int length, symbol_type type)
     new_symbol->length = length;
     new_symbol->param_count = 0;
     new_symbol->return_type = FUNC_RETURN_TYPE_NONE;
-    new_symbol->scope = numberOfScopes;
+    new_symbol->scope = 0;
 
     return new_symbol;
 }
 
-void add_sbl(symbol_table_element* symbol)
+void add_sbl(symbol_table_element* symbol, bool isLocal)
 {
     // if the element is already in the namsepace: do not add to symbol table 
     if (element_in_namespace(symbol))
@@ -28,6 +28,14 @@ void add_sbl(symbol_table_element* symbol)
         exit(1);
     }
 
+    if(isLocal)
+    {
+        symbol->scope = numberOfScopes;
+    }
+    else
+    {
+        symbol->scope = 0;
+    }
     symbol_table_element *last = get_last_table_element();
     last->next = symbol;
 
@@ -119,8 +127,8 @@ bool element_in_namespace(symbol_table_element *element)
 
 void print_all_symbol_tables()
 {
-    for (int i = 0; i < numberOfScopes; i++)
-    print_symbol_table (i);
+    for (int i = 0; i <= numberOfScopes; i++)
+        print_symbol_table (i);
 }
 
 void print_symbol_table (int scope)
@@ -131,8 +139,10 @@ void print_symbol_table (int scope)
     FILE *fp = 0;
     
     char fileString[128];
+    char numberString[10];
+    sprintf(numberString, "%d", scope);
     strcpy(fileString, "symbol_table_");
-    strcat(fileString, itoa(scope));
+    strcat(fileString, numberString);
     strcat(fileString, ".txt\0");
     fp = fopen(fileString, "w+");
 

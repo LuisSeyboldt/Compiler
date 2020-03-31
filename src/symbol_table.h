@@ -42,11 +42,11 @@ typedef struct symbol_table_struct
 
 // Global first elemnt of the symbol table
 symbol_table_element first_element;
-int numberOfScopes = 1;
+extern int numberOfScopes;
 
 extern symbol_table_element *get_last_table_element();
 extern symbol_table_element* init_sbl (char* id, int length, symbol_type type);
-void add_sbl(symbol_table_element* symbol);
+void add_sbl(symbol_table_element* symbol, bool isLocal);
 extern bool element_in_namespace(symbol_table_element *element);
 extern void add_fun (char* id, func_return_type rtype, unsigned int param_count);
 extern void print_all_symbol_tables ();

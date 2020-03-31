@@ -10,7 +10,7 @@
 	#include "diag.h"
 %}
 
-%code requires {#include "symbol_table.h"}
+%code requires { #include "symbol_table.h" }
 
 %union {
   int i;
@@ -94,9 +94,9 @@ program_element_list
      ;
 
 program_element
-     : variable_declaration SEMICOLON  { add_sbl($1); }
+     : variable_declaration SEMICOLON  { add_sbl($1, false); }
      | function_declaration SEMICOLON
-     | function_definition
+     | function_definition             
      | SEMICOLON
      ;
 									
@@ -140,7 +140,7 @@ stmt_list
 
 stmt
      : stmt_block
-     | variable_declaration SEMICOLON                       { add_sbl($1); }
+     | variable_declaration SEMICOLON                       { add_sbl($1, true); }
      | expression SEMICOLON
      | stmt_conditional
      | stmt_loop
@@ -204,6 +204,7 @@ function_call_parameters
      ;
 
 %%
+int numberOfScopes = 1;
 
 void yyerror (const char *msg)
 {
