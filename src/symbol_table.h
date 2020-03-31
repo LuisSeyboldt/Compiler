@@ -32,6 +32,8 @@ typedef struct symbol_table_struct
     func_return_type return_type; // return type of the function 
     unsigned int param_count; // parameter count of the function
 
+    bool isLocal; // flag for local or gloabl scope
+
     // variables for arrays:
     unsigned int length; // array length
 
@@ -42,9 +44,9 @@ symbol_table_element first_element;
 
 extern symbol_table_element *get_last_table_element();
 extern bool element_in_namespace(symbol_table_element *element);
-extern void add_var (char* id); 
+extern void add_var (char* id, bool isLocal); 
 extern void add_fun (char* id, func_return_type rtype, unsigned int param_count);
-extern void add_arr (char* id, unsigned int length);
+extern void add_arr (char* id, unsigned int length, bool isLocal);
 extern void print_symbol_table ();
 extern void cleanMem();
 

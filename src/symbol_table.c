@@ -3,7 +3,7 @@
 #include <string.h>
 
 
-void add_var (char* id)
+void add_var (char* id, bool isLocal)
 {
     symbol_table_element *new_symbol;
     new_symbol = malloc(sizeof(symbol_table_element));
@@ -14,6 +14,7 @@ void add_var (char* id)
     new_symbol->length = 0;
     new_symbol->param_count = 0;
     new_symbol->return_type = FUNC_RETURN_TYPE_NONE;
+    new_symbol->isLocal = isLocal;
     
     // if the element is already in the namsepace: do not add to symbol table 
     if (element_in_namespace(new_symbol))
@@ -55,7 +56,7 @@ void add_fun (char* id, func_return_type rtype, unsigned int param_count)
     print_symbol_table();
 }
 
-void add_arr (char* id, unsigned int length)
+void add_arr (char* id, unsigned int length, bool isLocal)
 {
     symbol_table_element *new_symbol;
     new_symbol = malloc(sizeof(symbol_table_element));
@@ -66,6 +67,7 @@ void add_arr (char* id, unsigned int length)
     new_symbol->length =length;
     new_symbol->param_count = 0;
     new_symbol->return_type = FUNC_RETURN_TYPE_NONE;
+    new_symbol->isLocal = isLocal;
 
     // if the element is already in the namsepace: do not add to symbol table 
     if (element_in_namespace(new_symbol))
