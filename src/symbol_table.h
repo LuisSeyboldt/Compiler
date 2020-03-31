@@ -47,7 +47,8 @@ extern symbol_table_element* init_sbl (char* id, int length, symbol_type type);
 void add_sbl(symbol_table_element* symbol);
 extern bool element_in_namespace(symbol_table_element *element);
 extern void add_fun (char* id, func_return_type rtype, unsigned int param_count);
-extern void print_symbol_table ();
+extern void print_all_symbol_tables ();
+extern void print_symbol_table (bool local);
 extern void cleanMem();
 
 

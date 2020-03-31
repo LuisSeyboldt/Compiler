@@ -31,7 +31,7 @@ void add_sbl(symbol_table_element* symbol)
     symbol_table_element *last = get_last_table_element();
     last->next = symbol;
 
-    print_symbol_table();
+    print_all_symbol_tables();
 }
 
 
@@ -58,7 +58,7 @@ void add_fun (char* id, func_return_type rtype, unsigned int param_count)
     symbol_table_element *last = get_last_table_element();
     last->next = new_symbol;
 
-    print_symbol_table();
+    print_all_symbol_tables();
 }
 
 symbol_table_element *get_last_table_element()
@@ -117,48 +117,77 @@ bool element_in_namespace(symbol_table_element *element)
 
 }
 
-void print_symbol_table ()
+void print_all_symbol_tables()
+{
+    print_symbol_table(true);
+    print_symbol_table(false);
+}
+
+void print_symbol_table (bool local)
 {
 
     symbol_table_element *currentElement = &first_element;
     
-    FILE *fp;
-    fp = fopen("symbol_table.txt", "w+");
-
-    fprintf(fp, "Start symbol table:\n");
+    FILE *fp = 0;
+    if (local)
+    {
+        fp = fopen("symbol_table_local.txt", "w+");
+        fprintf(fp, "Start local symbol table:\n");
+        fprintf(stderr, "Start local symbol table:\n");
+    }
+    else
+    {
+        fp = fopen("symbol_table_global.txt", "w+");
+        fprintf(fp, "Start global symbol table:\n");
+        fprintf(stderr, "Start global symbol table:\n");
+    }
 
     while (true)
     {
         
-        if (currentElement->id != 0)
+        if (currentElement->id != 0 && currentElement->isLocal == local)
         {
             switch (currentElement->type)
             {
                 case SYMBOL_TYPE_VAR:
                 fprintf(fp, "Type: Variable, ID: %s\n", currentElement->id);
+                fprintf(stderr, "Type: Variable, ID: %s\n", currentElement->id);
                 break;
 
                 case SYMBOL_TYPE_FUNC:
                 fprintf(fp, "Type: Function, ID: %s, ", currentElement->id);
+                fprintf(stderr, "Type: Function, ID: %s, ", currentElement->id);
             
                 if (currentElement->return_type == FUNC_RETURN_TYPE_INT)
+                {
                     fprintf(fp, "Return type: int, ");
+                    fprintf(stderr, "Return type: int, ");
+                }
 
                 if (currentElement->return_type == FUNC_RETURN_TYPE_VOID)
+                {
                     fprintf(fp, "Return type: void, ");
+                    fprintf(stderr, "Return type: void, ");
+                }
 
                 if (currentElement->return_type == FUNC_RETURN_TYPE_NONE)
-                    fprintf(fp, "Return type: ERROR, ");
+                {
+                    fprintf(fp, "Return type: ERROR, ");+
+                    fprintf(stderr, "Return type: ERROR, ");
+                }
 
                 fprintf(fp, "Parameter count: %d\n", currentElement->param_count);
+                fprintf(stderr, "Parameter count: %d\n", currentElement->param_count);
                 break;
 
                 case SYMBOL_TYPE_ARRAY:
                 fprintf(fp, "Type: Array, ID: %s, Array length: %d\n", currentElement->id, currentElement->length);
+                fprintf(stderr, "Type: Array, ID: %s, Array length: %d\n", currentElement->id, currentElement->length);
                 break;
 
                 default:
                     fprintf (fp, "Error! Unrecognized type!\n");
+                    fprintf (stderr, "Error! Unrecognized type!\n");
                 break;
 
             };
