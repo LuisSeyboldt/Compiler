@@ -214,6 +214,10 @@ void print_symbol_table (bool local)
 void cleanMem()
 {
     symbol_table_element* current_element = &first_element;
+    if(current_element->next == NULL)
+    {
+        return;
+    }
 
     while(true)
     {
@@ -230,7 +234,10 @@ void cleanMem()
         }
         else
         {
-            free(current_element);
+            if (current_element != NULL)
+            {
+                free(current_element);
+            }
             return;
         }
     }
