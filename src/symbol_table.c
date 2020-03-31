@@ -27,7 +27,7 @@ void add_var (char* id, bool isLocal)
     symbol_table_element *last = get_last_table_element();
     last->next = new_symbol;
 
-    print_symbol_table();
+    print_all_symbol_tables();
 }
 
 void add_fun (char* id, func_return_type rtype, unsigned int param_count)
@@ -53,7 +53,7 @@ void add_fun (char* id, func_return_type rtype, unsigned int param_count)
     symbol_table_element *last = get_last_table_element();
     last->next = new_symbol;
 
-    print_symbol_table();
+    print_all_symbol_tables();
 }
 
 void add_arr (char* id, unsigned int length, bool isLocal)
@@ -80,7 +80,7 @@ void add_arr (char* id, unsigned int length, bool isLocal)
     symbol_table_element *last = get_last_table_element();
     last->next = new_symbol;
 
-    print_symbol_table();
+    print_all_symbol_tables();
 }
 
 symbol_table_element *get_last_table_element()
@@ -139,7 +139,7 @@ bool element_in_namespace(symbol_table_element *element)
 
 }
 
-void print_symbol_table()
+void print_all_symbol_tables()
 {
     print_symbol_table(true);
     print_symbol_table(false);
