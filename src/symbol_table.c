@@ -13,7 +13,7 @@ symbol_table_element* init_sbl (char* id, int length, symbol_type type)
     new_symbol->length = length;
     new_symbol->param_count = 0;
     new_symbol->return_type = FUNC_RETURN_TYPE_NONE;
-    new_symbol->isLocal = false;
+    new_symbol->scope = numberOfScopes;
 
     return new_symbol;
 }
@@ -90,7 +90,7 @@ bool element_in_namespace(symbol_table_element *element)
     while (true)
     {
         
-        if (currentElement->id != 0 && currentElement->isLocal == element->isLocal)
+        if (currentElement->id != 0 && currentElement->scope == element->scope)
         {
             if (!strcmp(currentElement->id, element->id) && 
             currentElement->param_count == element->param_count && 
@@ -123,29 +123,26 @@ void print_all_symbol_tables()
     print_symbol_table(false);
 }
 
-void print_symbol_table (bool local)
+void print_symbol_table (int scope)
 {
 
     symbol_table_element *currentElement = &first_element;
     
     FILE *fp = 0;
-    if (local)
-    {
-        fp = fopen("symbol_table_local.txt", "w+");
-        fprintf(fp, "Start local symbol table:\n");
-        fprintf(stderr, "Start local symbol table:\n");
-    }
-    else
-    {
-        fp = fopen("symbol_table_global.txt", "w+");
-        fprintf(fp, "Start global symbol table:\n");
-        fprintf(stderr, "Start global symbol table:\n");
-    }
+    
+    char fileString[128];
+    strcpy(fileString, "symbol_table_");
+    strcat(fileString, itoa(scope));
+    strcat(fileString, ".txt\0");
+    fp = fopen(fileString, "w+");
+
+    fprintf(fp, "Start symbol table (scope:%d):\n", scope);
+    fprintf(stderr, "Start symbol table (scope:%d):\n", scope);
 
     while (true)
     {
         
-        if (currentElement->id != 0 && currentElement->isLocal == local)
+        if (currentElement->id != 0 && currentElement->scope == scope)
         {
             switch (currentElement->type)
             {

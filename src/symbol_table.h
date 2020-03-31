@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
 // enum for different symbol types
 typedef enum symbol_type_enum 
@@ -32,7 +33,7 @@ typedef struct symbol_table_struct
     func_return_type return_type; // return type of the function 
     unsigned int param_count; // parameter count of the function
 
-    bool isLocal; // flag for local or gloabl scope
+    int scope; // scope of the function (0 is global)
 
     // variables for arrays:
     unsigned int length; // array length
@@ -41,6 +42,7 @@ typedef struct symbol_table_struct
 
 // Global first elemnt of the symbol table
 symbol_table_element first_element;
+int numberOfScopes = 1;
 
 extern symbol_table_element *get_last_table_element();
 extern symbol_table_element* init_sbl (char* id, int length, symbol_type type);
@@ -48,8 +50,7 @@ void add_sbl(symbol_table_element* symbol);
 extern bool element_in_namespace(symbol_table_element *element);
 extern void add_fun (char* id, func_return_type rtype, unsigned int param_count);
 extern void print_all_symbol_tables ();
-extern void print_symbol_table (bool local);
+extern void print_symbol_table (int scope);
 extern void cleanMem();
-
 
 #endif
