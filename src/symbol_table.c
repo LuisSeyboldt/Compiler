@@ -112,7 +112,7 @@ bool element_in_namespace(symbol_table_element *element)
     while (true)
     {
         
-        if (currentElement->id != 0)
+        if (currentElement->id != 0 && currentElement->isLocal == element->isLocal)
         {
             if (!strcmp(currentElement->id, element->id) && 
             currentElement->param_count == element->param_count && 
