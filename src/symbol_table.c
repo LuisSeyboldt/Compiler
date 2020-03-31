@@ -20,14 +20,6 @@ symbol_table_element* init_sbl (char* id, int length, symbol_type type)
 
 void add_sbl(symbol_table_element* symbol, bool isLocal)
 {
-    // if the element is already in the namsepace: do not add to symbol table 
-    if (element_in_namespace(symbol))
-    {
-        fprintf(stderr, "Duplicate definition of variable!\n");
-        free(symbol);
-        exit(1);
-    }
-
     if(isLocal)
     {
         symbol->scope = numberOfScopes;
@@ -36,6 +28,15 @@ void add_sbl(symbol_table_element* symbol, bool isLocal)
     {
         symbol->scope = 0;
     }
+
+    // if the element is already in the namsepace: do not add to symbol table 
+    if (element_in_namespace(symbol))
+    {
+        fprintf(stderr, "Duplicate definition of variable!\n");
+        free(symbol);
+        exit(1);
+    }
+
     symbol_table_element *last = get_last_table_element();
     last->next = symbol;
 
