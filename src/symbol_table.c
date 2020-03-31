@@ -119,8 +119,8 @@ bool element_in_namespace(symbol_table_element *element)
 
 void print_all_symbol_tables()
 {
-    print_symbol_table(true);
-    print_symbol_table(false);
+    for (int i = 0; i != numberOfScopes; i++)
+    print_symbol_table (i);
 }
 
 void print_symbol_table (int scope)
