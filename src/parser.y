@@ -16,6 +16,7 @@
   int i;
   char *id;
   func_return_type rtype;
+  symbol_table_element* sblElement;
 }
 // Verbose messages on parser error
 %define parse.error verbose
@@ -77,8 +78,9 @@
 %left PARA_OPEN PARA_CLOSE BRACKET_OPEN BRACKET_CLOSE 
 
 %type<rtype> type INT VOID
-%type<id>    identifier_declaration ID
+%type<id>    ID
 %type<i>     NUM function_parameter_list
+%type<sblElement> identifier_declaration variable_declaration
 
 %%
 
@@ -92,7 +94,7 @@ program_element_list
      ;
 
 program_element
-     : variable_declaration SEMICOLON
+     : variable_declaration SEMICOLON  { add_sbl($1); }
      | function_declaration SEMICOLON
      | function_definition
      | SEMICOLON
@@ -104,17 +106,17 @@ type
      ;
 
 variable_declaration
-     : variable_declaration COMMA identifier_declaration
-     | type identifier_declaration                       
+     : variable_declaration COMMA identifier_declaration {$$ = $3; }
+     | type identifier_declaration                       {$$ = $2; }
 
 identifier_declaration
-     : ID BRACKET_OPEN NUM BRACKET_CLOSE { add_arr($1, $3); }
-     | ID                                { add_var($1); }
+     : ID BRACKET_OPEN NUM BRACKET_CLOSE { $$ = init_sbl($1, $3, SYMBOL_TYPE_ARRAY); }
+     | ID                                { $$ = init_sbl($1, 0, SYMBOL_TYPE_VAR); }
      ;
 
 function_definition
-     : type ID PARA_OPEN PARA_CLOSE BRACE_OPEN stmt_list BRACE_CLOSE                           { add_fun($2, $1, 0); }
-     | type ID PARA_OPEN function_parameter_list PARA_CLOSE BRACE_OPEN stmt_list BRACE_CLOSE   { add_fun($2, $1, $4); }
+     : type ID PARA_OPEN PARA_CLOSE BRACE_OPEN stmt_list BRACE_CLOSE                           
+     | type ID PARA_OPEN function_parameter_list PARA_CLOSE BRACE_OPEN stmt_list BRACE_CLOSE   
      ;
 
 function_declaration
@@ -138,7 +140,7 @@ stmt_list
 
 stmt
      : stmt_block
-     | variable_declaration SEMICOLON
+     | variable_declaration SEMICOLON                       { $1->isLocal = true; add_sbl($1); }
      | expression SEMICOLON
      | stmt_conditional
      | stmt_loop

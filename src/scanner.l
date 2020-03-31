@@ -29,7 +29,7 @@ int						{ return INT; }
 (&&)                    { return LOGICAL_AND; }
 (!=)                    { return NE; }
 (<=)                    { return LSEQ; }
-"="                     { return GTEQ; }
+(>=)                    { return GTEQ; }
 (<<)                    { return SHIFT_LEFT; }
 (>>)                    { return SHIFT_RIGHT; }
 (\<)                    { return LS; }
@@ -40,7 +40,7 @@ int						{ return INT; }
 \/                      { return DIV; }
 %                       { return MOD; }
 (!)                     { return LOGICAL_NOT; }
-"+"                     { return UNARY_PLUS; }
+\+                     { return UNARY_PLUS; }
 \-                      { return UNARY_MINUS; }
 [0-9]+                  { yylval.i = atoi(yytext); return NUM; }
 [do]					{ return DO; }
