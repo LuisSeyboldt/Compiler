@@ -19,6 +19,7 @@
   char *id;
   func_return_type rtype;
   symbol_table_element* sblElement;
+  parameter_list* paramList;
 }
 // Verbose messages on parser error
 %define parse.error verbose
@@ -81,8 +82,9 @@
 
 %type<rtype> type INT VOID
 %type<id>    ID
-%type<i>     NUM function_parameter_list
-%type<sblElement> identifier_declaration variable_declaration
+%type<i>     NUM 
+%type<sblElement> identifier_declaration variable_declaration function_parameter
+%type<paramList> function_parameter_list
 
 %%
 
@@ -108,7 +110,7 @@ type
      ;
 
 variable_declaration
-     : variable_declaration COMMA identifier_declaration {$$ = $3; }
+     : variable_declaration COMMA identifier_declaration { $3->next = $1; $$ = $3; }
      | type identifier_declaration                       {$$ = $2; }
 
 identifier_declaration
@@ -117,22 +119,22 @@ identifier_declaration
      ;
 
 function_definition
-     : type ID PARA_OPEN PARA_CLOSE BRACE_OPEN stmt_list BRACE_CLOSE                           { numberOfScopes++; } 
-     | type ID PARA_OPEN function_parameter_list PARA_CLOSE BRACE_OPEN stmt_list BRACE_CLOSE   { numberOfScopes++; } 
+     : type ID PARA_OPEN PARA_CLOSE BRACE_OPEN stmt_list BRACE_CLOSE                           { numberOfScopes++; add_fun($2, $1, 0); } 
+     | type ID PARA_OPEN function_parameter_list PARA_CLOSE BRACE_OPEN stmt_list BRACE_CLOSE   { add_fun($2, $1, $4->numberOfParameters); add_sbl($4->symbols, true); numberOfScopes++;} 
      ;
 
 function_declaration
-     : type ID PARA_OPEN PARA_CLOSE                                                            { add_fun($2, $1, 0); }
-     | type ID PARA_OPEN function_parameter_list PARA_CLOSE                                    { add_fun($2, $1, $4); }
+     : type ID PARA_OPEN PARA_CLOSE                                                            
+     | type ID PARA_OPEN function_parameter_list PARA_CLOSE                                    
      ;
 
 function_parameter_list
-     : function_parameter                                   { $$ = 1; }
-     | function_parameter_list COMMA function_parameter     { $$ = $1 + 1; }
+     : function_parameter                                   { $$ = init_param_list(1, $1); }
+     | function_parameter_list COMMA function_parameter     { $3->next = $1->symbols; $$->numberOfParameters++; $$->symbols = $3;}
      ;
 	
 function_parameter
-     : type identifier_declaration                          { add_sbl($2, true); }
+     : type identifier_declaration                          { $$ = $2; }
      ;
 									
 stmt_list

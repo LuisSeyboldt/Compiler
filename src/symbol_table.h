@@ -40,16 +40,25 @@ typedef struct symbol_table_struct
 
 } symbol_table_element;
 
+// union for the parameter list data
+typedef struct parameter_list
+{
+    int numberOfParameters;
+    symbol_table_element* symbols;
+} parameter_list;
+
 // Global first elemnt of the symbol table
 symbol_table_element first_element;
 extern int numberOfScopes;
 
+extern parameter_list* init_param_list(int paramCount, symbol_table_element* symbols);
 extern symbol_table_element *get_last_table_element();
 extern symbol_table_element* init_sbl (char* id, int length, symbol_type type);
 void add_sbl(symbol_table_element* symbol, bool isLocal);
 extern bool element_in_namespace(symbol_table_element *element);
 extern void add_fun (char* id, func_return_type rtype, unsigned int param_count);
 extern void print_all_symbol_tables ();
+extern void set_scope(symbol_table_element* symbols, int scope);
 extern void print_symbol_table (int scope);
 extern void cleanMem();
 

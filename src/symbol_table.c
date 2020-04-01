@@ -2,6 +2,15 @@
 #include <stdlib.h>
 #include <string.h>
 
+parameter_list* init_param_list(int paramCount, symbol_table_element* symbols)
+{
+    parameter_list* new_param_list = malloc(sizeof(parameter_list));
+    new_param_list->numberOfParameters = paramCount;
+    new_param_list->symbols = symbols;
+
+    return new_param_list;
+}
+
 symbol_table_element* init_sbl (char* id, int length, symbol_type type)
 {
     symbol_table_element *new_symbol;
@@ -22,11 +31,11 @@ void add_sbl(symbol_table_element* symbol, bool isLocal)
 {
     if(isLocal)
     {
-        symbol->scope = numberOfScopes;
+        set_scope(symbol, numberOfScopes);
     }
     else
     {
-        symbol->scope = 0;
+        set_scope(symbol, 0);
     }
 
     // if the element is already in the namsepace: do not add to symbol table 
@@ -41,6 +50,25 @@ void add_sbl(symbol_table_element* symbol, bool isLocal)
     last->next = symbol;
 
     print_all_symbol_tables();
+}
+
+void set_scope(symbol_table_element* symbols, int scope)
+{
+    symbol_table_element* current_element = symbols;
+    while(true)
+    {
+        current_element->scope = scope;
+        if(current_element->next != NULL)
+        {
+            current_element = current_element->next;
+        }
+        else
+        {
+            return;
+        }
+    }
+
+    return;
 }
 
 
