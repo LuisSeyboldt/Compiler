@@ -246,7 +246,7 @@ int process_options (int argc, char *argv[]) {
   return ret;
 }
 
-
+void yyparse(); 
 extern FILE* yyin;
 /**
  * \brief Entry point.
