@@ -3,6 +3,8 @@
  */
  
 %{
+     void yyerror(const char* msg);
+     int yylex();
 	// System includes
 	#include <stdbool.h>
 	
@@ -130,7 +132,7 @@ function_parameter_list
      ;
 	
 function_parameter
-     : type identifier_declaration
+     : type identifier_declaration                          { add_sbl($2, true); }
      ;
 									
 stmt_list

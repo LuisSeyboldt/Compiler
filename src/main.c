@@ -273,6 +273,7 @@ int main (int argc, char *argv[]) {
 
   yyparse();
 
+  print_all_symbol_tables();
   rm_cleanup_resources(&resource_mgr);
   cleanMem();
   return 0;

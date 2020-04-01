@@ -40,8 +40,6 @@ int						{ return INT; }
 \/                      { return DIV; }
 %                       { return MOD; }
 (!)                     { return LOGICAL_NOT; }
-\+                     { return UNARY_PLUS; }
-\-                      { return UNARY_MINUS; }
 [0-9]+                  { yylval.i = atoi(yytext); return NUM; }
 [do]					{ return DO; }
 while					{ return WHILE; }

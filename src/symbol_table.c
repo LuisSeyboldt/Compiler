@@ -55,6 +55,7 @@ void add_fun (char* id, func_return_type rtype, unsigned int param_count)
     new_symbol->length = 0;
     new_symbol->param_count = param_count;
     new_symbol->return_type = rtype;
+    new_symbol->scope = 0;
 
     // if the element is already in the namsepace: do not add to symbol table 
     if (element_in_namespace(new_symbol))
