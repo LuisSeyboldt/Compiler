@@ -28,16 +28,17 @@ symbol_table_element* init_sbl (char* id, int length, symbol_type type)
     return new_symbol;
 }
 
-void add_sbl(symbol_table_element* symbol, bool isLocal)
+void add_sbl(symbol_table_element* symbol, bool isLocal, bool isParam)
 {
     if(isLocal)
     {
-        set_scope(symbol, numberOfScopes);
+        set_scope(symbol, numberOfScopes, isParam);
     }
     else
     {
-        set_scope(symbol, 0);
+        set_scope(symbol, 0, isParam);
     }
+    
 
     // if the element is already in the namsepace: do not add to symbol table 
     if (element_in_namespace(symbol))
@@ -50,15 +51,15 @@ void add_sbl(symbol_table_element* symbol, bool isLocal)
     symbol_table_element *last = get_last_table_element();
     last->next = symbol;
 
-    //print_all_symbol_tables();
 }
 
-void set_scope(symbol_table_element* symbols, int scope)
+void set_scope(symbol_table_element* symbols, int scope, bool isParam)
 {
     symbol_table_element* current_element = symbols;
     while(true)
     {
         current_element->scope = scope;
+        current_element->isParam = isParam;
         if(current_element->next != NULL)
         {
             current_element = current_element->next;
@@ -326,8 +327,16 @@ void print_symbol_table (int scope)
             switch (currentElement->type)
             {
                 case SYMBOL_TYPE_VAR:
-                fprintf(fp, "Type: Variable, ID: %s\n", currentElement->id);
-                fprintf(stderr, "Type: Variable, ID: %s\n", currentElement->id);
+                if (currentElement->isParam)
+                {
+                    fprintf(fp, "Type: Function Parameter Variable, ID: %s\n", currentElement->id);
+                    fprintf(stderr, "Type: Function Parameter Variable, ID: %s\n", currentElement->id);
+                }
+                else
+                {
+                    fprintf(fp, "Type: Variable, ID: %s\n", currentElement->id);
+                    fprintf(stderr, "Type: Variable, ID: %s\n", currentElement->id);
+                }
                 break;
 
                 case SYMBOL_TYPE_FUNC:
@@ -357,8 +366,16 @@ void print_symbol_table (int scope)
                 break;
 
                 case SYMBOL_TYPE_ARRAY:
-                fprintf(fp, "Type: Array, ID: %s, Array length: %d\n", currentElement->id, currentElement->length);
-                fprintf(stderr, "Type: Array, ID: %s, Array length: %d\n", currentElement->id, currentElement->length);
+                if (currentElement->isParam)
+                {
+                    fprintf(fp, "Type: Function Parameter Array, ID: %s, Array length: %d\n", currentElement->id, currentElement->length);
+                    fprintf(stderr, "Type: Function Parameter Array, ID: %s, Array length: %d\n", currentElement->id, currentElement->length);
+                }
+                else
+                {
+                    fprintf(fp, "Type: Array, ID: %s, Array length: %d\n", currentElement->id, currentElement->length);
+                    fprintf(stderr, "Type: Array, ID: %s, Array length: %d\n", currentElement->id, currentElement->length);
+                }
                 break;
 
                 default:

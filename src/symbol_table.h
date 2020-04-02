@@ -37,6 +37,8 @@ typedef struct symbol_table_struct
 
     int scope; // scope of the symbol (0 is global)
 
+    bool isParam; // is the symbol parameter?
+
     // variables for arrays:
     unsigned int length; // array length
 
@@ -56,13 +58,13 @@ extern int numberOfScopes;
 extern parameter_list* init_param_list(int paramCount, symbol_table_element* symbols);
 extern symbol_table_element *get_last_table_element();
 extern symbol_table_element* init_sbl (char* id, int length, symbol_type type);
-void add_sbl(symbol_table_element* symbol, bool isLocal);
+void add_sbl(symbol_table_element* symbol, bool isLocal, bool isParam);
 extern bool element_in_namespace(symbol_table_element *element);
 extern symbol_table_element* check_for_existing_function(symbol_table_element* new_function);
 extern void delete_elements_of_scope (int scope);
 extern void add_fun (char* id, func_return_type rtype, unsigned int param_count, bool definition);
 extern void print_all_symbol_tables ();
-extern void set_scope(symbol_table_element* symbols, int scope);
+extern void set_scope(symbol_table_element* symbols, int scope, bool isParam);
 extern void print_symbol_table (int scope);
 extern void cleanMem();
 extern char* get_ID_of_scope(int scope);

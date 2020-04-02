@@ -98,7 +98,7 @@ program_element_list
      ;
 
 program_element
-     : variable_declaration SEMICOLON  { add_sbl($1, false); }
+     : variable_declaration SEMICOLON  { add_sbl($1, false, false); }
      | function_declaration SEMICOLON
      | function_definition             
      | SEMICOLON
@@ -120,12 +120,12 @@ identifier_declaration
 
 function_definition
      : type ID PARA_OPEN PARA_CLOSE BRACE_OPEN stmt_list BRACE_CLOSE                           { add_fun($2, $1, 0, true); numberOfScopes++; /* only increment numberOfScopes as last operation! */ } 
-     | type ID PARA_OPEN function_parameter_list PARA_CLOSE BRACE_OPEN stmt_list BRACE_CLOSE   { add_fun($2, $1, $4->numberOfParameters, true); add_sbl($4->symbols, true); numberOfScopes++; /* only increment numberOfScopes as last operation! */ } 
+     | type ID PARA_OPEN function_parameter_list PARA_CLOSE BRACE_OPEN stmt_list BRACE_CLOSE   { add_fun($2, $1, $4->numberOfParameters, true); add_sbl($4->symbols, true, true); numberOfScopes++; /* only increment numberOfScopes as last operation! */ } 
      ;
 
 function_declaration
      : type ID PARA_OPEN PARA_CLOSE                                                            { add_fun($2, $1, 0, true); numberOfScopes++; /* only increment numberOfScopes as last operation! */ }                  
-     | type ID PARA_OPEN function_parameter_list PARA_CLOSE                                    { add_fun($2, $1, $4->numberOfParameters, false); add_sbl($4->symbols, true); numberOfScopes++; /* only increment numberOfScopes as last operation! */ }                 
+     | type ID PARA_OPEN function_parameter_list PARA_CLOSE                                    { add_fun($2, $1, $4->numberOfParameters, false); add_sbl($4->symbols, true, true); numberOfScopes++; /* only increment numberOfScopes as last operation! */ }                 
      ;
 
 function_parameter_list
@@ -144,7 +144,7 @@ stmt_list
 
 stmt
      : stmt_block
-     | variable_declaration SEMICOLON                       { add_sbl($1, true); }
+     | variable_declaration SEMICOLON                       { add_sbl($1, true, false); }
      | expression SEMICOLON
      | stmt_conditional
      | stmt_loop
