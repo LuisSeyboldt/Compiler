@@ -73,7 +73,7 @@ void set_scope(symbol_table_element* symbols, int scope)
 }
 
 
-void add_fun (char* id, func_return_type rtype, unsigned int param_count)
+void add_fun (char* id, func_return_type rtype, unsigned int param_count, bool definition)
 {
     symbol_table_element *new_symbol;
     new_symbol = malloc(sizeof(symbol_table_element));
@@ -85,20 +85,144 @@ void add_fun (char* id, func_return_type rtype, unsigned int param_count)
     new_symbol->param_count = param_count;
     new_symbol->return_type = rtype;
     new_symbol->scope = 0;
+    new_symbol->definied = definition;
     new_symbol->function_scope = numberOfScopes;
 
     // if the element is already in the namsepace: do not add to symbol table 
-    if (element_in_namespace(new_symbol))
+    /*if (element_in_namespace(new_symbol))
     {
         fprintf(stderr, "Duplicate definition of function!\n");
         free(new_symbol);
         exit(1);
+    }*/
+
+    // if definition: check for existing entries
+        // if definition exists: error duplicate definition
+        // if declaration: delete entries and create fresh
+        // create
+    // if declaration: check for existing entries
+        // if definition: error already defined
+        // if declaratopm: error already declared
+        // create
+
+    // check for existing entries
+    symbol_table_element* found_function = check_for_existing_function(new_symbol);
+    if (found_function != 0)
+    {
+        if (definition)
+        {
+            if (found_function->definied)
+            {
+                fprintf(stderr, "Error: Duplicate definition of function!\n");
+                exit(1); 
+            }
+            else 
+            {
+                delete_elements_of_scope(found_function->function_scope);
+            }
+        }
+        else
+        {
+            if (found_function->definied)
+            {
+                fprintf(stderr, "Error: Function already definied!\n");
+                exit(1); 
+            }
+            else 
+            {
+                fprintf(stderr, "Error: Duplicate declaration of function!\n");
+                exit(1);
+            }
+        }
     }
 
     symbol_table_element *last = get_last_table_element();
     last->next = new_symbol;
 
     //print_all_symbol_tables();
+}
+
+void delete_elements_of_scope (int scope)
+{
+    symbol_table_element *currentElement = &first_element, *prev = 0;
+
+    while (true)
+    {
+
+        bool delete = false;
+
+        if (currentElement->type == SYMBOL_TYPE_FUNC)
+        {
+            if (currentElement->function_scope == scope)
+                delete = true;
+        }
+        else 
+        {
+            if (currentElement->scope == scope)
+                delete = true;
+        }
+
+        if (delete)
+        {
+
+            symbol_table_element *nextElement = currentElement->next;
+
+            if (prev != 0)
+                prev->next = nextElement;
+            else 
+                first_element = *nextElement;
+
+            free (currentElement);
+            
+            currentElement = nextElement;
+            continue;
+
+        }
+
+        if (currentElement->next == 0)
+            return;
+
+        // go to next element
+        if (currentElement->next != 0)
+        {
+            prev = currentElement;
+            currentElement = currentElement->next;
+        }
+    }
+}
+
+symbol_table_element* check_for_existing_function(symbol_table_element* new_function)
+{
+    symbol_table_element *currentElement = &first_element;
+
+    while (true)
+    {
+        if (currentElement->type == SYMBOL_TYPE_FUNC)
+        {
+            // check if names are equal
+            if (!strcmp(currentElement->id, new_function->id))
+            {
+                // check if return type and parameters are the same
+                if (currentElement->return_type == new_function->return_type && currentElement->param_count == new_function->param_count)
+                    return currentElement;
+                else
+                {
+                    fprintf(stderr, "Error: Function overloading cannot be performed (in ANSI-C)!\n");
+                    exit(1);       
+                }
+            }
+        }
+
+        // if no function has been found: return 0
+        if (currentElement->next == 0)
+            return 0;
+
+        // go to next element
+        if (currentElement->next != 0)
+            currentElement = currentElement->next;
+    }
+
+    return 0;
 }
 
 symbol_table_element *get_last_table_element()
@@ -165,6 +289,9 @@ void print_all_symbol_tables()
 
 void print_symbol_table (int scope)
 {
+
+    if (!scope_has_elements(scope))
+        return;
 
     symbol_table_element *currentElement = &first_element;
     
@@ -342,4 +469,36 @@ char* get_ID_of_scope(int scope)
 
     return scopeID;
 
+}
+
+bool scope_has_elements(int scope)
+{
+
+    // iterator
+    symbol_table_element *currentElement = &first_element;
+
+    while (true)
+    {
+
+        if (currentElement->type == SYMBOL_TYPE_FUNC)
+        {
+            if (currentElement->function_scope == scope)
+                return true;
+        }
+        else 
+        {
+            if (currentElement->scope == scope)
+                return true;
+        }
+
+        if (currentElement->next == 0)
+            return false;
+
+        // go to next element
+        if (currentElement->next != 0)
+            currentElement = currentElement->next;
+
+    }
+
+    return false;
 }

@@ -33,6 +33,7 @@ typedef struct symbol_table_struct
     func_return_type return_type; // return type of the function 
     unsigned int param_count; // parameter count of the function
     int function_scope;
+    bool definied;
 
     int scope; // scope of the symbol (0 is global)
 
@@ -57,11 +58,14 @@ extern symbol_table_element *get_last_table_element();
 extern symbol_table_element* init_sbl (char* id, int length, symbol_type type);
 void add_sbl(symbol_table_element* symbol, bool isLocal);
 extern bool element_in_namespace(symbol_table_element *element);
-extern void add_fun (char* id, func_return_type rtype, unsigned int param_count);
+extern symbol_table_element* check_for_existing_function(symbol_table_element* new_function);
+extern void delete_elements_of_scope (int scope);
+extern void add_fun (char* id, func_return_type rtype, unsigned int param_count, bool definition);
 extern void print_all_symbol_tables ();
 extern void set_scope(symbol_table_element* symbols, int scope);
 extern void print_symbol_table (int scope);
 extern void cleanMem();
 extern char* get_ID_of_scope(int scope);
+extern bool scope_has_elements(int scope);
 
 #endif
