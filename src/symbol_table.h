@@ -32,8 +32,9 @@ typedef struct symbol_table_struct
     // variables for functions:
     func_return_type return_type; // return type of the function 
     unsigned int param_count; // parameter count of the function
+    int function_scope;
 
-    int scope; // scope of the function (0 is global)
+    int scope; // scope of the symbol (0 is global)
 
     // variables for arrays:
     unsigned int length; // array length
@@ -61,5 +62,6 @@ extern void print_all_symbol_tables ();
 extern void set_scope(symbol_table_element* symbols, int scope);
 extern void print_symbol_table (int scope);
 extern void cleanMem();
+extern char* get_ID_of_scope(int scope);
 
 #endif

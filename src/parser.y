@@ -89,12 +89,12 @@
 %%
 
 program
-     : program_element_list 
+     : program_element_list { print_all_symbol_tables(); }
      ;
 
 program_element_list
-     : program_element_list program_element 
-     | program_element
+     : program_element_list program_element { print_all_symbol_tables(); }
+     | program_element                      { print_all_symbol_tables(); }
      ;
 
 program_element
@@ -119,8 +119,8 @@ identifier_declaration
      ;
 
 function_definition
-     : type ID PARA_OPEN PARA_CLOSE BRACE_OPEN stmt_list BRACE_CLOSE                           { numberOfScopes++; add_fun($2, $1, 0); } 
-     | type ID PARA_OPEN function_parameter_list PARA_CLOSE BRACE_OPEN stmt_list BRACE_CLOSE   { add_fun($2, $1, $4->numberOfParameters); add_sbl($4->symbols, true); numberOfScopes++;} 
+     : type ID PARA_OPEN PARA_CLOSE BRACE_OPEN stmt_list BRACE_CLOSE                           { add_fun($2, $1, 0); numberOfScopes++; /* only increment numberOfScopes as last operation! */ } 
+     | type ID PARA_OPEN function_parameter_list PARA_CLOSE BRACE_OPEN stmt_list BRACE_CLOSE   { add_fun($2, $1, $4->numberOfParameters); add_sbl($4->symbols, true); numberOfScopes++; /* only increment numberOfScopes as last operation! */ } 
      ;
 
 function_declaration

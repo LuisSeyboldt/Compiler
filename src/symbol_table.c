@@ -23,6 +23,7 @@ symbol_table_element* init_sbl (char* id, int length, symbol_type type)
     new_symbol->param_count = 0;
     new_symbol->return_type = FUNC_RETURN_TYPE_NONE;
     new_symbol->scope = 0;
+    new_symbol->function_scope = 0;
 
     return new_symbol;
 }
@@ -49,7 +50,7 @@ void add_sbl(symbol_table_element* symbol, bool isLocal)
     symbol_table_element *last = get_last_table_element();
     last->next = symbol;
 
-    print_all_symbol_tables();
+    //print_all_symbol_tables();
 }
 
 void set_scope(symbol_table_element* symbols, int scope)
@@ -84,6 +85,7 @@ void add_fun (char* id, func_return_type rtype, unsigned int param_count)
     new_symbol->param_count = param_count;
     new_symbol->return_type = rtype;
     new_symbol->scope = 0;
+    new_symbol->function_scope = numberOfScopes;
 
     // if the element is already in the namsepace: do not add to symbol table 
     if (element_in_namespace(new_symbol))
@@ -96,7 +98,7 @@ void add_fun (char* id, func_return_type rtype, unsigned int param_count)
     symbol_table_element *last = get_last_table_element();
     last->next = new_symbol;
 
-    print_all_symbol_tables();
+    //print_all_symbol_tables();
 }
 
 symbol_table_element *get_last_table_element()
@@ -157,7 +159,7 @@ bool element_in_namespace(symbol_table_element *element)
 
 void print_all_symbol_tables()
 {
-    for (int i = 0; i <= numberOfScopes; i++)
+    for (int i = 0; i < numberOfScopes; i++)
         print_symbol_table (i);
 }
 
@@ -176,8 +178,18 @@ void print_symbol_table (int scope)
     strcat(fileString, ".txt\0");
     fp = fopen(fileString, "w+");
 
-    fprintf(fp, "Start symbol table (scope:%d):\n", scope);
-    fprintf(stderr, "Start symbol table (scope:%d):\n", scope);
+    // find ID of the function scope
+    char* scopeID = 0;
+    scopeID = get_ID_of_scope(scope);
+
+    if (scopeID == 0)
+    {
+        fprintf(stderr, "Error printing the symbol table\n");
+        return;
+    }
+
+    fprintf(fp, "Start symbol table (scope: %s):\n", scopeID);
+    fprintf(stderr, "Start symbol table (scope: %s):\n", scopeID);
 
     while (true)
     {
@@ -233,6 +245,10 @@ void print_symbol_table (int scope)
         if (currentElement->next == 0)
         {
             fclose(fp);
+
+            if (scopeID != 0)
+                free(scopeID);
+
             return;
         }
 
@@ -242,6 +258,10 @@ void print_symbol_table (int scope)
     }
 
     fclose(fp);
+
+     if (scopeID != 0)
+        free(scopeID);
+
     return;
 
 }
@@ -280,4 +300,46 @@ void cleanMem()
     }
 
     return;
+}
+
+char* get_ID_of_scope(int scope)
+{
+
+    // var for return
+    char* scopeID = 0;
+
+    // return "global" string if the scope is global (= 0)
+    if (scope == 0)
+    {
+        scopeID = malloc(sizeof("global\0"));
+        strcpy(scopeID,"global\0");
+        return scopeID;
+    }
+
+    // iterator
+    symbol_table_element *currentElement = &first_element;
+
+    while (true)
+    {
+
+        // function is found when the element is of the type func and has the searched scope
+        if (currentElement->type == SYMBOL_TYPE_FUNC && currentElement->function_scope == scope)
+        {
+            scopeID = malloc(sizeof(currentElement->id)); // allocate new memory
+            strcpy(scopeID, currentElement->id); // copy the string
+            return scopeID; 
+        }
+
+        // if the end of the list has been reached return with scopeID = 0
+        if (currentElement->next == 0)
+            return scopeID;
+
+        // go to next element
+        if (currentElement->next != 0)
+            currentElement = currentElement->next;
+
+    }
+
+    return scopeID;
+
 }
