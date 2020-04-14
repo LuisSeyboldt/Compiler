@@ -124,8 +124,12 @@ identifier_declaration
      ;
 
 function_definition
-     : type ID PARA_OPEN PARA_CLOSE BRACE_OPEN stmt_list BRACE_CLOSE                           { checkReturnType($1, $2); add_fun($2, $1, 0, true); numberOfScopes++; /* only increment numberOfScopes as last operation! */ } 
-     | type ID PARA_OPEN function_parameter_list PARA_CLOSE BRACE_OPEN stmt_list BRACE_CLOSE   { checkReturnType($1, $2); add_fun($2, $1, $4->numberOfParameters, true); add_sbl($4->symbols, true, true); numberOfScopes++; /* only increment numberOfScopes as last operation! */ } 
+     : type ID PARA_OPEN PARA_CLOSE BRACE_OPEN stmt_list BRACE_CLOSE                           { add_fun($2, $1, 0, true); checkReturnType($1, $2); numberOfScopes++;  /* only increment numberOfScopes as last operation! */ } 
+     | function_definition_start stmt_list BRACE_CLOSE    
+     ;
+
+function_definition_start
+     : type ID PARA_OPEN function_parameter_list PARA_CLOSE BRACE_OPEN                         { add_fun($2, $1, $4->numberOfParameters, true); add_sbl($4->symbols, true, true); checkReturnType($1, $2); numberOfScopes++; /* only increment numberOfScopes as last operation! */ }
      ;
 
 function_declaration

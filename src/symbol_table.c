@@ -149,35 +149,41 @@ void delete_elements_of_scope (int scope)
 
     while (true)
     {
-
-        bool delete = false;
-
-        if (currentElement->type == SYMBOL_TYPE_FUNC)
+        if(currentElement != NULL)
         {
-            if (currentElement->function_scope == scope)
-                delete = true;
-        }
-        else 
-        {
-            if (currentElement->scope == scope)
-                delete = true;
-        }
+            bool delete = false;
 
-        if (delete)
-        {
-
-            symbol_table_element *nextElement = currentElement->next;
-
-            if (prev != 0)
-                prev->next = nextElement;
+            if (currentElement->type == SYMBOL_TYPE_FUNC)
+            {
+                if (currentElement->function_scope == scope)
+                    delete = true;
+            }
             else 
-                first_element = *nextElement;
+            {
+                if (currentElement->scope == scope)
+                    delete = true;
+            }
 
-            free (currentElement);
-            
-            currentElement = nextElement;
-            continue;
+            if (delete)
+            {
 
+                symbol_table_element *nextElement = currentElement->next;
+
+                if (prev != 0)
+                    prev->next = nextElement;
+                else 
+                    first_element = *nextElement;
+
+                free (currentElement);
+                currentElement = nextElement;
+
+                // Nothing else in the list
+                if(nextElement == NULL)
+                    return;
+
+                continue;
+
+            }
         }
 
         if (currentElement->next == 0)
