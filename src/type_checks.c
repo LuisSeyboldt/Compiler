@@ -48,7 +48,7 @@ void checkExpr(value expr1, value expr2)
         }
         else 
         {
-            //error
+            err("ERROR: mismatched types");
         }
         break;
     case VALUE_TYPE_ARR_ELEMENT:
@@ -56,7 +56,7 @@ void checkExpr(value expr1, value expr2)
         break; 
     
     default:
-        //error
+        err("ERROR: unkown error");
         break;
     }
 }
@@ -67,7 +67,7 @@ void checkSingleExpr(value expr)
     {
         if(expr.value.element->type == SYMBOL_TYPE_ARRAY)
         {
-            //error
+            err("ERROR: Array not allowed here");
         }
     }
 
@@ -75,7 +75,7 @@ void checkSingleExpr(value expr)
     {
         if(expr.value.element->return_type == FUNC_RETURN_TYPE_VOID)
         {
-            //error
+            err("ERROR: Return type void not allowed here");
         }
     }
 
@@ -89,14 +89,14 @@ void checkRVal(value expr1, value expr2)
     {
         if(expr1.value.element->type == SYMBOL_TYPE_ARRAY)
         {
-            //error
+            err("ERROR: Array can not be assigned");
         }
     }
     if(expr2.valueType == VALUE_TYPE_SYMBOL)
     {
         if(expr2.value.element->type == SYMBOL_TYPE_ARRAY)
         {
-            //error
+            err("ERROR: Can not assign array");
         }
     }
 
@@ -105,14 +105,14 @@ void checkRVal(value expr1, value expr2)
     {
         if(expr1.value.element->return_type == FUNC_RETURN_TYPE_VOID)
         {
-            //error
+            err("ERROR: Return type void not allowed here");
         }
     }
     if(expr2.valueType == VALUE_TYPE_FUNCTION_CALL)
     {
         if(expr2.value.element->return_type == FUNC_RETURN_TYPE_VOID)
         {
-            //error
+            err("ERROR: Return type void not allowed here");
         }
     }
 
@@ -126,7 +126,7 @@ void caseLval(value expr)
     {
         if(expr.value.element->return_type != FUNC_RETURN_TYPE_INT)
         {
-            //error
+            err("ERROR: Return type void not allowed here");
         }
         else
         {
@@ -145,7 +145,7 @@ void caseLval(value expr)
         }
         else
         {
-            //error
+            err("ERROR: Types do not match");
         }
     }
     if (expr.valueType == VALUE_TYPE_ARR_ELEMENT)
@@ -158,7 +158,7 @@ void checkIfNotVoid(func_return_type type)
 {
     if(type == FUNC_RETURN_TYPE_VOID)
     {
-        //error
+        err("ERROR: Return type void not allowed here");
     }
 
     return;
@@ -169,12 +169,19 @@ void checkReturnType(func_return_type rType, char* id)
     symbol_table_element* function = get_element_in_namespace(id);
     if(function->type != SYMBOL_TYPE_FUNC)
     {
-        // error element is not a function
+        err("ERROR: No function with matching name");
+        
     }
     
     if(function->return_type != rType)
     {
-        // error declaration type does not match definition type
+        err("ERROR: declaration type does not match definition type");
     }
 
 } 
+
+void err(char* msg)
+{
+    fprintf(stderr,"%s", msg);
+    exit(1);
+}
