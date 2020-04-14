@@ -282,6 +282,33 @@ bool element_in_namespace(symbol_table_element *element)
 
 }
 
+symbol_table_element *get_element_in_namespace (char* id)
+{
+
+    symbol_table_element *currentElement = &first_element;
+
+    while (true)
+    {
+        
+        if (!strcmp (id, currentElement->id))
+        {
+            if (element_in_namespace (currentElement) || currentElement->scope == 0)
+                return currentElement;
+        }
+
+        if (currentElement->next == 0)
+            return NULL;
+
+        if (currentElement->next != 0)
+            currentElement = currentElement->next; 
+
+    }
+    
+    return NULL;
+
+
+}
+
 void print_all_symbol_tables()
 {
     for (int i = 0; i < numberOfScopes; i++)

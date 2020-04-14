@@ -60,6 +60,7 @@ extern symbol_table_element *get_last_table_element();
 extern symbol_table_element* init_sbl (char* id, int length, symbol_type type);
 void add_sbl(symbol_table_element* symbol, bool isLocal, bool isParam);
 extern bool element_in_namespace(symbol_table_element *element);
+extern symbol_table_element *get_element_in_namespace (char* id);
 extern symbol_table_element* check_for_existing_function(symbol_table_element* new_function);
 extern void delete_elements_of_scope (int scope);
 extern void add_fun (char* id, func_return_type rtype, unsigned int param_count, bool definition);
