@@ -289,18 +289,20 @@ symbol_table_element *get_element_in_namespace (char* id)
 
     while (true)
     {
-        
-        if (!strcmp (id, currentElement->id))
+        if(currentElement->id != 0)
         {
-            if (element_in_namespace (currentElement) || currentElement->scope == 0)
-                return currentElement;
+            if (!strcmp(id, currentElement->id))
+            {
+                if (element_in_namespace (currentElement) || currentElement->scope == 0)
+                    return currentElement;
+            }
         }
 
-        if (currentElement->next == 0)
-            return NULL;
+            if (currentElement->next == 0)
+                return NULL;
 
-        if (currentElement->next != 0)
-            currentElement = currentElement->next; 
+            if (currentElement->next != 0)
+                currentElement = currentElement->next; 
 
     }
     
