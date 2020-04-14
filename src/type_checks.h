@@ -5,6 +5,11 @@
 
 #include <stdbool.h>
 
+typedef enum value_type_enum 
+{
+    VALUE_TYPE_VALUE, VALUE_TYPE_SYMBOL, VALUE_TYPE_FUNCTION_CALL
+} value_type;
+
 typedef union value_union 
 {
     int rval;
@@ -14,7 +19,7 @@ typedef union value_union
 typedef struct value_struct
 {
     simple_value value;
-    bool isSymbol;
+    value_type valueType;
 } value;
 
 extern value valueFromId(char* id);
