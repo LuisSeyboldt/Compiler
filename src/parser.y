@@ -22,6 +22,7 @@
   symbol_table_element* sblElement;
   parameter_list* paramList;
   value value;
+  value *pValue;
 }
 // Verbose messages on parser error
 %define parse.error verbose
@@ -87,7 +88,8 @@
 %type<i>     NUM 
 %type<sblElement> identifier_declaration variable_declaration function_parameter
 %type<paramList> function_parameter_list
-%type<value> primary expression function_call
+%type<value> primary expression function_call 
+%type<pValue> function_call_parameters
 
 %%
 
@@ -166,8 +168,8 @@ stmt_conditional
      ;
 									
 stmt_loop
-     : WHILE PARA_OPEN expression PARA_CLOSE stmt                { checkSingleExpr($2); }
-     | DO stmt WHILE PARA_OPEN expression PARA_CLOSE SEMICOLON   { checkSingleExpr($4); }
+     : WHILE PARA_OPEN expression PARA_CLOSE stmt                { checkSingleExpr($3); }
+     | DO stmt WHILE PARA_OPEN expression PARA_CLOSE SEMICOLON   { checkSingleExpr($5); }
      ;
 									
 expression
@@ -206,8 +208,8 @@ function_call
       ;
 
 function_call_parameters
-     : function_call_parameters COMMA expression
-     | expression
+     : function_call_parameters COMMA expression       { $3.next = $1; $$ = $1; }
+     | expression                                      { $$ = &$1; }
      ;
 
 %%

@@ -20,6 +20,11 @@ typedef struct value_struct
 {
     simple_value value;
     value_type valueType;
+
+    // pointer to the next element 
+    // (used for parameter list evaluation)
+    struct value_struct *next; 
+
 } value;
 
 void caseLval(value expr);
