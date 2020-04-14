@@ -17,4 +17,8 @@ typedef struct value_struct
     bool isSymbol;
 } value;
 
+extern value valueFromId(char* id);
+extern value valueFromNum(int num);
+
+
 #endif

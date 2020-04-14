@@ -195,8 +195,8 @@ expression
      ;
 
 primary
-     : NUM
-     | ID
+     : NUM     { $$ = valueFromNum($1); }
+     | ID      { $$ = valueFromId($1); }
      ;
 
 function_call
