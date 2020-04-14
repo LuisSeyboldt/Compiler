@@ -163,3 +163,18 @@ void checkIfNotVoid(func_return_type type)
 
     return;
 }
+
+void checkReturnType(func_return_type rType, char* id)
+{
+    symbol_table_element* function = get_element_in_namespace(id);
+    if(function->type != SYMBOL_TYPE_FUNC)
+    {
+        // error element is not a function
+    }
+    
+    if(function->return_type != rType)
+    {
+        // error declaration type does not match definition type
+    }
+
+} 

@@ -23,6 +23,7 @@ typedef struct value_struct
 } value;
 
 void caseLval(value expr);
+extern void checkReturnType(func_return_type rType, char* id);
 extern value valueFromId(char* id);
 extern value valueFromNum(int num);
 extern value valueFromArray(char *id);
@@ -31,8 +32,5 @@ extern void checkExpr(value expr1, value expr2);
 extern void checkRVal(value expr1, value expr2);
 extern void checkSingleExpr(value expr);
 extern void checkIfNotVoid(func_return_type type);
-
-
-
 
 #endif

@@ -22,6 +22,7 @@
   symbol_table_element* sblElement;
   parameter_list* paramList;
   value value;
+  value* pValue;
 }
 // Verbose messages on parser error
 %define parse.error verbose
@@ -88,6 +89,7 @@
 %type<sblElement> identifier_declaration variable_declaration function_parameter
 %type<paramList> function_parameter_list
 %type<value> primary expression function_call
+%type<pValue> function_call_parameters
 
 %%
 
@@ -122,8 +124,8 @@ identifier_declaration
      ;
 
 function_definition
-     : type ID PARA_OPEN PARA_CLOSE BRACE_OPEN stmt_list BRACE_CLOSE                           { add_fun($2, $1, 0, true); numberOfScopes++; /* only increment numberOfScopes as last operation! */ } 
-     | type ID PARA_OPEN function_parameter_list PARA_CLOSE BRACE_OPEN stmt_list BRACE_CLOSE   { add_fun($2, $1, $4->numberOfParameters, true); add_sbl($4->symbols, true, true); numberOfScopes++; /* only increment numberOfScopes as last operation! */ } 
+     : type ID PARA_OPEN PARA_CLOSE BRACE_OPEN stmt_list BRACE_CLOSE                           { checkReturnType($1, $2); add_fun($2, $1, 0, true); numberOfScopes++; /* only increment numberOfScopes as last operation! */ } 
+     | type ID PARA_OPEN function_parameter_list PARA_CLOSE BRACE_OPEN stmt_list BRACE_CLOSE   { checkReturnType($1, $2); add_fun($2, $1, $4->numberOfParameters, true); add_sbl($4->symbols, true, true); numberOfScopes++; /* only increment numberOfScopes as last operation! */ } 
      ;
 
 function_declaration
@@ -166,8 +168,8 @@ stmt_conditional
      ;
 									
 stmt_loop
-     : WHILE PARA_OPEN expression PARA_CLOSE stmt                { checkSingleExpr($2); }
-     | DO stmt WHILE PARA_OPEN expression PARA_CLOSE SEMICOLON   { checkSingleExpr($4); }
+     : WHILE PARA_OPEN expression PARA_CLOSE stmt                { checkSingleExpr($3); }
+     | DO stmt WHILE PARA_OPEN expression PARA_CLOSE SEMICOLON   { checkSingleExpr($5); }
      ;
 									
 expression
