@@ -87,7 +87,7 @@
 %type<i>     NUM 
 %type<sblElement> identifier_declaration variable_declaration function_parameter
 %type<paramList> function_parameter_list
-%type<value> primary expression
+%type<value> primary expression function_call
 
 %%
 
@@ -114,7 +114,7 @@ type
 
 variable_declaration
      : variable_declaration COMMA identifier_declaration { $3->next = $1; $$ = $3; }
-     | type identifier_declaration                       {$$ = $2; }
+     | type identifier_declaration                       { checkIfNotVoid($1); $$ = $2; }
 
 identifier_declaration
      : ID BRACKET_OPEN NUM BRACKET_CLOSE { $$ = init_sbl($1, $3, SYMBOL_TYPE_ARRAY); }
@@ -137,7 +137,7 @@ function_parameter_list
      ;
 	
 function_parameter
-     : type identifier_declaration                          { $$ = $2; }
+     : type identifier_declaration                          { checkIfNotVoid($1); $$ = $2; }
      ;
 									
 stmt_list
@@ -161,38 +161,38 @@ stmt_block
      ;
 	
 stmt_conditional
-     : IF PARA_OPEN expression PARA_CLOSE stmt
-     | IF PARA_OPEN expression PARA_CLOSE stmt ELSE stmt
+     : IF PARA_OPEN expression PARA_CLOSE stmt              { checkSingleExpr($3); }
+     | IF PARA_OPEN expression PARA_CLOSE stmt ELSE stmt    { checkSingleExpr($3); }
      ;
 									
 stmt_loop
-     : WHILE PARA_OPEN expression PARA_CLOSE stmt
-     | DO stmt WHILE PARA_OPEN expression PARA_CLOSE SEMICOLON
+     : WHILE PARA_OPEN expression PARA_CLOSE stmt                { checkSingleExpr($2); }
+     | DO stmt WHILE PARA_OPEN expression PARA_CLOSE SEMICOLON   { checkSingleExpr($4); }
      ;
 									
 expression
-     : expression ASSIGN expression
-     | expression LOGICAL_OR expression
-     | expression LOGICAL_AND expression
-     | LOGICAL_NOT expression
-     | expression EQ expression
-     | expression NE expression
-     | expression LS expression 
-     | expression LSEQ expression 
-     | expression GTEQ expression 
-     | expression GT expression
-     | expression PLUS expression
-     | expression MINUS expression
-     | expression SHIFT_LEFT expression
-     | expression SHIFT_RIGHT expression
-     | expression MUL expression
-     | expression DIV expression
-     | MINUS expression %prec UNARY_MINUS
-     | PLUS expression %prec UNARY_PLUS
-     | ID BRACKET_OPEN primary BRACKET_CLOSE
-     | PARA_OPEN expression PARA_CLOSE 
-     | function_call
-     | primary
+     : expression ASSIGN expression          { checkExpr($1, $3); }
+     | expression LOGICAL_OR expression      { checkRVal($1, $3); }
+     | expression LOGICAL_AND expression     { checkRVal($1, $3); }
+     | LOGICAL_NOT expression                { checkSingleExpr($2); }
+     | expression EQ expression              { checkRVal($1, $3); }
+     | expression NE expression              { checkRVal($1, $3); }
+     | expression LS expression              { checkRVal($1, $3); }
+     | expression LSEQ expression            { checkRVal($1, $3); }
+     | expression GTEQ expression            { checkRVal($1, $3); }
+     | expression GT expression              { checkRVal($1, $3); }
+     | expression PLUS expression            { checkRVal($1, $3); }
+     | expression MINUS expression           { checkRVal($1, $3); }
+     | expression SHIFT_LEFT expression      { checkRVal($1, $3); }
+     | expression SHIFT_RIGHT expression     { checkRVal($1, $3); }
+     | expression MUL expression             { checkRVal($1, $3); }
+     | expression DIV expression             { checkRVal($1, $3); }
+     | MINUS expression %prec UNARY_MINUS    { checkSingleExpr($2); }
+     | PLUS expression %prec UNARY_PLUS      { checkSingleExpr($2); }
+     | ID BRACKET_OPEN primary BRACKET_CLOSE { $$ = valueFromArray($1); }
+     | PARA_OPEN expression PARA_CLOSE       { $$ = $2; }
+     | function_call                         { $$ = $1; }
+     | primary                               { $$ = $1; }
      ;
 
 primary
@@ -201,8 +201,8 @@ primary
      ;
 
 function_call
-      : ID PARA_OPEN PARA_CLOSE
-      | ID PARA_OPEN function_call_parameters PARA_CLOSE
+      : ID PARA_OPEN PARA_CLOSE                             { $$ = valueFromFunction($1); }
+      | ID PARA_OPEN function_call_parameters PARA_CLOSE    { $$ = valueFromFunction($1); }
       ;
 
 function_call_parameters
