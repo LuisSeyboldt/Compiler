@@ -204,7 +204,7 @@ primary
 
 function_call
       : ID PARA_OPEN PARA_CLOSE                             { $$ = valueFromFunction($1); }
-      | ID PARA_OPEN function_call_parameters PARA_CLOSE    { $$ = valueFromFunction($1); }
+      | ID PARA_OPEN function_call_parameters PARA_CLOSE    { $$ = valueFromFunctionWithParameterList($1, $3); }
       ;
 
 function_call_parameters

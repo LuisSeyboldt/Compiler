@@ -36,8 +36,7 @@ extern void checkExpr(value expr1, value expr2);
 extern void checkRVal(value expr1, value expr2);
 extern void checkSingleExpr(value expr);
 extern void checkIfNotVoid(func_return_type type);
-
-
-
+extern value valueFromFunctionWithParameterList(char *id, value *first_param_list_element);
+bool compareParameters (symbol_table_element *definiedParameter, value *callParameter);
 
 #endif

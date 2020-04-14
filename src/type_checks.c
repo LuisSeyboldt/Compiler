@@ -167,3 +167,88 @@ void checkIfNotVoid(func_return_type type)
 
     return;
 }
+
+extern value valueFromFunctionWithParameterList(char *id, value *first_param_list_element)
+{
+
+    value new_value = valueFromFunction(id);
+
+    int numberOfParamInCall = 0;
+    
+    // get number of parameters in function call
+    value *currentElement = first_param_list_element;
+    while (true)
+    {
+        if (currentElement->next == 0)
+        {
+            break;
+        }
+
+        if (currentElement->next != 0)
+        {
+            currentElement = currentElement->next; 
+            numberOfParamInCall++;
+        }
+
+    }
+
+    if (numberOfParamInCall <= 0)
+    {
+        // error
+        exit(1);
+    }
+
+    // check if number matches function definition
+    if (numberOfParamInCall != new_value.value.element->param_count)
+    {
+        // error
+        exit(1);
+    }
+
+    // get first parameter
+    symbol_table_element *firstDefinedParameter = get_element_in_scope(first_param_list_element->value.element->id, new_value.value.element->function_scope);
+
+    // check parameters
+    value *currentCallElement = first_param_list_element;
+    symbol_table_element *currentDefiniedElement = firstDefinedParameter;
+    while (true)
+    {
+
+        if (!compareParameters(currentDefiniedElement, currentCallElement) && 
+        currentDefiniedElement->scope == new_value.value.element->function_scope)
+        {
+            // error
+            exit(1);
+        }
+
+        if (currentCallElement->next == 0 && 
+        (currentDefiniedElement->next->scope != new_value.value.element->function_scope || 
+        !currentDefiniedElement->next->isParam || 
+        currentDefiniedElement->next == NULL))
+        {
+            break;
+        }
+
+        if (currentCallElement->next != 0 && currentDefiniedElement->next != 0)
+        {
+            currentCallElement = currentCallElement->next; 
+            currentDefiniedElement = currentDefiniedElement->next;
+        }
+
+    }
+
+    return new_value;
+
+}
+
+bool compareParameters (symbol_table_element *definiedParameter, value *callParameter)
+{
+
+    if (!strcmp (definiedParameter->id, callParameter->value.element->id) &&
+    definiedParameter->type == callParameter->value.element->type &&
+    definiedParameter->isParam )
+        return true;
+
+    return false;
+
+}
