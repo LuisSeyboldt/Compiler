@@ -21,6 +21,7 @@
   func_return_type rtype;
   symbol_table_element* sblElement;
   parameter_list* paramList;
+  value value;
 }
 // Verbose messages on parser error
 %define parse.error verbose
