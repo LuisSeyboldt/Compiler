@@ -13,6 +13,7 @@
 %}
 
 %code requires { #include "symbol_table.h" }
+%code requires { #include "type_checks.h" }
 
 %union {
   int i;
@@ -85,6 +86,7 @@
 %type<i>     NUM 
 %type<sblElement> identifier_declaration variable_declaration function_parameter
 %type<paramList> function_parameter_list
+%type<value> primary
 
 %%
 
