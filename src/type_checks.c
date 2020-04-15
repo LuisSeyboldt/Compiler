@@ -6,6 +6,7 @@ value valueFromId(char* id)
     value new_val;
     new_val.value.element = get_element_in_namespace(id); 
     new_val.valueType = VALUE_TYPE_SYMBOL;
+    new_val.next = NULL;
 
     return new_val;
 }
@@ -15,6 +16,7 @@ value valueFromNum(int num)
     value new_val;
     new_val.value.rval = num;
     new_val.valueType = VALUE_TYPE_VALUE;
+    new_val.next = NULL;
 
     return new_val;
 }
@@ -24,6 +26,7 @@ value valueFromArray(char *id)
     value new_val;
     new_val.value.element = get_element_in_namespace(id);
     new_val.valueType = VALUE_TYPE_ARR_ELEMENT;
+    new_val.next = NULL;
 
     return new_val;
 }
@@ -33,6 +36,7 @@ value valueFromFunction(char *id)
     value new_val;
     new_val.value.element = get_element_in_namespace(id);
     new_val.valueType = VALUE_TYPE_FUNCTION_CALL;
+    new_val.next = NULL;
 
     return new_val;
 }
@@ -184,4 +188,161 @@ void err(char* msg)
 {
     fprintf(stderr,"%s", msg);
     exit(1);
+}
+
+extern value valueFromFunctionWithParameterList(char *id, value *firstParamListElement)
+{
+
+    value new_value = valueFromFunction(id);
+
+    int numberOfParamInCall = 1;
+    
+    // get number of parameters in function call
+    value *currentElement = firstParamListElement;
+    while (true)
+    {
+        if (currentElement->next == 0)
+        {
+            break;
+        }
+
+        if (currentElement->next != 0)
+        {
+            currentElement = currentElement->next; 
+            numberOfParamInCall++;
+        }
+
+    }
+
+    // check if number matches function definition
+    if (numberOfParamInCall != new_value.value.element->param_count)
+    {
+        err ("Error: Number of parameters in function call does not match number of parameters of the called function!\n Aborting!\n");
+    }
+
+    // get first parameter
+    symbol_table_element *firstDefinedParameter = get_frist_parameter_of_func(new_value.value.element->function_scope);
+
+    // check parameters
+    value *currentCallElement = firstParamListElement;
+    symbol_table_element *currentDefiniedElement = firstDefinedParameter;
+    while (true)
+    {
+
+
+        if (!compareParameters(currentDefiniedElement, currentCallElement) || 
+        currentDefiniedElement->scope != new_value.value.element->function_scope)
+        {
+            err ("Error: Parameter type of called function does not match parameter!\n Aborting!\n");
+        }
+
+        if (currentDefiniedElement->next == NULL)
+        {
+            if (currentCallElement->next == NULL)
+                break;
+        }
+        else 
+        {
+            if (currentCallElement->next == NULL &&
+            (currentDefiniedElement->next->scope != new_value.value.element->function_scope || 
+            !currentDefiniedElement->next->isParam))
+                break;
+        }
+
+        /*if (currentCallElement->next == 0 && 
+        (currentDefiniedElement->next->scope != new_value.value.element->function_scope || 
+        !currentDefiniedElement->next->isParam || 
+        currentDefiniedElement->next == NULL))
+        {
+            break;
+        }*/
+
+        if (currentCallElement->next != 0 && currentDefiniedElement->next != 0)
+        {
+            currentCallElement = currentCallElement->next; 
+            currentDefiniedElement = currentDefiniedElement->next;
+        }
+
+    }
+
+    cleanFunctionParameterMemory (firstParamListElement);
+
+    return new_value;
+
+}
+
+bool compareParameters (symbol_table_element *definiedParameter, value *callParameter)
+{
+
+    if (callParameter->valueType == VALUE_TYPE_VALUE)
+    {
+        if (definiedParameter->type == SYMBOL_TYPE_VAR && definiedParameter->isParam)
+            return true;
+        else 
+            err("Error: RVAL cannot be assigned to non int parameter in function call!\n Aborting!\n");
+    }
+
+    if (callParameter->valueType == VALUE_TYPE_FUNCTION_CALL)
+    {
+        if (definiedParameter->type == SYMBOL_TYPE_VAR &&
+            callParameter->value.element->return_type == FUNC_RETURN_TYPE_INT &&
+            definiedParameter->isParam)
+            return true;
+        else 
+            err("Error: Function return value is incompatible with parameter!\n Aborting!\n");
+    }
+
+    if (callParameter->valueType == VALUE_TYPE_ARR_ELEMENT)
+    {
+        if (definiedParameter->type == SYMBOL_TYPE_VAR &&
+            definiedParameter->isParam)
+            return true;
+        else 
+            err ("Error: Array element type does not match parameter type!\n Aborting!\n");
+    }
+
+    if (definiedParameter->type == callParameter->value.element->type &&
+        definiedParameter->isParam )
+        return true;
+
+    return false;
+
+}
+
+value *allocFunctionParameter (value someValue)
+{
+    value *valuePtr = malloc (sizeof(someValue));
+    memcpy (valuePtr, &someValue, sizeof(someValue));
+    return valuePtr;
+}
+
+void cleanFunctionParameterMemory (value *firstFunctionCallParameter)
+{
+    value* current_element = firstFunctionCallParameter;
+    if(current_element->next == NULL)
+    {
+        return;
+    }
+
+    while(true)
+    {
+        if(current_element->next != NULL)
+        {
+            value* tmp = current_element->next;
+
+            free(current_element);
+
+            current_element = tmp;
+        }
+        else
+        {
+            if (current_element != NULL)
+            {
+                free(current_element);
+            }
+            return;
+        }
+    }
+
+    return;
 }

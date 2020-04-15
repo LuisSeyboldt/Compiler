@@ -59,9 +59,10 @@ extern parameter_list* init_param_list(int paramCount, symbol_table_element* sym
 extern symbol_table_element *get_last_table_element();
 extern symbol_table_element* init_sbl (char* id, int length, symbol_type type);
 void add_sbl(symbol_table_element* symbol, bool isLocal, bool isParam);
+extern bool element_in_namespace_scope (symbol_table_element *element, int scope);
 extern bool element_in_namespace(symbol_table_element *element);
 extern symbol_table_element *get_element_in_namespace (char* id);
-extern symbol_table_element* check_for_existing_function(symbol_table_element* new_function);
+extern symbol_table_element *check_for_existing_function(symbol_table_element* new_function);
 extern void delete_elements_of_scope (int scope);
 extern void add_fun (char* id, func_return_type rtype, unsigned int param_count, bool definition);
 extern void print_all_symbol_tables ();
@@ -70,5 +71,7 @@ extern void print_symbol_table (int scope);
 extern void cleanMem();
 extern char* get_ID_of_scope(int scope);
 extern bool scope_has_elements(int scope);
+extern symbol_table_element *get_element_in_scope(char *id, int scope);
+extern symbol_table_element *get_frist_parameter_of_func(int functionScope);
 
 #endif

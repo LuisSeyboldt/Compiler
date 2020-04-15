@@ -253,7 +253,7 @@ symbol_table_element *get_last_table_element()
 
 }
 
-bool element_in_namespace(symbol_table_element *element)
+extern bool element_in_namespace_scope (symbol_table_element *element, int scope)
 {
 
     symbol_table_element *currentElement = &first_element;
@@ -261,7 +261,7 @@ bool element_in_namespace(symbol_table_element *element)
     while (true)
     {
         
-        if (currentElement->id != 0 && currentElement->scope == element->scope)
+        if (currentElement->id != 0 && currentElement->scope == scope)
         {
             if (!strcmp(currentElement->id, element->id) && 
             currentElement->param_count == element->param_count && 
@@ -285,6 +285,13 @@ bool element_in_namespace(symbol_table_element *element)
     }
     
     return false;
+
+}
+
+bool element_in_namespace(symbol_table_element *element)
+{
+
+    return element_in_namespace_scope (element, element->scope);
 
 }
 
@@ -553,4 +560,62 @@ bool scope_has_elements(int scope)
     }
 
     return false;
+}
+
+symbol_table_element *get_element_in_scope(char *id, int scope)
+{
+
+    symbol_table_element *currentElement = &first_element;
+
+    while (true)
+    {
+        if(currentElement->id != 0)
+        {
+            if (!strcmp(id, currentElement->id))
+            {
+                if (element_in_namespace_scope (currentElement, scope))
+                    return currentElement;
+            }
+        }
+
+            if (currentElement->next == 0)
+                return NULL;
+
+            if (currentElement->next != 0)
+                currentElement = currentElement->next; 
+
+    }
+    
+    return NULL;
+
+}
+
+// finds and returns the first (in symbol table) parameter of a function
+symbol_table_element *get_frist_parameter_of_func(int functionScope)
+{
+
+     // iterator
+    symbol_table_element *currentElement = &first_element;
+
+    while (true)
+    {
+
+        // if the scope of the element is correct 
+        // and the element if a parameter return the element
+        if (currentElement->scope == functionScope &&
+        currentElement->isParam == true)
+            return currentElement;
+
+        // end of list and no element found -> error
+        if (currentElement->next == 0)
+            return NULL;
+
+        // iterate
+        if (currentElement->next != 0)
+            currentElement = currentElement->next; 
+
+    }
+    
+    return NULL;
+
 }
