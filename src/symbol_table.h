@@ -55,6 +55,7 @@ typedef struct parameter_list
 symbol_table_element first_element;
 extern int numberOfScopes;
 
+extern symbol_table_element* get_function_from_scope (int scope);
 extern parameter_list* init_param_list(int paramCount, symbol_table_element* symbols);
 extern symbol_table_element *get_last_table_element();
 extern symbol_table_element* init_sbl (char* id, int length, symbol_type type);

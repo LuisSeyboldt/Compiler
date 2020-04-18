@@ -24,6 +24,7 @@ symbol_table_element* init_sbl (char* id, int length, symbol_type type)
     new_symbol->return_type = FUNC_RETURN_TYPE_NONE;
     new_symbol->scope = 0;
     new_symbol->function_scope = 0;
+    new_symbol->isParam = false;
 
     return new_symbol;
 }
@@ -88,6 +89,7 @@ void add_fun (char* id, func_return_type rtype, unsigned int param_count, bool d
     new_symbol->scope = 0;
     new_symbol->definied = definition;
     new_symbol->function_scope = numberOfScopes;
+    new_symbol->isParam = false;
 
     // if the element is already in the namsepace: do not add to symbol table 
     /*if (element_in_namespace(new_symbol))
@@ -119,6 +121,9 @@ void add_fun (char* id, func_return_type rtype, unsigned int param_count, bool d
             }
             else 
             {
+                // reduce the number of scopes to prevent duplicate entries in symbol table for definition and declaration
+                new_symbol->function_scope = found_function->function_scope;
+                numberOfScopes--;
                 delete_elements_of_scope(found_function->function_scope);
             }
         }
@@ -322,6 +327,35 @@ symbol_table_element *get_element_in_namespace (char* id)
     return NULL;
 
 
+}
+
+symbol_table_element* get_function_from_scope (int scope)
+{
+    symbol_table_element *currentElement = &first_element;
+
+    while (true)
+    {
+        // skip first element
+        if(currentElement->id != NULL)
+        {
+            if(currentElement->type == SYMBOL_TYPE_FUNC)
+            {
+                if (currentElement->function_scope == scope)
+                {
+                    return currentElement;
+                }
+            }
+        }
+
+        if (currentElement->next == 0)
+            return NULL;
+
+        if (currentElement->next != 0)
+            currentElement = currentElement->next; 
+
+    }
+    
+    return NULL;
 }
 
 void print_all_symbol_tables()

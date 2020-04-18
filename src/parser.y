@@ -124,12 +124,16 @@ identifier_declaration
      ;
 
 function_definition
-     : type ID PARA_OPEN PARA_CLOSE BRACE_OPEN stmt_list BRACE_CLOSE                           { add_fun($2, $1, 0, true); checkReturnType($1, $2); numberOfScopes++;  /* only increment numberOfScopes as last operation! */ } 
-     | function_definition_start stmt_list BRACE_CLOSE    
+     : function_definition_start_wo_params stmt_list BRACE_CLOSE                               { numberOfScopes++;  /* only increment numberOfScopes as last operation! */ }
+     | function_definition_start stmt_list BRACE_CLOSE                                         { numberOfScopes++;  /* only increment numberOfScopes as last operation! */ }
+     ;
+
+function_definition_start_wo_params
+     : type ID PARA_OPEN PARA_CLOSE BRACE_OPEN                                                 { add_fun($2, $1, 0, true); checkReturnType($1, $2); }
      ;
 
 function_definition_start
-     : type ID PARA_OPEN function_parameter_list PARA_CLOSE BRACE_OPEN                         { add_fun($2, $1, $4->numberOfParameters, true); add_sbl($4->symbols, true, true); checkReturnType($1, $2); numberOfScopes++; /* only increment numberOfScopes as last operation! */ }
+     : type ID PARA_OPEN function_parameter_list PARA_CLOSE BRACE_OPEN                         { add_fun($2, $1, $4->numberOfParameters, true); add_sbl($4->symbols, true, true); checkReturnType($1, $2); }
      ;
 
 function_declaration
@@ -157,8 +161,8 @@ stmt
      | expression SEMICOLON
      | stmt_conditional
      | stmt_loop
-     | RETURN expression SEMICOLON
-     | RETURN SEMICOLON
+     | RETURN expression SEMICOLON                          { checkFuncReturn($2); }
+     | RETURN SEMICOLON                                     { checkVoidReturn(); }
      | SEMICOLON /* empty statement */
      ;
 
@@ -207,8 +211,8 @@ primary
      ;
 
 function_call
-      : ID PARA_OPEN PARA_CLOSE                             { $$ = valueFromFunction($1); }
-      | ID PARA_OPEN function_call_parameters PARA_CLOSE    { $$ = valueFromFunctionWithParameterList($1, $3); }
+      : ID PARA_OPEN PARA_CLOSE                             { checkZeroParams($1); $$ = valueFromFunction($1); }
+      | ID PARA_OPEN function_call_parameters PARA_CLOSE    { checkParams($1, $3); $$ = valueFromFunctionWithParameterList($1, $3); }
       ;
 
 function_call_parameters
