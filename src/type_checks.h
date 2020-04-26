@@ -31,25 +31,25 @@ typedef struct value_struct
     struct value_struct* next_expr;
 } value;
 
-void caseLval(value expr);
+void caseLval(value* expr);
 void err(char* msg);
 extern void checkReturnType(func_return_type rType, char* id);
-extern value valueFromId(char* id);
-extern value valueFromNum(int num);
-extern value valueFromArray(char *id);
-extern value valueFromFunction(char *id);
+extern value* valueFromId(char* id);
+extern value* valueFromNum(int num);
+extern value* valueFromArray(char *id);
+extern value* valueFromFunction(char *id);
 extern value* valueFromSbl(symbol_table_element* sbl);
-extern void checkExpr(value expr1, value expr2);
-extern void checkRVal(value expr1, value expr2);
-extern void checkSingleExpr(value expr);
+extern void checkExpr(value* expr1, value* expr2);
+extern void checkRVal(value* expr1, value* expr2);
+extern void checkSingleExpr(value* expr);
 extern void checkIfNotVoid(func_return_type type);
-extern value valueFromFunctionWithParameterList(char *id, value *first_param_list_element);
-extern void checkFuncReturn(value returnExpr);
+extern value* valueFromFunctionWithParameterList(char *id, value *first_param_list_element);
+extern void checkFuncReturn(value* returnExpr);
 extern void checkVoidReturn();
 extern void checkParams(char* id, value* params);
 extern void checkZeroParams(char* id);
 bool compareParameters (symbol_table_element *definiedParameter, value *callParameter);
-extern value *allocFunctionParameter (value someValue);
+extern value* allocFunctionParameter (value* someValue);
 void cleanFunctionParameterMemory(value *firstFunctionCallParameter);
 
 #endif

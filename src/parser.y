@@ -90,8 +90,7 @@
 %type<i>     NUM 
 %type<sblElement> identifier_declaration variable_declaration function_parameter
 %type<paramList> function_parameter_list
-%type<value> primary expression function_call
-%type<pValue> function_call_parameters
+%type<pValue> function_call_parameters expression primary function_call
 %type<stmt_list> stmt_list stmt stmt_conditional stmt_loop
 
 %%
@@ -160,11 +159,11 @@ stmt_list
 
 stmt
      : stmt_block
-     | variable_declaration SEMICOLON                       { add_sbl($1, true, false); }
-     | expression SEMICOLON                                 { $$ = stmt_from_expr(&$1); }
+     | variable_declaration SEMICOLON                       { add_sbl($1, true, false); $$ = stmt_from_var_decl($1); }
+     | expression SEMICOLON                                 { $$ = stmt_from_expr($1); }
      | stmt_conditional                                     { $$ = $1; }
      | stmt_loop                                            { $$ = $1; }
-     | RETURN expression SEMICOLON                          { checkFuncReturn($2); $$ = stmt_from_return(&$2); }
+     | RETURN expression SEMICOLON                          { checkFuncReturn($2); $$ = stmt_from_return($2); }
      | RETURN SEMICOLON                                     { checkVoidReturn(); $$ = stmt_from_return(NULL); }
      | SEMICOLON /* empty statement */
      ;
@@ -174,34 +173,34 @@ stmt_block
      ;
 	
 stmt_conditional
-     : IF PARA_OPEN expression PARA_CLOSE stmt              { checkSingleExpr($3); $$ = stmt_from_cond(&$3, $5, NULL); }
-     | IF PARA_OPEN expression PARA_CLOSE stmt ELSE stmt    { checkSingleExpr($3); $$ = stmt_from_cond(&$3, $5, $7); }
+     : IF PARA_OPEN expression PARA_CLOSE stmt              { checkSingleExpr($3); $$ = stmt_from_cond($3, $5, NULL); }
+     | IF PARA_OPEN expression PARA_CLOSE stmt ELSE stmt    { checkSingleExpr($3); $$ = stmt_from_cond($3, $5, $7); }
      ;
 									
 stmt_loop
-     : WHILE PARA_OPEN expression PARA_CLOSE stmt                { checkSingleExpr($3); $$ = stmt_from_loop(&$3, $5, false); }
-     | DO stmt WHILE PARA_OPEN expression PARA_CLOSE SEMICOLON   { checkSingleExpr($5); $$ = stmt_from_loop(&$5, $2, true); }
+     : WHILE PARA_OPEN expression PARA_CLOSE stmt                { checkSingleExpr($3); $$ = stmt_from_loop($3, $5, false); }
+     | DO stmt WHILE PARA_OPEN expression PARA_CLOSE SEMICOLON   { checkSingleExpr($5); $$ = stmt_from_loop($5, $2, true); }
      ;
 									
 expression
-     : expression ASSIGN expression          { checkExpr($1, $3); set_expr_details("=", &$1, &$3); $$ = $1; }
-     | expression LOGICAL_OR expression      { checkRVal($1, $3); set_expr_details("||", &$1, &$3); $$ = $1; }
-     | expression LOGICAL_AND expression     { checkRVal($1, $3); set_expr_details("&&", &$1, &$3); $$ = $1; }
-     | LOGICAL_NOT expression                { checkSingleExpr($2); set_expr_details("!", &$2, NULL); $$ = $2; }
-     | expression EQ expression              { checkRVal($1, $3); set_expr_details("==", &$1, &$3); $$ = $1; }
-     | expression NE expression              { checkRVal($1, $3); set_expr_details("!=", &$1, &$3); $$ = $1; }
-     | expression LS expression              { checkRVal($1, $3); set_expr_details("<", &$1, &$3); $$ = $1; }
-     | expression LSEQ expression            { checkRVal($1, $3); set_expr_details("<=", &$1, &$3); $$ = $1; }
-     | expression GTEQ expression            { checkRVal($1, $3); set_expr_details(">=", &$1, &$3); $$ = $1; }
-     | expression GT expression              { checkRVal($1, $3); set_expr_details(">", &$1, &$3); $$ = $1; }
-     | expression PLUS expression            { checkRVal($1, $3); set_expr_details("+", &$1, &$3); $$ = $1; }
-     | expression MINUS expression           { checkRVal($1, $3); set_expr_details("-", &$1, &$3); $$ = $1; }
-     | expression SHIFT_LEFT expression      { checkRVal($1, $3); set_expr_details("<<", &$1, &$3); $$ = $1; }
-     | expression SHIFT_RIGHT expression     { checkRVal($1, $3); set_expr_details(">>", &$1, &$3); $$ = $1; }
-     | expression MUL expression             { checkRVal($1, $3); set_expr_details("*", &$1, &$3); $$ = $1; }
-     | expression DIV expression             { checkRVal($1, $3); set_expr_details("/", &$1, &$3); $$ = $1; }
-     | MINUS expression %prec UNARY_MINUS    { checkSingleExpr($2); set_expr_details("-", &$2, NULL); $$ = $2; }
-     | PLUS expression %prec UNARY_PLUS      { checkSingleExpr($2); set_expr_details("+", &$2, NULL); $$ = $2; }
+     : expression ASSIGN expression          { checkExpr($1, $3); set_expr_details("=", $1, $3); $$ = $1; }
+     | expression LOGICAL_OR expression      { checkRVal($1, $3); set_expr_details("||", $1, $3); $$ = $1; }
+     | expression LOGICAL_AND expression     { checkRVal($1, $3); set_expr_details("", $1, $3); $$ = $1; }
+     | LOGICAL_NOT expression                { checkSingleExpr($2); set_expr_details("!", $2, NULL); $$ = $2; }
+     | expression EQ expression              { checkRVal($1, $3); set_expr_details("==", $1, $3); $$ = $1; }
+     | expression NE expression              { checkRVal($1, $3); set_expr_details("!=", $1, $3); $$ = $1; }
+     | expression LS expression              { checkRVal($1, $3); set_expr_details("<", $1, $3); $$ = $1; }
+     | expression LSEQ expression            { checkRVal($1, $3); set_expr_details("<=", $1, $3); $$ = $1; }
+     | expression GTEQ expression            { checkRVal($1, $3); set_expr_details(">=", $1, $3); $$ = $1; }
+     | expression GT expression              { checkRVal($1, $3); set_expr_details(">", $1, $3); $$ = $1; }
+     | expression PLUS expression            { checkRVal($1, $3); set_expr_details("+", $1, $3); $$ = $1; }
+     | expression MINUS expression           { checkRVal($1, $3); set_expr_details("-", $1, $3); $$ = $1; }
+     | expression SHIFT_LEFT expression      { checkRVal($1, $3); set_expr_details("<<", $1, $3); $$ = $1; }
+     | expression SHIFT_RIGHT expression     { checkRVal($1, $3); set_expr_details(">>", $1, $3); $$ = $1; }
+     | expression MUL expression             { checkRVal($1, $3); set_expr_details("*", $1, $3); $$ = $1; }
+     | expression DIV expression             { checkRVal($1, $3); set_expr_details("/", $1, $3); $$ = $1; }
+     | MINUS expression %prec UNARY_MINUS    { checkSingleExpr($2); set_expr_details("-", $2, NULL); $$ = $2; }
+     | PLUS expression %prec UNARY_PLUS      { checkSingleExpr($2); set_expr_details("+", $2, NULL); $$ = $2; }
      | ID BRACKET_OPEN primary BRACKET_CLOSE { $$ = valueFromArray($1); }
      | PARA_OPEN expression PARA_CLOSE       { $$ = $2; }
      | function_call                         { $$ = $1; }
@@ -219,7 +218,7 @@ function_call
       ;
 
 function_call_parameters
-     : function_call_parameters COMMA expression       { $3.next = $1; $$ = allocFunctionParameter($3); }
+     : function_call_parameters COMMA expression       { $3->next = $1; $$ = allocFunctionParameter($3); }
      | expression                                      { $$ = allocFunctionParameter($1); }
      ;
 

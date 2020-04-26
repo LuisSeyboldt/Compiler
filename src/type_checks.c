@@ -8,70 +8,74 @@ value* valueFromSbl(symbol_table_element* sbl)
     new_val->next_expr = NULL;
     new_val->value.element = sbl;
     new_val->valueType = VALUE_TYPE_SYMBOL;
-    new_val->stmt_operator = NULL;
+    new_val->stmt_operator = malloc(sizeof(char[255]));
     new_val->next = NULL;
 
     return new_val;
 }
 
-value valueFromId(char* id) 
+value* valueFromId(char* id) 
 {
-    value new_val;
-    new_val.value.element = get_element_in_namespace(id); 
-    new_val.valueType = VALUE_TYPE_SYMBOL;
-    new_val.next = NULL;
-    new_val.next_expr = NULL;
-    new_val.isTemp = false; 
-    new_val.stmt_operator = NULL;
+    value* new_val = malloc(sizeof(value));
+    new_val->value.element = get_element_in_namespace(id); 
+    new_val->valueType = VALUE_TYPE_SYMBOL;
+    new_val->next = NULL;
+    new_val->next_expr = NULL;
+    new_val->isTemp = false; 
+    new_val->stmt_operator = malloc(sizeof(char[255]));
 
     return new_val;
 }
 
-value valueFromNum(int num)
+value* valueFromNum(int num)
 {
-    value new_val;
-    new_val.value.rval = num;
-    new_val.valueType = VALUE_TYPE_VALUE;
-    new_val.next = NULL;
-    new_val.next_expr = NULL;
-    new_val.isTemp = false; 
-    new_val.stmt_operator = NULL;
+    value* new_val = malloc(sizeof(value));
+    new_val->value.rval = num;
+    new_val->valueType = VALUE_TYPE_VALUE;
+    new_val->next = NULL;
+    new_val->next_expr = NULL;
+    new_val->isTemp = false; 
+    new_val->stmt_operator = malloc(sizeof(char[255]));
 
     return new_val;
 }
 
-value valueFromArray(char *id)
+value* valueFromArray(char *id)
 {
-    value new_val;
-    new_val.value.element = get_element_in_namespace(id);
-    new_val.valueType = VALUE_TYPE_ARR_ELEMENT;
-    new_val.next = NULL;
-    new_val.next_expr = NULL;
-    new_val.isTemp = false; 
-    new_val.stmt_operator = NULL;
+    value* new_val = malloc(sizeof(value));
+    new_val->value.element = get_element_in_namespace(id);
+    new_val->valueType = VALUE_TYPE_ARR_ELEMENT;
+    new_val->next = NULL;
+    new_val->next_expr = NULL;
+    new_val->isTemp = false; 
+    new_val->stmt_operator = malloc(sizeof(char[255]));
 
     return new_val;
 }
 
-value valueFromFunction(char *id)
+value* valueFromFunction(char *id)
 {
-    value new_val;
-    new_val.value.element = get_element_in_namespace(id);
-    new_val.valueType = VALUE_TYPE_FUNCTION_CALL;
-    new_val.next = NULL;
-    new_val.next_expr = NULL;
-    new_val.isTemp = false; 
-    new_val.stmt_operator = NULL;
+    value* new_val = malloc(sizeof(value));
+    new_val->value.element = get_element_in_namespace(id);
+    new_val->valueType = VALUE_TYPE_FUNCTION_CALL;
+    new_val->next = NULL;
+    new_val->next_expr = NULL;
+    new_val->isTemp = false; 
+    new_val->stmt_operator = malloc(sizeof(char[255]));
 
     return new_val;
 }
 
-void checkExpr(value expr1, value expr2)
+void checkExpr(value* expr1, value* expr2)
 {
-    switch (expr1.valueType)
+    if(expr1 == NULL || expr2 == NULL || expr1->value.element == NULL || expr2->value.element == NULL)
+    {
+        return; 
+    }
+    switch (expr1->valueType)
     {
     case VALUE_TYPE_SYMBOL:
-        if(expr1.value.element->type == SYMBOL_TYPE_VAR)
+        if(expr1->value.element->type == SYMBOL_TYPE_VAR)
         {
             caseLval(expr2);
         }
@@ -90,19 +94,19 @@ void checkExpr(value expr1, value expr2)
     }
 }
 
-void checkSingleExpr(value expr)
+void checkSingleExpr(value* expr)
 {
-    if(expr.valueType == VALUE_TYPE_SYMBOL)
+    if(expr->valueType == VALUE_TYPE_SYMBOL)
     {
-        if(expr.value.element->type == SYMBOL_TYPE_ARRAY)
+        if(expr->value.element->type == SYMBOL_TYPE_ARRAY)
         {
             err("ERROR: Array not allowed here");
         }
     }
 
-    if(expr.valueType == VALUE_TYPE_FUNCTION_CALL)
+    if(expr->valueType == VALUE_TYPE_FUNCTION_CALL)
     {
-        if(expr.value.element->return_type == FUNC_RETURN_TYPE_VOID)
+        if(expr->value.element->return_type == FUNC_RETURN_TYPE_VOID)
         {
             err("ERROR: Return type void not allowed here");
         }
@@ -111,35 +115,35 @@ void checkSingleExpr(value expr)
     return;
 }
 
-void checkRVal(value expr1, value expr2)
+void checkRVal(value* expr1, value* expr2)
 {
     // can not compare a array with something
-    if(expr1.valueType == VALUE_TYPE_SYMBOL)
+    if(expr1->valueType == VALUE_TYPE_SYMBOL)
     {
-        if(expr1.value.element->type == SYMBOL_TYPE_ARRAY)
+        if(expr1->value.element->type == SYMBOL_TYPE_ARRAY)
         {
             err("ERROR: Array can not be assigned");
         }
     }
-    if(expr2.valueType == VALUE_TYPE_SYMBOL)
+    if(expr2->valueType == VALUE_TYPE_SYMBOL)
     {
-        if(expr2.value.element->type == SYMBOL_TYPE_ARRAY)
+        if(expr2->value.element->type == SYMBOL_TYPE_ARRAY)
         {
             err("ERROR: Can not assign array");
         }
     }
 
     // cannot compare a void function call with something
-    if(expr1.valueType == VALUE_TYPE_FUNCTION_CALL)
+    if(expr1->valueType == VALUE_TYPE_FUNCTION_CALL)
     {
-        if(expr1.value.element->return_type == FUNC_RETURN_TYPE_VOID)
+        if(expr1->value.element->return_type == FUNC_RETURN_TYPE_VOID)
         {
             err("ERROR: Return type void not allowed here");
         }
     }
-    if(expr2.valueType == VALUE_TYPE_FUNCTION_CALL)
+    if(expr2->valueType == VALUE_TYPE_FUNCTION_CALL)
     {
-        if(expr2.value.element->return_type == FUNC_RETURN_TYPE_VOID)
+        if(expr2->value.element->return_type == FUNC_RETURN_TYPE_VOID)
         {
             err("ERROR: Return type void not allowed here");
         }
@@ -149,11 +153,11 @@ void checkRVal(value expr1, value expr2)
     return;
 }
 
-void caseLval(value expr) 
+void caseLval(value* expr) 
 {
-    if(expr.valueType == VALUE_TYPE_FUNCTION_CALL)
+    if(expr->valueType == VALUE_TYPE_FUNCTION_CALL)
     {
-        if(expr.value.element->return_type != FUNC_RETURN_TYPE_INT)
+        if(expr->value.element->return_type != FUNC_RETURN_TYPE_INT)
         {
             err("ERROR: Return type void not allowed here");
         }
@@ -162,13 +166,13 @@ void caseLval(value expr)
             return;
         }
     }
-    if (expr.valueType == VALUE_TYPE_VALUE)
+    if (expr->valueType == VALUE_TYPE_VALUE)
     {
         return;
     }
-    if (expr.valueType == VALUE_TYPE_SYMBOL)
+    if (expr->valueType == VALUE_TYPE_SYMBOL)
     {
-        if (expr.value.element->type == SYMBOL_TYPE_VAR)
+        if (expr->value.element->type == SYMBOL_TYPE_VAR)
         {
             return;
         }
@@ -177,7 +181,7 @@ void caseLval(value expr)
             err("ERROR: Types do not match");
         }
     }
-    if (expr.valueType == VALUE_TYPE_ARR_ELEMENT)
+    if (expr->valueType == VALUE_TYPE_ARR_ELEMENT)
     {
         return;
     }
@@ -215,10 +219,10 @@ void err(char* msg)
     exit(1);
 }
 
-extern value valueFromFunctionWithParameterList(char *id, value *firstParamListElement)
+extern value* valueFromFunctionWithParameterList(char *id, value *firstParamListElement)
 {
 
-    value new_value = valueFromFunction(id);
+    value* new_value = valueFromFunction(id);
 
     int numberOfParamInCall = 1;
     
@@ -240,13 +244,13 @@ extern value valueFromFunctionWithParameterList(char *id, value *firstParamListE
     }
 
     // check if number matches function definition
-    if (numberOfParamInCall != new_value.value.element->param_count)
+    if (numberOfParamInCall != new_value->value.element->param_count)
     {
         err ("Error: Number of parameters in function call does not match number of parameters of the called function!\n Aborting!\n");
     }
 
     // get first parameter
-    symbol_table_element *firstDefinedParameter = get_frist_parameter_of_func(new_value.value.element->function_scope);
+    symbol_table_element *firstDefinedParameter = get_frist_parameter_of_func(new_value->value.element->function_scope);
 
     // check parameters
     value *currentCallElement = firstParamListElement;
@@ -256,7 +260,7 @@ extern value valueFromFunctionWithParameterList(char *id, value *firstParamListE
 
 
         if (!compareParameters(currentDefiniedElement, currentCallElement) || 
-        currentDefiniedElement->scope != new_value.value.element->function_scope)
+        currentDefiniedElement->scope != new_value->value.element->function_scope)
         {
             err ("Error: Parameter type of called function does not match parameter!\n Aborting!\n");
         }
@@ -269,13 +273,13 @@ extern value valueFromFunctionWithParameterList(char *id, value *firstParamListE
         else 
         {
             if (currentCallElement->next == NULL &&
-            (currentDefiniedElement->next->scope != new_value.value.element->function_scope || 
+            (currentDefiniedElement->next->scope != new_value->value.element->function_scope || 
             !currentDefiniedElement->next->isParam))
                 break;
         }
 
         /*if (currentCallElement->next == 0 && 
-        (currentDefiniedElement->next->scope != new_value.value.element->function_scope || 
+        (currentDefiniedElement->next->scope != new_value->value.element->function_scope || 
         !currentDefiniedElement->next->isParam || 
         currentDefiniedElement->next == NULL))
         {
@@ -296,7 +300,7 @@ extern value valueFromFunctionWithParameterList(char *id, value *firstParamListE
 
 }
 
-bool compareParameters (symbol_table_element *definiedParameter, value *callParameter)
+bool compareParameters (symbol_table_element *definiedParameter, value* callParameter)
 {
 
     if (callParameter->valueType == VALUE_TYPE_VALUE)
@@ -334,7 +338,7 @@ bool compareParameters (symbol_table_element *definiedParameter, value *callPara
 
 }
 
-value *allocFunctionParameter (value someValue)
+value* allocFunctionParameter (value* someValue)
 {
     value *valuePtr = malloc (sizeof(someValue));
     memcpy (valuePtr, &someValue, sizeof(someValue));
@@ -372,7 +376,7 @@ void cleanFunctionParameterMemory (value *firstFunctionCallParameter)
     return;
 }
 
-void checkFuncReturn(value returnExpr)
+void checkFuncReturn(value* returnExpr)
 {
     // get current function (numberOfScopes - 1) gets the currently active scope
     symbol_table_element* func = get_function_from_scope(numberOfScopes);
@@ -382,7 +386,7 @@ void checkFuncReturn(value returnExpr)
     }
 
     // return value is array element or rValue
-    if(returnExpr.valueType == VALUE_TYPE_ARR_ELEMENT || returnExpr.valueType == VALUE_TYPE_VALUE)
+    if(returnExpr->valueType == VALUE_TYPE_ARR_ELEMENT || returnExpr->valueType == VALUE_TYPE_VALUE)
     {
         if(func->return_type != FUNC_RETURN_TYPE_INT)
         {
@@ -391,16 +395,16 @@ void checkFuncReturn(value returnExpr)
     }
 
     // return value is array or variable
-    if(returnExpr.valueType == VALUE_TYPE_SYMBOL)
+    if(returnExpr->valueType == VALUE_TYPE_SYMBOL)
     {
         //array
-        if(returnExpr.value.element->type == SYMBOL_TYPE_ARRAY)
+        if(returnExpr->value.element->type == SYMBOL_TYPE_ARRAY)
         {
             err("ERROR: cannot return a array");
         }
 
         // var
-        if(returnExpr.value.element->type == SYMBOL_TYPE_VAR)
+        if(returnExpr->value.element->type == SYMBOL_TYPE_VAR)
         {
             if(func->return_type != FUNC_RETURN_TYPE_INT)
             {

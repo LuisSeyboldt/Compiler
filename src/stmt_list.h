@@ -65,7 +65,9 @@ typedef struct stmt_expr_struct
 stmt_list_element first_stmt;
 extern int label_counter;
 
+extern stmt_expr* init_stmt_expr();
 extern void add_to_list(stmt_list_element* list, stmt_list_element* element);
+extern stmt_list_element* stmt_from_var_decl(symbol_table_element* var);
 extern stmt_list_element* stmt_from_expr(value* expr);
 extern stmt_list_element* stmt_from_cond(value* cond_expr, stmt_list_element* true_list, stmt_list_element* false_list);
 extern stmt_list_element* stmt_from_loop(value* cond_expr, stmt_list_element* loop_list, bool doWhile);
