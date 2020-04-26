@@ -75,5 +75,6 @@ extern stmt_list_element* stmt_from_return(value* expr);
 extern void set_expr_details(char* op, value* currentExpr, value* nextExpr);
 
 extern void print_intermediate_code (char* file_string);
+void print_statements (FILE *fp, int function_scope, stmt_list_element *first_element);
 
 #endif

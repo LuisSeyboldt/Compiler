@@ -429,30 +429,30 @@ void print_statements (FILE *fp, int function_scope, stmt_list_element *first_el
 
             switch (current_stmt->type) {
 
-                STMT_TYPE_EMPTY:
+                case STMT_TYPE_EMPTY:
                 break;
 
-                STMT_TYPE_COND:
+                case STMT_TYPE_COND:
                 print_cond (fp, current_stmt->stmt.stmt_cond, function_scope);
                 break;
 
-                STMT_TYPE_LOOP:
+                case STMT_TYPE_LOOP:
                 if (current_stmt->stmt.stmt_loop->do_while)
                     print_do_while_loop(fp, current_stmt->stmt.stmt_loop, function_scope);
                 else 
                     print_while_loop(fp, current_stmt->stmt.stmt_loop, function_scope);
                 break;
 
-                STMT_TYPE_EXPR:
+                case STMT_TYPE_EXPR:
                 print_stmt_expr(fp, current_stmt->stmt.stmt_expr);
                 break;
 
-                STMT_TYPE_RETURN:
+                case STMT_TYPE_RETURN:
                 print_statements(fp, function_scope, current_stmt->stmt.stmt_return->return_expr_list);
                 fprintf (fp, "return %s;\n", current_stmt->stmt.stmt_return->return_id);
                 break;
 
-                STMT_TYPE_TMP_DEC:
+                case STMT_TYPE_TMP_DEC:
                 fprintf (fp, "int %s;\n", current_stmt->stmt.stmt_expr->dest);
                 print_stmt_expr(fp, current_stmt->stmt.stmt_expr);
                 break;
@@ -473,6 +473,38 @@ void print_statements (FILE *fp, int function_scope, stmt_list_element *first_el
 
 }
 
+void print_local_variables (FILE *fp, int function_scope)
+{
+
+    symbol_table_element *currentElement = &first_element;
+
+    while (true)
+    {
+
+        if (currentElement->scope == function_scope && !currentElement->isParam)
+        {
+
+            if (currentElement->type == SYMBOL_TYPE_VAR)
+                fprintf(fp, "int %s;\n", currentElement->id);
+
+            if (currentElement->type == SYMBOL_TYPE_ARRAY)
+                fprintf(fp, "int %s[%d];\n", currentElement->id, currentElement->length);
+
+        }
+
+
+        if (currentElement->next == 0)
+        {
+            break;
+        }
+
+        if (currentElement->next != 0)
+            currentElement = currentElement->next;
+
+    }
+
+}
+
 void print_functions (FILE *fp)
 {
 
@@ -485,7 +517,10 @@ void print_functions (FILE *fp)
         {
 
             print_function_header (fp, currentElement);
-            fprintf(fp, "\n{");
+            fprintf(fp, "\n{\n");
+
+            // print local variables
+            print_local_variables(fp, currentElement->function_scope);
 
             // print statements
             print_statements(fp, currentElement->function_scope, &first_stmt);
