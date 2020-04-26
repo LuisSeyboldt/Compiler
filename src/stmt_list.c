@@ -169,17 +169,12 @@ stmt_list_element* stmt_from_loop(value* cond_expr, stmt_list_element* loop_list
 stmt_list_element* stmt_from_return(value* expr)
 {
     stmt_list_element* new_element = malloc(sizeof(stmt_list_element));
+    stmt_list_element* return_stmt_list = stmt_from_expr(expr);
     new_element->next = NULL;
     new_element->scope = numberOfScopes;
     new_element->type = STMT_TYPE_RETURN;
-    if(expr != NULL)
-    {
-        new_element->stmt.stmt_return->return_expr = expr;
-    }
-    else
-    {
-        new_element->stmt.stmt_return->return_expr = NULL;
-    }
+    new_element->stmt.stmt_return->return_expr_list = return_stmt_list;
+    strcpy(new_element->stmt.stmt_return->return_id, get_last_statement(return_stmt_list)->stmt.stmt_expr->dest);
 
 
     return new_element;

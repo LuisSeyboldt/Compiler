@@ -50,6 +50,7 @@ typedef struct stmt_loop_struct
 
 typedef struct stmt_return_struct
 {
+    stmt_list_element* return_expr_list;
     char* return_id;
 } stmt_return;
 
