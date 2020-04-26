@@ -387,6 +387,7 @@ void print_statements (FILE *fp, int function_scope, stmt_list_element *first_el
                 break;
 
                 STMT_TYPE_RETURN:
+                print_statements(fp, function_scope, current_stmt->stmt.stmt_return->return_expr_list);
                 fprintf (fp, "return %s;\n", current_stmt->stmt.stmt_return->return_id);
                 break;
 
