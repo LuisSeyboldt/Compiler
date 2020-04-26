@@ -155,13 +155,13 @@ function_parameter
 									
 stmt_list
      : /* empty: epsilon */
-     | stmt_list stmt                                       { $2->next = $1; $$ = $2; }
+     | stmt_list stmt                                       { /*$2->next = $1; $$ = $2;*/ }
      ;
 
 stmt
      : stmt_block
      | variable_declaration SEMICOLON                       { add_sbl($1, true, false); }
-     | expression SEMICOLON                                 { $$ = stmt_from_expr($1); }
+     | expression SEMICOLON                                 { /*$$ = stmt_from_expr($1);*/ }
      | stmt_conditional
      | stmt_loop
      | RETURN expression SEMICOLON                          { checkFuncReturn($2); }
