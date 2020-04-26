@@ -14,6 +14,7 @@
 
 %code requires { #include "symbol_table.h" }
 %code requires { #include "type_checks.h" }
+%code requires { #include "stmt_list.h" }
 
 %union {
   int i;
@@ -23,6 +24,7 @@
   parameter_list* paramList;
   value value;
   value* pValue;
+  stmt_list_element* stmt_list;
 }
 // Verbose messages on parser error
 %define parse.error verbose
@@ -90,6 +92,7 @@
 %type<paramList> function_parameter_list
 %type<value> primary expression function_call
 %type<pValue> function_call_parameters
+%type<stmt_list> stmt_list stmt stmt_conditional stmt_loop
 
 %%
 
@@ -152,13 +155,13 @@ function_parameter
 									
 stmt_list
      : /* empty: epsilon */
-     | stmt_list stmt
+     | stmt_list stmt                                       { $2->next = $1; $$ = $2; }
      ;
 
 stmt
      : stmt_block
      | variable_declaration SEMICOLON                       { add_sbl($1, true, false); }
-     | expression SEMICOLON
+     | expression SEMICOLON                                 { $$ = stmt_from_expr($1); }
      | stmt_conditional
      | stmt_loop
      | RETURN expression SEMICOLON                          { checkFuncReturn($2); }

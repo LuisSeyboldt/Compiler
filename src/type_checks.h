@@ -25,6 +25,11 @@ typedef struct value_struct
     // (used for parameter list evaluation)
     struct value_struct *next; 
 
+    // chars for statement list
+    char* destination;
+    char  stmt_operator;
+    char* operand1;
+    char* operand2;
 } value;
 
 void caseLval(value expr);
