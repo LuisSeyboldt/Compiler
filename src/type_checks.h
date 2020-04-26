@@ -38,6 +38,7 @@ extern value valueFromId(char* id);
 extern value valueFromNum(int num);
 extern value valueFromArray(char *id);
 extern value valueFromFunction(char *id);
+extern value* valueFromSbl(symbol_table_element* sbl);
 extern void checkExpr(value expr1, value expr2);
 extern void checkRVal(value expr1, value expr2);
 extern void checkSingleExpr(value expr);

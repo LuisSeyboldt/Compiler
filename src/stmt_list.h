@@ -8,12 +8,11 @@
 
 typedef union stmt_union
 {
-    value* expr;
+    struct stmt_expr_struct* stmt_expr;
     struct stmt_cond_struct* stmt_cond;
     struct stmt_loop_struct* stmt_loop;
     struct stmt_return_struct* stmt_return;
 } stmt;
-
 
 typedef enum stmt_enum 
 {
@@ -21,7 +20,8 @@ typedef enum stmt_enum
     STMT_TYPE_COND,
     STMT_TYPE_LOOP,
     STMT_TYPE_EXPR,
-    STMT_TYPE_RETURN
+    STMT_TYPE_RETURN,
+    STMT_TYPE_TMP_DEC
 } stmt_type;
 
 typedef struct stmt_list_struct
@@ -34,16 +34,18 @@ typedef struct stmt_list_struct
 
 typedef struct stmt_cond_struct
 {
-    value* cond_expr;
+    stmt_list_element* cond_stmt_list;
     stmt_list_element* true_list;
     stmt_list_element* false_list;
+    char* cond_id;
 } stmt_cond;
 
 typedef struct stmt_loop_struct
 {
     bool do_while;
-    value*  cond_expr;
+    stmt_list_element* cond_stmt_list;
     stmt_list_element* loop_list;
+    char* cond_id;
 } stmt_loop;
 
 typedef struct stmt_return_struct
@@ -60,24 +62,7 @@ typedef struct stmt_expr_struct
 } stmt_expr;
 
 
-typedef struct stmt_list_struct
-{
-    stmt_list_element* next;
-    stmt_type type;
-    stmt stmt;
-    int scope;
-} stmt_list_element;
-
-typedef union stmt_union
-{
-    value* expr;
-    stmt_expr* stmt_expr;
-    stmt_cond* stmt_cond;
-    stmt_loop* stmt_loop;
-    stmt_return* stmt_return;
-} stmt;
-
-
+extern void add_to_list(stmt_list_element* list, stmt_list_element* element);
 extern stmt_list_element* stmt_from_expr(value* expr);
 extern stmt_list_element* stmt_from_cond(value* cond_expr, stmt_list_element* true_list, stmt_list_element* false_list);
 extern stmt_list_element* stmt_from_loop(value* cond_expr, stmt_list_element* loop_list, bool doWhile);

@@ -1,6 +1,19 @@
 #include "type_checks.h"
 #include "symbol_table.h"
 
+value* valueFromSbl(symbol_table_element* sbl)
+{
+    value* new_val = malloc(sizeof(value));
+    new_val->isTemp = true; 
+    new_val->next_expr = NULL;
+    new_val->value.element = sbl;
+    new_val->valueType = VALUE_TYPE_SYMBOL;
+    new_val->stmt_operator = NULL;
+    new_val->next = NULL;
+
+    return new_val;
+}
+
 value valueFromId(char* id) 
 {
     value new_val;
