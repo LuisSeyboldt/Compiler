@@ -21,15 +21,14 @@ typedef struct value_struct
     simple_value value;
     value_type valueType;
 
-    // pointer to the next element 
+    // pointer to the next element
     // (used for parameter list evaluation)
-    struct value_struct *next; 
+    struct value_struct *next;
 
-    // chars for statement list
-    char* destination;
-    char  stmt_operator;
-    char* operand1;
-    char* operand2;
+    // for statement list
+    char* stmt_operator;
+    bool isTemp;
+    struct value_struct* next_expr;
 } value;
 
 void caseLval(value expr);

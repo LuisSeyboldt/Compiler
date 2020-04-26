@@ -7,6 +7,9 @@ value valueFromId(char* id)
     new_val.value.element = get_element_in_namespace(id); 
     new_val.valueType = VALUE_TYPE_SYMBOL;
     new_val.next = NULL;
+    new_val.next_expr = NULL;
+    new_val.isTemp = false; 
+    new_val.stmt_operator = NULL;
 
     return new_val;
 }
@@ -17,6 +20,9 @@ value valueFromNum(int num)
     new_val.value.rval = num;
     new_val.valueType = VALUE_TYPE_VALUE;
     new_val.next = NULL;
+    new_val.next_expr = NULL;
+    new_val.isTemp = false; 
+    new_val.stmt_operator = NULL;
 
     return new_val;
 }
@@ -27,6 +33,9 @@ value valueFromArray(char *id)
     new_val.value.element = get_element_in_namespace(id);
     new_val.valueType = VALUE_TYPE_ARR_ELEMENT;
     new_val.next = NULL;
+    new_val.next_expr = NULL;
+    new_val.isTemp = false; 
+    new_val.stmt_operator = NULL;
 
     return new_val;
 }
@@ -37,6 +46,9 @@ value valueFromFunction(char *id)
     new_val.value.element = get_element_in_namespace(id);
     new_val.valueType = VALUE_TYPE_FUNCTION_CALL;
     new_val.next = NULL;
+    new_val.next_expr = NULL;
+    new_val.isTemp = false; 
+    new_val.stmt_operator = NULL;
 
     return new_val;
 }

@@ -21,7 +21,7 @@ stmt_list_element* stmt_from_expr(value* expr)
         {
             if(current_value->next_expr->next_expr != NULL)
             {
-
+                current_value = current_value->next_expr;
             }
             else // no more expressions 
             {
@@ -32,15 +32,27 @@ stmt_list_element* stmt_from_expr(value* expr)
                 tmp_stmt->type = STMT_TYPE_EXPR;
                 strcpy(tmp_stmt->stmt.stmt_expr->dest, strcat("temp_", itoa(numberOfTemps)));
                 strcpy(tmp_stmt->stmt.stmt_expr->op, current_value->stmt_operator);
+
+
                 if(current_value->valueType == VALUE_TYPE_VALUE)
                 {
                     strcpy(tmp_stmt->stmt.stmt_expr->operand1, itoa(current_value->value.rval));
+                }
+                else if(current_value->valueType == VALUE_TYPE_SYMBOL)
+                {
+                    strcpy(tmp_stmt->stmt.stmt_expr->operand1, itoa(current_value->value.element->id));
                 }
 
                 if(current_value->next_expr->valueType == VALUE_TYPE_VALUE)
                 {
                     strcpy(tmp_stmt->stmt.stmt_expr->operand2, itoa(current_value->next_expr->value.rval));
                 }
+                else if(current_value->valueType == VALUE_TYPE_SYMBOL)
+                {
+                    strcpy(tmp_stmt->stmt.stmt_expr->operand2, itoa(current_value->next_expr->value.element->id));
+                }
+
+                
             }
         }
     }
