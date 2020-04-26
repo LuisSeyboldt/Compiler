@@ -12,6 +12,7 @@ typedef union stmt_union
     struct stmt_cond_struct* stmt_cond;
     struct stmt_loop_struct* stmt_loop;
     struct stmt_return_struct* stmt_return;
+    struct stmt_expr_struct* stmt_expr;
 } stmt;
 
 
@@ -21,7 +22,8 @@ typedef enum stmt_enum
     STMT_TYPE_COND,
     STMT_TYPE_LOOP,
     STMT_TYPE_EXPR,
-    STMT_TYPE_RETURN
+    STMT_TYPE_RETURN,
+    STMT_TYPE_TMP_DEC,
 } stmt_type;
 
 typedef struct stmt_list_struct
@@ -48,7 +50,7 @@ typedef struct stmt_loop_struct
 
 typedef struct stmt_return_struct
 {
-    value* return_expr;
+    char* return_id;
 } stmt_return;
 
 typedef struct stmt_expr_struct
@@ -77,6 +79,8 @@ typedef union stmt_union
     stmt_return* stmt_return;
 } stmt;
 
+stmt_list_element first_stmt;
+extern int label_counter = 0;
 
 extern stmt_list_element* stmt_from_expr(value* expr);
 extern stmt_list_element* stmt_from_cond(value* cond_expr, stmt_list_element* true_list, stmt_list_element* false_list);

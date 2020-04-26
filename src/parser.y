@@ -225,6 +225,7 @@ function_call_parameters
 
 %%
 int numberOfScopes = 1;
+int label_counter = 0;
 
 void yyerror (const char *msg)
 {
