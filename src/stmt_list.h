@@ -6,6 +6,15 @@
 
 #include "type_checks.h"
 
+typedef union stmt_union
+{
+    value* expr;
+    struct stmt_cond_struct* stmt_cond;
+    struct stmt_loop_struct* stmt_loop;
+    struct stmt_return_struct* stmt_return;
+} stmt;
+
+
 typedef enum stmt_enum 
 {
     STMT_TYPE_EMPTY,
@@ -14,6 +23,14 @@ typedef enum stmt_enum
     STMT_TYPE_EXPR,
     STMT_TYPE_RETURN
 } stmt_type;
+
+typedef struct stmt_list_struct
+{
+    struct stmt_list_struct* next;
+    stmt_type type;
+    stmt stmt;
+    int scope;
+} stmt_list_element;
 
 typedef struct stmt_cond_struct
 {
@@ -67,6 +84,6 @@ extern stmt_list_element* stmt_from_loop(value* cond_expr, stmt_list_element* lo
 extern stmt_list_element* stmt_from_return(value* expr);
 extern void set_expr_details(char* op, value* currentExpr, value* nextExpr);
 
-
+extern void print_intermediate_code (char* file_string);
 
 #endif

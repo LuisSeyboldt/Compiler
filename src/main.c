@@ -7,6 +7,7 @@
 
 #include "main.h"
 #include "symbol_table.h"
+#include "stmt_list.h"
 
 /* Constants */
 static const char *C_EXT = ".c";
@@ -274,6 +275,10 @@ int main (int argc, char *argv[]) {
   yyparse();
 
   print_all_symbol_tables();
+
+  if (cc_options.ir_file != NULL)
+    print_intermediate_code(cc_options.ir_file);
+
   rm_cleanup_resources(&resource_mgr);
   cleanMem();
   return 0;
