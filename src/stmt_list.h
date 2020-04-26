@@ -50,7 +50,7 @@ typedef struct stmt_loop_struct
 
 typedef struct stmt_return_struct
 {
-    value* return_expr;
+    char* return_id;
 } stmt_return;
 
 typedef struct stmt_expr_struct
@@ -61,6 +61,8 @@ typedef struct stmt_expr_struct
     char* operand2;
 } stmt_expr;
 
+stmt_list_element first_stmt;
+extern int label_counter;
 
 extern void add_to_list(stmt_list_element* list, stmt_list_element* element);
 extern stmt_list_element* stmt_from_expr(value* expr);

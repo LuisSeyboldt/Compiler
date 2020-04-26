@@ -1,6 +1,8 @@
 #include "stmt_list.h"
 #include "symbol_table.h"
 
+#include <string.h>
+
 stmt_list_element* stmt_from_expr(value* expr)
 {
     if(expr->next_expr == NULL)
@@ -279,6 +281,141 @@ void print_global_elements(FILE *fp)
     }
 }
 
+void print_stmt_expr (FILE *fp, stmt_expr* stmt_expr)
+{
+
+    if (stmt_expr->operand2 != NULL && stmt_expr->op != NULL && strcmp(stmt_expr->op, "="))
+        fprintf (fp, "%s = %s %s %s;\n", stmt_expr->dest, stmt_expr->operand1, stmt_expr->op, stmt_expr->operand2);
+
+    if (stmt_expr->operand2 == NULL && stmt_expr->op != NULL && strcmp(stmt_expr->op, "="))
+        fprintf (fp, "%s = %s %s;\n", stmt_expr->dest, stmt_expr->op, stmt_expr->operand1);
+
+    if (stmt_expr->operand2 == NULL &&  stmt_expr->op != NULL && !strcmp(stmt_expr->op, "="))
+        fprintf (fp, "%s = %s;\n", stmt_expr->dest, stmt_expr->operand1);
+
+}
+
+void print_while_loop (FILE *fp, stmt_loop* stmt_loop, int function_scope)
+{
+
+    print_statements(fp, function_scope, stmt_loop->cond_stmt_list);
+
+    int top_label = label_counter++;
+    int loop_body = label_counter++;
+    int after_loop = label_counter++;
+
+    fprintf(fp, "label%d:\n", top_label);
+
+    fprintf(fp, "if (%s)\n{\ngoto label%d;\n}\ngoto label%d;\n", stmt_loop->cond_id, loop_body, after_loop);
+    
+    fprintf(fp, "label%d\n", loop_body);
+    print_statements(fp, function_scope, stmt_loop->loop_list);
+    fprintf(fp, "goto label%d;\n", top_label);
+    
+    fprintf(fp, "label%d\n", after_loop);
+
+}
+
+void print_do_while_loop (FILE *fp, stmt_loop* stmt_loop, int function_scope)
+{
+
+    print_statements(fp, function_scope, stmt_loop->cond_stmt_list);
+
+    int loop_body = label_counter++;
+    int cond_label = label_counter++;
+    int after_loop = label_counter++;
+
+    fprintf(fp, "label%d\n", loop_body);
+    print_statements(fp, function_scope, stmt_loop->loop_list);
+    fprintf(fp, "goto label%d;\n", cond_label);
+    
+    fprintf(fp, "label%d:\n", cond_label);
+
+    fprintf(fp, "if (%s)\n{\ngoto label%d;\n}\ngoto label%d;\n", stmt_loop->cond_id, loop_body, after_loop);
+
+    fprintf(fp, "label%d\n", after_loop);
+
+}
+
+void print_cond (FILE *fp, stmt_cond *stmt_cond, int function_scope)
+{
+
+    print_statements(fp, function_scope, stmt_cond->cond_stmt_list);
+
+    int true_label = label_counter++;
+    int false_label = label_counter++;
+    int after_label = label_counter++;
+
+    fprintf(fp, "if (%s)\n{\ngoto label%d;\n}\ngoto label%d;\n", stmt_cond->cond_id, true_label, false_label);
+
+    fprintf(fp, "label%d\n", true_label);
+    print_statements(fp, function_scope, stmt_cond->true_list);
+    fprintf(fp, "goto label%d;\n", after_label);
+
+    fprintf(fp, "label%d\n", false_label);
+    print_statements(fp, function_scope, stmt_cond->false_list);
+    fprintf(fp, "goto label%d;\n", after_label);
+
+    fprintf(fp, "label%d\n", after_label);
+
+}
+
+void print_statements (FILE *fp, int function_scope, stmt_list_element *first_element)
+{
+
+    stmt_list_element *current_stmt = first_element;
+
+    while (true)
+    {
+
+        if (current_stmt->scope == function_scope)
+        {
+
+            switch (current_stmt->type) {
+
+                STMT_TYPE_EMPTY:
+                break;
+
+                STMT_TYPE_COND:
+                print_cond (fp, current_stmt->stmt.stmt_cond, function_scope);
+                break;
+
+                STMT_TYPE_LOOP:
+                if (current_stmt->stmt.stmt_loop->do_while)
+                    print_do_while_loop(fp, current_stmt->stmt.stmt_loop, function_scope);
+                else 
+                    print_while_loop(fp, current_stmt->stmt.stmt_loop, function_scope);
+                break;
+
+                STMT_TYPE_EXPR:
+                print_stmt_expr(fp, current_stmt->stmt.stmt_expr);
+                break;
+
+                STMT_TYPE_RETURN:
+                fprintf (fp, "return %s;\n", current_stmt->stmt.stmt_return->return_id);
+                break;
+
+                STMT_TYPE_TMP_DEC:
+                fprintf (fp, "int %s;\n", current_stmt->stmt.stmt_expr->dest);
+                print_stmt_expr(fp, current_stmt->stmt.stmt_expr);
+                break;
+
+            };
+
+        }
+
+        if (current_stmt->next == 0)
+        {
+            break;
+        }
+
+        if (current_stmt->next != 0)
+            current_stmt = current_stmt->next;
+
+    }
+
+}
+
 void print_functions (FILE *fp)
 {
 
@@ -294,8 +431,9 @@ void print_functions (FILE *fp)
             fprintf(fp, "\n{");
 
             // print statements
+            print_statements(fp, currentElement->function_scope, &first_stmt);
 
-            fprintf(fp, "\n}\n");
+            fprintf(fp, "}\n");
 
         }
 
