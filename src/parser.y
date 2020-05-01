@@ -126,7 +126,7 @@ identifier_declaration
      ;
 
 function_definition
-     : function_definition_start_wo_params stmt_list BRACE_CLOSE                               { numberOfScopes++;  /* only increment numberOfScopes as last operation! */ }
+     : function_definition_start_wo_params stmt_list BRACE_CLOSE                               { add_to_stmt_list($2); numberOfScopes++;  /* only increment numberOfScopes as last operation! */ }
      | function_definition_start stmt_list BRACE_CLOSE                                         { add_to_stmt_list($2); numberOfScopes++;  /* only increment numberOfScopes as last operation! */ }
      ;
 
