@@ -554,3 +554,28 @@ void print_intermediate_code (char* file_string)
     fclose(fp);
 
 }
+
+void init_first_stmt () 
+{
+    first_stmt.next = NULL;
+    first_stmt.scope = NULL;
+    first_stmt.type = STMT_TYPE_EMPTY;
+    first_stmt.stmt.stmt_cond = NULL;
+}
+
+void add_to_stmt_list(stmt_list_element* stmt_list)
+{
+    stmt_list_element* current_element = &first_stmt;
+    while(true)
+    {
+        if(current_element->next != NULL)
+        {
+            current_element = current_element->next;
+        }
+        else
+        {
+            current_element->next = stmt_list;
+            break;
+        }
+    }
+}

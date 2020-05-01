@@ -270,6 +270,9 @@ int main (int argc, char *argv[]) {
 
   FILE* inputFile = fopen(cc_options.input_file, "r");
 
+  // initialize beginning of the statement list
+  init_first_stmt();
+
   yyin = inputFile;
 
   yyparse();
