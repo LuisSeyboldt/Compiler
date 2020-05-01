@@ -122,7 +122,14 @@
 
 stmt_list_element* stmt_from_expr(value* expr)
 {
-    stmt_list_element* expressions = NULL;  // statement list to be returned 
+    //init return element
+    stmt_list_element* expressions = NULL;  
+    expressions = malloc(sizeof(stmt_list_element));
+    expressions->stmt.stmt_expr = init_stmt_expr();
+    expressions->next = NULL;
+    expressions->scope = numberOfScopes;
+    expressions->type = STMT_TYPE_EMPTY;
+
     char convert_arr[255];           // array for int to char conversions
 
     // All cases with assign operation on the left
@@ -136,12 +143,6 @@ stmt_list_element* stmt_from_expr(value* expr)
             // case e.g: i = 0;  || only one element on the right side
             if( current_expr->next_expr == NULL)
             {
-                expressions = malloc(sizeof(stmt_list_element));
-                expressions->stmt.stmt_expr = init_stmt_expr();
-                expressions->next = NULL;
-                expressions->scope = numberOfScopes;
-                expressions->type = STMT_TYPE_EXPR;
-
                 // set stmt_expr details
                 strcpy(expressions->stmt.stmt_expr->dest, expr->value.element->id);
                 strcpy(expressions->stmt.stmt_expr->op, expr->stmt_operator);
@@ -160,6 +161,20 @@ stmt_list_element* stmt_from_expr(value* expr)
             else // case: more elements on the right side
             {
                 char* last_tmp_var = slice_expressions(current_expr, expressions);
+                // new statement to set the initial variable to the last tmp var
+                stmt_list_element* new_stmt;
+                new_stmt = malloc(sizeof(stmt_list_element));
+                new_stmt->stmt.stmt_expr = init_stmt_expr();
+                new_stmt->next = NULL;
+                new_stmt->scope = numberOfScopes;
+                new_stmt->type = STMT_TYPE_EXPR;
+
+                strcpy(new_stmt->stmt.stmt_expr->dest, expr->value.element->id);
+                strcpy(new_stmt->stmt.stmt_expr->op, "=");
+                strcpy(new_stmt->stmt.stmt_expr->operand1, last_tmp_var);
+                strcpy(new_stmt->stmt.stmt_expr->operand2, "");
+
+                string_statements_together(expressions, new_stmt);
             }
 
         }
@@ -216,23 +231,19 @@ char* slice_expressions(value* rvals, stmt_list_element* stmts)
             strcpy(new_stmt->stmt.stmt_expr->operand2, rvals->next_expr->value.element->id);
         }
 
+        numberOfTmps++;
+
         // add new temp declaration to stmt list
         // if first call then overwrite the parameter, else append to the end
-        if(stmts == NULL)
-        {
-            stmts = new_stmt;
-        }
-        else
-        {
-            string_statements_together(stmts, new_stmt);
-        }
+        string_statements_together(stmts, new_stmt);
+
 
         // termination condition: eg. rvals: 1 + 2 || no third value
-        if(rvals->next_expr->next_expr == NULL)
+        if(rvals->next_expr->next_expr == 0)
         {
             return new_stmt->stmt.stmt_expr->dest;
         }
-        else // 
+        else // recursive call
         {
             value* tmp_value = malloc(sizeof(value)); 
             tmp_value->isTemp = true;
@@ -241,6 +252,7 @@ char* slice_expressions(value* rvals, stmt_list_element* stmts)
             tmp_value->stmt_operator = malloc(sizeof(char[255]));
             tmp_value->valueType = VALUE_TYPE_SYMBOL;
             tmp_value->value.element = malloc(sizeof(symbol_table_element));
+            tmp_value->value.element->id = malloc(sizeof(char[255]));
             
             strcpy(tmp_value->value.element->id, tmp_name);
             strcpy(tmp_value->stmt_operator, rvals->next_expr->stmt_operator);
@@ -391,12 +403,25 @@ stmt_list_element* stmt_from_var_decl(symbol_table_element* var)
 
 void set_expr_details (char* op, value* currentExpr, value* nextExpr)
 {
+    value* curr = currentExpr;
+    while (true)
+    {
+        if(curr->next_expr != NULL)
+        {
+            curr = curr->next_expr;
+        }
+        else
+        {
+            break;
+        }
+    }
+    
     if(op != NULL)
     {
-        strcpy(currentExpr->stmt_operator, op);
+        strcpy(curr->stmt_operator, op);
     }
 
-    currentExpr->next_expr = nextExpr;
+    curr->next_expr = nextExpr;
 }
 
 void print_function_header (FILE *fp, symbol_table_element *currentElement)
@@ -715,7 +740,7 @@ void print_intermediate_code (char* file_string)
 void init_first_stmt () 
 {
     first_stmt.next = NULL;
-    first_stmt.scope = NULL;
+    first_stmt.scope = 0;
     first_stmt.type = STMT_TYPE_EMPTY;
     first_stmt.stmt.stmt_cond = NULL;
 }
