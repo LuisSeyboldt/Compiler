@@ -156,10 +156,7 @@ stmt_list_element* stmt_from_expr(value* expr)
                     strcpy(expressions->stmt.stmt_expr->operand1, convert_arr);
                 }
             }
-            while(true)
-            {
 
-            }
         }
     }
 
@@ -395,14 +392,23 @@ void print_global_elements(FILE *fp)
 void print_stmt_expr (FILE *fp, stmt_expr* stmt_expr)
 {
 
-    if (stmt_expr->operand2 != NULL && stmt_expr->op != NULL && strcmp(stmt_expr->op, "="))
+    if (strcmp(stmt_expr->operand2, "") && strcmp(stmt_expr->op, "") && strcmp(stmt_expr->op, "="))
         fprintf (fp, "%s = %s %s %s;\n", stmt_expr->dest, stmt_expr->operand1, stmt_expr->op, stmt_expr->operand2);
 
-    if (stmt_expr->operand2 == NULL && stmt_expr->op != NULL && strcmp(stmt_expr->op, "="))
+    if (!strcmp(stmt_expr->operand2, "") && strcmp(stmt_expr->op, "") && strcmp(stmt_expr->op, "="))
         fprintf (fp, "%s = %s %s;\n", stmt_expr->dest, stmt_expr->op, stmt_expr->operand1);
 
-    if (stmt_expr->operand2 == NULL &&  stmt_expr->op != NULL && !strcmp(stmt_expr->op, "="))
+    if (!strcmp(stmt_expr->operand2, "") && strcmp(stmt_expr->op, "") && !strcmp(stmt_expr->op, "="))
         fprintf (fp, "%s = %s;\n", stmt_expr->dest, stmt_expr->operand1);
+
+    /*if (stmt_expr->operand2 == NULL)
+    {
+        if (stmt_expr->op != NULL)
+        {
+            if (!strcmp(stmt_expr->op, "="))
+                fprintf (fp, "%s = %s;\n", stmt_expr->dest, stmt_expr->operand1);
+        }
+    }*/
 
 }
 
@@ -471,10 +477,10 @@ void print_cond (FILE *fp, stmt_cond *stmt_cond, int function_scope)
 
 }
 
-void print_statements (FILE *fp, int function_scope, stmt_list_element *first_element)
+void print_statements (FILE *fp, int function_scope, stmt_list_element *first_stmt_of_block)
 {
 
-    stmt_list_element *current_stmt = first_element;
+    stmt_list_element *current_stmt = first_stmt_of_block;
 
     while (true)
     {
@@ -638,6 +644,7 @@ void add_to_global_stmt_list(stmt_list_element* stmt_list)
 void string_statements_together(stmt_list_element* stmt_list, stmt_list_element* stmt)
 {
     stmt_list_element* current_element = stmt_list;
+
     while(true)
     {
         if(current_element->next != NULL)
@@ -650,4 +657,18 @@ void string_statements_together(stmt_list_element* stmt_list, stmt_list_element*
             break;
         }
     }
+}
+
+stmt_list_element* create_empty_stmt ()
+{
+
+    stmt_list_element* new_element;
+    new_element = malloc(sizeof(stmt_list_element));
+    new_element->stmt.stmt_expr = init_stmt_expr();
+    new_element->next = NULL;
+    new_element->scope = numberOfScopes;
+    new_element->type = STMT_TYPE_EMPTY;
+    
+    return new_element;
+
 }

@@ -153,19 +153,19 @@ function_parameter
      ;
 									
 stmt_list
-     : /* empty: epsilon */
+     : /* empty: epsilon */                                 { $$ = create_empty_stmt(); }
      | stmt_list stmt                                       { string_statements_together($2, $1); $$ = $2; }
      ;
 
 stmt
      : stmt_block
-     | variable_declaration SEMICOLON                       { add_sbl($1, true, false); $$ = stmt_from_var_decl($1); }
+     | variable_declaration SEMICOLON                       { add_sbl($1, true, false); $$ = create_empty_stmt()/*stmt_from_var_decl($1)*/; }
      | expression SEMICOLON                                 { $$ = stmt_from_expr($1); }
      | stmt_conditional                                     { $$ = $1; }
      | stmt_loop                                            { $$ = $1; }
-     | RETURN expression SEMICOLON                          { checkFuncReturn($2); $$ = stmt_from_return($2); }
-     | RETURN SEMICOLON                                     { checkVoidReturn(); $$ = stmt_from_return(NULL); }
-     | SEMICOLON /* empty statement */
+     | RETURN expression SEMICOLON                          { checkFuncReturn($2); $$ = create_empty_stmt(); /*$$ = stmt_from_return($2);*/ }
+     | RETURN SEMICOLON                                     { checkVoidReturn(); $$ = create_empty_stmt(); /*$$ = stmt_from_return(NULL);*/ }
+     | SEMICOLON /* empty statement */                      { $$ = create_empty_stmt(); }
      ;
 
 stmt_block
