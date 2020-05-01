@@ -62,7 +62,7 @@
 
 
 /* Copy the first part of user declarations.  */
-#line 5 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:339  */
+#line 5 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:339  */
 
      void yyerror(const char* msg);
      int yylex();
@@ -72,7 +72,7 @@
 	// Project-specific includes
 	#include "diag.h"
 
-#line 76 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:339  */
+#line 76 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -92,8 +92,8 @@
 
 /* In a future release of Bison, this section will be replaced
    by #include "parser.y.h".  */
-#ifndef YY_YY_HOME_VAGRANT_COMPILER_BUILD_SRC_PARSER_Y_H_INCLUDED
-# define YY_YY_HOME_VAGRANT_COMPILER_BUILD_SRC_PARSER_Y_H_INCLUDED
+#ifndef YY_YY_HOME_VAGRANT_GITHUB_COMPILER_BUILD_SRC_PARSER_Y_H_INCLUDED
+# define YY_YY_HOME_VAGRANT_GITHUB_COMPILER_BUILD_SRC_PARSER_Y_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 1
@@ -102,14 +102,14 @@
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 15 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:355  */
+#line 15 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:355  */
  #include "symbol_table.h" 
-#line 16 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:355  */
+#line 16 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:355  */
  #include "type_checks.h" 
-#line 17 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:355  */
+#line 17 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:355  */
  #include "stmt_list.h" 
 
-#line 113 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:355  */
+#line 113 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:355  */
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -160,7 +160,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 19 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:355  */
+#line 19 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:355  */
 
   int i;
   char *id;
@@ -171,7 +171,7 @@ union YYSTYPE
   value* pValue;
   stmt_list_element* stmt_list;
 
-#line 175 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:355  */
+#line 175 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -198,11 +198,11 @@ extern YYSTYPE yylval;
 extern YYLTYPE yylloc;
 int yyparse (void);
 
-#endif /* !YY_YY_HOME_VAGRANT_COMPILER_BUILD_SRC_PARSER_Y_H_INCLUDED  */
+#endif /* !YY_YY_HOME_VAGRANT_GITHUB_COMPILER_BUILD_SRC_PARSER_Y_H_INCLUDED  */
 
 /* Copy the second part of user declarations.  */
 
-#line 206 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:358  */
+#line 206 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -1323,12 +1323,12 @@ yyparse (void)
   yychar = YYEMPTY; /* Cause a token to be read.  */
 
 /* User initialization code.  */
-#line 40 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1429  */
+#line 40 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1429  */
 {
 	yydebug = true;
 }
 
-#line 1332 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1429  */
+#line 1332 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1429  */
   yylsp[0] = yylloc;
   goto yysetstate;
 
@@ -1515,123 +1515,117 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 99 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 99 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { print_all_symbol_tables(); }
-#line 1521 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1521 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 3:
-#line 103 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 103 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { print_all_symbol_tables(); }
-#line 1527 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1527 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 4:
-#line 104 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 104 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { print_all_symbol_tables(); }
-#line 1533 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1533 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 5:
-#line 108 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 108 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { add_sbl((yyvsp[-1].sblElement), false, false); }
-#line 1539 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1539 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 115 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 115 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { (yyval.rtype) = FUNC_RETURN_TYPE_INT; }
-#line 1545 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1545 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 116 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 116 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { (yyval.rtype) = FUNC_RETURN_TYPE_VOID; }
-#line 1551 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1551 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 120 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 120 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { (yyvsp[0].sblElement)->next = (yyvsp[-2].sblElement); (yyval.sblElement) = (yyvsp[0].sblElement); }
-#line 1557 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1557 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 121 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 121 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { checkIfNotVoid((yyvsp[-1].rtype)); (yyval.sblElement) = (yyvsp[0].sblElement); }
-#line 1563 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1563 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 124 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 124 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { (yyval.sblElement) = init_sbl((yyvsp[-3].id), (yyvsp[-1].i), SYMBOL_TYPE_ARRAY); }
-#line 1569 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1569 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 125 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 125 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { (yyval.sblElement) = init_sbl((yyvsp[0].id), 0, SYMBOL_TYPE_VAR); }
-#line 1575 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1575 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 129 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 129 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { add_to_global_stmt_list((yyvsp[-1].stmt_list)); numberOfScopes++;  /* only increment numberOfScopes as last operation! */ }
-#line 1581 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1581 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 130 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 130 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { add_to_global_stmt_list((yyvsp[-1].stmt_list)); numberOfScopes++;  /* only increment numberOfScopes as last operation! */ }
-#line 1587 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1587 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 134 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 134 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { add_fun((yyvsp[-3].id), (yyvsp[-4].rtype), 0, true); checkReturnType((yyvsp[-4].rtype), (yyvsp[-3].id)); }
-#line 1593 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1593 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 138 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 138 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { add_fun((yyvsp[-4].id), (yyvsp[-5].rtype), (yyvsp[-2].paramList)->numberOfParameters, true); add_sbl((yyvsp[-2].paramList)->symbols, true, true); checkReturnType((yyvsp[-5].rtype), (yyvsp[-4].id)); }
-#line 1599 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1599 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 142 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 142 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { add_fun((yyvsp[-2].id), (yyvsp[-3].rtype), 0, true); numberOfScopes++; /* only increment numberOfScopes as last operation! */ }
-#line 1605 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1605 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 143 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 143 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { add_fun((yyvsp[-3].id), (yyvsp[-4].rtype), (yyvsp[-1].paramList)->numberOfParameters, false); add_sbl((yyvsp[-1].paramList)->symbols, true, true); numberOfScopes++; /* only increment numberOfScopes as last operation! */ }
-#line 1611 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1611 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 147 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 147 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { (yyval.paramList) = init_param_list(1, (yyvsp[0].sblElement)); }
-#line 1617 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1617 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 148 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 148 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { (yyvsp[0].sblElement)->next = (yyvsp[-2].paramList)->symbols; (yyval.paramList)->numberOfParameters++; (yyval.paramList)->symbols = (yyvsp[0].sblElement);}
-#line 1623 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1623 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 152 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 152 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { checkIfNotVoid((yyvsp[-1].rtype)); (yyval.sblElement) = (yyvsp[0].sblElement); }
-#line 1629 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
-    break;
-
-  case 24:
-#line 156 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
-    { (yyval.stmt_list) = create_empty_stmt(); }
-#line 1635 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1629 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 24:
@@ -1641,247 +1635,247 @@ yyreduce:
     break;
 
   case 25:
-#line 157 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 157 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { string_statements_together((yyvsp[0].stmt_list), (yyvsp[-1].stmt_list)); (yyval.stmt_list) = (yyvsp[0].stmt_list); }
-#line 1641 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1641 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 162 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 162 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { add_sbl((yyvsp[-1].sblElement), true, false); (yyval.stmt_list) = create_empty_stmt()/*stmt_from_var_decl($1)*/; }
-#line 1647 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1647 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 163 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 163 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { (yyval.stmt_list) = stmt_from_expr((yyvsp[-1].pValue)); }
-#line 1653 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1653 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 164 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 164 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { (yyval.stmt_list) = (yyvsp[0].stmt_list); }
-#line 1659 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1659 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 165 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 165 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { (yyval.stmt_list) = (yyvsp[0].stmt_list); }
-#line 1665 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1665 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 166 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
-    { checkFuncReturn((yyvsp[-1].pValue)); (yyval.stmt_list) = create_empty_stmt(); /*$$ = stmt_from_return($2);*/ }
-#line 1671 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 166 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { checkFuncReturn((yyvsp[-1].pValue)); /*$$ = create_empty_stmt();*/ (yyval.stmt_list) = stmt_from_return((yyvsp[-1].pValue)); }
+#line 1671 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 167 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
-    { checkVoidReturn(); (yyval.stmt_list) = create_empty_stmt(); /*$$ = stmt_from_return(NULL);*/ }
-#line 1677 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 167 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { checkVoidReturn(); /*$$ = create_empty_stmt();*/ (yyval.stmt_list) = stmt_from_return(NULL); }
+#line 1677 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 33:
-#line 168 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 168 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { (yyval.stmt_list) = create_empty_stmt(); }
-#line 1683 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1683 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 35:
-#line 176 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 176 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { checkSingleExpr((yyvsp[-2].pValue)); (yyval.stmt_list) = stmt_from_cond((yyvsp[-2].pValue), (yyvsp[0].stmt_list), NULL); }
-#line 1689 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1689 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 36:
-#line 177 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 177 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { checkSingleExpr((yyvsp[-4].pValue)); (yyval.stmt_list) = stmt_from_cond((yyvsp[-4].pValue), (yyvsp[-2].stmt_list), (yyvsp[0].stmt_list)); }
-#line 1695 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1695 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 37:
-#line 181 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 181 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { checkSingleExpr((yyvsp[-2].pValue)); (yyval.stmt_list) = stmt_from_loop((yyvsp[-2].pValue), (yyvsp[0].stmt_list), false); }
-#line 1701 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1701 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 38:
-#line 182 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 182 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { checkSingleExpr((yyvsp[-2].pValue)); (yyval.stmt_list) = stmt_from_loop((yyvsp[-2].pValue), (yyvsp[-5].stmt_list), true); }
-#line 1707 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1707 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 39:
-#line 186 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 186 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { checkExpr((yyvsp[-2].pValue), (yyvsp[0].pValue)); set_expr_details("=", (yyvsp[-2].pValue), (yyvsp[0].pValue)); (yyval.pValue) = (yyvsp[-2].pValue); }
-#line 1713 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1713 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 40:
-#line 187 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 187 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { checkRVal((yyvsp[-2].pValue), (yyvsp[0].pValue)); set_expr_details("||", (yyvsp[-2].pValue), (yyvsp[0].pValue)); (yyval.pValue) = (yyvsp[-2].pValue); }
-#line 1719 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1719 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 41:
-#line 188 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 188 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { checkRVal((yyvsp[-2].pValue), (yyvsp[0].pValue)); set_expr_details("", (yyvsp[-2].pValue), (yyvsp[0].pValue)); (yyval.pValue) = (yyvsp[-2].pValue); }
-#line 1725 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1725 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 42:
-#line 189 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 189 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { checkSingleExpr((yyvsp[0].pValue)); set_expr_details("!", (yyvsp[0].pValue), NULL); (yyval.pValue) = (yyvsp[0].pValue); }
-#line 1731 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1731 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 43:
-#line 190 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 190 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { checkRVal((yyvsp[-2].pValue), (yyvsp[0].pValue)); set_expr_details("==", (yyvsp[-2].pValue), (yyvsp[0].pValue)); (yyval.pValue) = (yyvsp[-2].pValue); }
-#line 1737 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1737 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 191 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 191 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { checkRVal((yyvsp[-2].pValue), (yyvsp[0].pValue)); set_expr_details("!=", (yyvsp[-2].pValue), (yyvsp[0].pValue)); (yyval.pValue) = (yyvsp[-2].pValue); }
-#line 1743 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1743 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 192 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 192 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { checkRVal((yyvsp[-2].pValue), (yyvsp[0].pValue)); set_expr_details("<", (yyvsp[-2].pValue), (yyvsp[0].pValue)); (yyval.pValue) = (yyvsp[-2].pValue); }
-#line 1749 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1749 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 193 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 193 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { checkRVal((yyvsp[-2].pValue), (yyvsp[0].pValue)); set_expr_details("<=", (yyvsp[-2].pValue), (yyvsp[0].pValue)); (yyval.pValue) = (yyvsp[-2].pValue); }
-#line 1755 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1755 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 47:
-#line 194 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 194 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { checkRVal((yyvsp[-2].pValue), (yyvsp[0].pValue)); set_expr_details(">=", (yyvsp[-2].pValue), (yyvsp[0].pValue)); (yyval.pValue) = (yyvsp[-2].pValue); }
-#line 1761 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1761 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 48:
-#line 195 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 195 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { checkRVal((yyvsp[-2].pValue), (yyvsp[0].pValue)); set_expr_details(">", (yyvsp[-2].pValue), (yyvsp[0].pValue)); (yyval.pValue) = (yyvsp[-2].pValue); }
-#line 1767 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1767 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 49:
-#line 196 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 196 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { checkRVal((yyvsp[-2].pValue), (yyvsp[0].pValue)); set_expr_details("+", (yyvsp[-2].pValue), (yyvsp[0].pValue)); (yyval.pValue) = (yyvsp[-2].pValue); }
-#line 1773 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1773 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 50:
-#line 197 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 197 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { checkRVal((yyvsp[-2].pValue), (yyvsp[0].pValue)); set_expr_details("-", (yyvsp[-2].pValue), (yyvsp[0].pValue)); (yyval.pValue) = (yyvsp[-2].pValue); }
-#line 1779 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1779 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 51:
-#line 198 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 198 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { checkRVal((yyvsp[-2].pValue), (yyvsp[0].pValue)); set_expr_details("<<", (yyvsp[-2].pValue), (yyvsp[0].pValue)); (yyval.pValue) = (yyvsp[-2].pValue); }
-#line 1785 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1785 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 52:
-#line 199 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 199 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { checkRVal((yyvsp[-2].pValue), (yyvsp[0].pValue)); set_expr_details(">>", (yyvsp[-2].pValue), (yyvsp[0].pValue)); (yyval.pValue) = (yyvsp[-2].pValue); }
-#line 1791 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1791 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 53:
-#line 200 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 200 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { checkRVal((yyvsp[-2].pValue), (yyvsp[0].pValue)); set_expr_details("*", (yyvsp[-2].pValue), (yyvsp[0].pValue)); (yyval.pValue) = (yyvsp[-2].pValue); }
-#line 1797 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1797 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 54:
-#line 201 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 201 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { checkRVal((yyvsp[-2].pValue), (yyvsp[0].pValue)); set_expr_details("/", (yyvsp[-2].pValue), (yyvsp[0].pValue)); (yyval.pValue) = (yyvsp[-2].pValue); }
-#line 1803 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1803 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 55:
-#line 202 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 202 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { checkSingleExpr((yyvsp[0].pValue)); set_expr_details("-", (yyvsp[0].pValue), NULL); (yyval.pValue) = (yyvsp[0].pValue); }
-#line 1809 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1809 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 56:
-#line 203 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 203 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { checkSingleExpr((yyvsp[0].pValue)); set_expr_details("+", (yyvsp[0].pValue), NULL); (yyval.pValue) = (yyvsp[0].pValue); }
-#line 1815 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1815 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 57:
-#line 204 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 204 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { (yyval.pValue) = valueFromArray((yyvsp[-3].id)); }
-#line 1821 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1821 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 58:
-#line 205 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 205 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { (yyval.pValue) = (yyvsp[-1].pValue); }
-#line 1827 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1827 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 59:
-#line 206 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 206 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { (yyval.pValue) = (yyvsp[0].pValue); }
-#line 1833 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1833 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 60:
-#line 207 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 207 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { (yyval.pValue) = (yyvsp[0].pValue); }
-#line 1839 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1839 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 61:
-#line 211 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 211 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { (yyval.pValue) = valueFromNum((yyvsp[0].i)); }
-#line 1845 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1845 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 62:
-#line 212 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 212 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { (yyval.pValue) = valueFromId((yyvsp[0].id)); }
-#line 1851 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1851 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 63:
-#line 216 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 216 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { checkZeroParams((yyvsp[-2].id)); (yyval.pValue) = valueFromFunction((yyvsp[-2].id)); }
-#line 1857 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1857 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 64:
-#line 217 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 217 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { checkParams((yyvsp[-3].id), (yyvsp[-1].pValue)); (yyval.pValue) = valueFromFunctionWithParameterList((yyvsp[-3].id), (yyvsp[-1].pValue)); }
-#line 1863 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1863 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 65:
-#line 221 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 221 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { (yyvsp[0].pValue)->next = (yyvsp[-2].pValue); (yyval.pValue) = allocFunctionParameter((yyvsp[0].pValue)); }
-#line 1869 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1869 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 66:
-#line 222 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 222 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { (yyval.pValue) = allocFunctionParameter((yyvsp[0].pValue)); }
-#line 1875 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1875 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
 
-#line 1879 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1879 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2116,7 +2110,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 225 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1906  */
+#line 225 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1906  */
 
 int numberOfScopes = 1;
 int label_counter = 0;
