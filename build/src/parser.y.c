@@ -1634,6 +1634,12 @@ yyreduce:
 #line 1635 "/home/vagrant/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
+  case 24:
+#line 156 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { (yyval.stmt_list) = create_empty_stmt(); }
+#line 1635 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
   case 25:
 #line 157 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1646  */
     { string_statements_together((yyvsp[0].stmt_list), (yyvsp[-1].stmt_list)); (yyval.stmt_list) = (yyvsp[0].stmt_list); }
