@@ -64,13 +64,15 @@
 /* Copy the first part of user declarations.  */
 #line 5 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:339  */
 
+     void yyerror(const char* msg);
+     int yylex();
 	// System includes
 	#include <stdbool.h>
 	
 	// Project-specific includes
 	#include "diag.h"
 
-#line 74 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:339  */
+#line 76 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -100,10 +102,14 @@
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 13 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:355  */
-#include "symbol_table.h"
+#line 15 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:355  */
+ #include "symbol_table.h" 
+#line 16 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:355  */
+ #include "type_checks.h" 
+#line 17 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:355  */
+ #include "stmt_list.h" 
 
-#line 107 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:355  */
+#line 113 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:355  */
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -154,13 +160,18 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 15 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:355  */
+#line 19 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:355  */
 
   int i;
   char *id;
   func_return_type rtype;
+  symbol_table_element* sblElement;
+  parameter_list* paramList;
+  value value;
+  value* pValue;
+  stmt_list_element* stmt_list;
 
-#line 164 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:355  */
+#line 175 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -191,7 +202,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 195 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:358  */
+#line 206 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -433,18 +444,18 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  11
+#define YYFINAL  13
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   359
+#define YYLAST   366
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  39
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  20
+#define YYNNTS  22
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  64
+#define YYNRULES  66
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  128
+#define YYNSTATES  130
 
 /* YYTRANSLATE[YYX] -- Symbol number corresponding to YYX as returned
    by yylex, with out-of-bounds checking.  */
@@ -494,13 +505,13 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    87,    87,    91,    92,    96,    97,    98,    99,   103,
-     104,   108,   109,   113,   114,   118,   119,   123,   124,   128,
-     129,   133,   136,   138,   142,   143,   144,   145,   146,   147,
-     148,   149,   153,   157,   158,   162,   163,   167,   168,   169,
-     170,   171,   172,   173,   174,   175,   176,   177,   178,   179,
-     180,   181,   182,   183,   184,   185,   186,   187,   188,   192,
-     193,   197,   198,   202,   203
+       0,    99,    99,   103,   104,   108,   109,   110,   111,   115,
+     116,   120,   121,   124,   125,   129,   130,   134,   138,   142,
+     143,   147,   148,   152,   155,   157,   161,   162,   163,   164,
+     165,   166,   167,   168,   172,   176,   177,   181,   182,   186,
+     187,   188,   189,   190,   191,   192,   193,   194,   195,   196,
+     197,   198,   199,   200,   201,   202,   203,   204,   205,   206,
+     207,   211,   212,   216,   217,   221,   222
 };
 #endif
 
@@ -517,6 +528,7 @@ static const char *const yytname[] =
   "LOGICAL_NOT", "UNARY_MINUS", "UNARY_PLUS", "$accept", "program",
   "program_element_list", "program_element", "type",
   "variable_declaration", "identifier_declaration", "function_definition",
+  "function_definition_start_wo_params", "function_definition_start",
   "function_declaration", "function_parameter_list", "function_parameter",
   "stmt_list", "stmt", "stmt_block", "stmt_conditional", "stmt_loop",
   "expression", "primary", "function_call", "function_call_parameters", YY_NULLPTR
@@ -535,10 +547,10 @@ static const yytype_uint16 yytoknum[] =
 };
 # endif
 
-#define YYPACT_NINF -37
+#define YYPACT_NINF -28
 
 #define yypact_value_is_default(Yystate) \
-  (!!((Yystate) == (-37)))
+  (!!((Yystate) == (-28)))
 
 #define YYTABLE_NINF -1
 
@@ -549,19 +561,19 @@ static const yytype_uint16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int16 yypact[] =
 {
-      78,   -37,   -37,   -37,     1,    78,   -37,   -13,    92,   -37,
-      20,   -37,   -37,     5,   -37,     2,   -37,   -37,    15,     9,
-      39,   -37,    51,    57,     2,     8,   -37,   -37,   -37,   -37,
-     125,    67,    52,   -37,   -37,   148,    71,    82,    -4,   -37,
-     -37,   -37,   214,    38,   -37,   214,   214,   214,     2,   132,
-     -37,   -37,   -37,   -37,   165,   -37,   -37,    88,    90,   214,
-     214,   -37,   189,   118,   231,   126,   208,   -37,   -37,   -37,
-     -37,   -37,   214,   214,   214,   214,   214,   214,   214,   214,
-     214,   214,   214,   214,   214,   214,   214,   -37,    89,   249,
-     267,   -37,   -37,   -37,   -37,   103,   -37,   300,    41,   300,
-     313,   325,    83,    83,    43,    43,    43,    43,   107,   107,
-     113,   113,   -37,   -37,   214,   148,   148,   -37,   214,   -37,
-     285,   -37,   122,   300,   124,   148,   -37,   -37
+     114,   -28,   -28,   -28,     1,   114,   -28,     5,    29,   -28,
+     -28,   -28,     4,   -28,   -28,    16,   -28,     7,   -28,    54,
+      95,   -28,    17,     9,    42,   -28,   155,    44,    48,   161,
+     -28,   -28,   -28,   221,    55,   -28,   221,   221,   221,     7,
+      77,   -28,   -28,   -28,   -28,   178,   -28,   -28,   -28,    53,
+      72,     7,    -5,   -28,    91,   221,   221,   -28,   202,   125,
+     238,    78,     2,   -28,   -28,   -28,   -28,   -28,   221,   221,
+     221,   221,   221,   221,   221,   221,   221,   221,   221,   221,
+     221,   221,   221,   -28,   -28,   -28,   102,    93,    96,   256,
+     274,   -28,   -28,   -28,   -28,   120,   -28,   307,    -3,   307,
+     320,   332,    49,    49,    86,    86,    86,    86,   115,   115,
+      90,    90,   -28,   -28,   -28,   -28,   221,   155,   155,   -28,
+     221,   -28,   292,   -28,   133,   307,   129,   155,   -28,   -28
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -570,32 +582,34 @@ static const yytype_int16 yypact[] =
 static const yytype_uint8 yydefact[] =
 {
        0,     9,    10,     8,     0,     2,     4,     0,     0,     7,
-       0,     1,     3,    14,    12,     0,     5,     6,     0,     0,
-      14,    11,     0,    17,     0,     0,    19,    13,    22,    21,
-       0,    18,     0,    20,    22,     0,     0,     0,     0,    31,
-      22,    15,     0,    60,    59,     0,     0,     0,     0,     0,
-      23,    24,    27,    28,     0,    58,    57,     0,     0,     0,
-       0,    30,     0,     0,     0,     0,     0,    54,    53,    40,
-      25,    26,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,     0,     0,    16,     0,     0,
-       0,    29,    32,    56,    60,     0,    61,    64,     0,    37,
-      38,    39,    41,    42,    43,    44,    45,    46,    49,    50,
-      47,    48,    51,    52,     0,     0,     0,    55,     0,    62,
-       0,    35,    33,    63,     0,     0,    36,    34
+      24,    24,     0,     1,     3,    14,    12,     0,     5,     0,
+       0,     6,     0,     0,    14,    11,     0,     0,     0,     0,
+      33,    24,    15,     0,    62,    61,     0,     0,     0,     0,
+       0,    25,    26,    29,    30,     0,    60,    59,    16,     0,
+      19,     0,     0,    21,     0,     0,     0,    32,     0,     0,
+       0,     0,     0,    56,    55,    42,    27,    28,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,    13,    17,    23,     0,    20,     0,     0,
+       0,    31,    34,    58,    62,     0,    63,    66,     0,    39,
+      40,    41,    43,    44,    45,    46,    47,    48,    51,    52,
+      49,    50,    53,    54,    22,    18,     0,     0,     0,    57,
+       0,    64,     0,    37,    35,    65,     0,     0,    38,    36
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int16 yypgoto[] =
 {
-     -37,   -37,   -37,   143,     3,    62,   -11,   -37,   -37,   -37,
-     128,    -5,   -35,   -37,   -37,   -37,   -36,    96,   -37,   -37
+     -28,   -28,   -28,   137,     8,    22,   -14,   -28,   -28,   -28,
+     -28,   -28,    59,    -7,   -26,   -28,   -28,   -28,   -27,    89,
+     -28,   -28
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     4,     5,     6,    48,    49,    14,     9,    10,    25,
-      26,    32,    50,    51,    52,    53,    54,    55,    56,    98
+      -1,     4,     5,     6,    39,    40,    16,     9,    10,    11,
+      12,    52,    53,    19,    41,    42,    43,    44,    45,    46,
+      47,    98
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -603,82 +617,84 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_uint8 yytable[] =
 {
-      58,    11,    62,     7,    21,    13,    64,    61,     7,    67,
-      68,    69,    42,    29,    43,    44,     1,     2,    30,    18,
-      20,    19,    24,    89,    90,    31,    23,    45,    46,    57,
-      97,    17,    47,    24,    22,    63,    99,   100,   101,   102,
-     103,   104,   105,   106,   107,   108,   109,   110,   111,   112,
-     113,   118,    65,    18,    66,    35,    36,    37,   119,     1,
-       2,    38,     8,    39,    40,    41,    27,     8,    42,    28,
-      43,    44,    81,    82,    83,    84,    85,    86,   120,    34,
-     121,   122,   123,    45,    46,     1,     2,    59,    47,     3,
-     127,    35,    36,    37,    88,     1,     2,    38,    60,    39,
-      40,    87,    15,    16,    42,   114,    43,    44,    77,    78,
-      79,    80,    81,    82,    83,    84,    85,    86,   117,    45,
-      46,    35,    36,    37,    47,     1,     2,    38,   125,    39,
-      40,    92,     1,     2,    42,   126,    43,    44,    83,    84,
-      85,    86,    15,    70,    94,    44,    85,    86,    12,    45,
-      46,    35,    36,    37,    47,     1,     2,    38,    33,    39,
-      40,    95,     0,     0,    42,     0,    43,    44,     0,     0,
-       0,     0,     0,     0,     0,     0,    71,     0,     0,    45,
-      46,     0,     0,     0,    47,    72,    73,    74,    75,    76,
-      77,    78,    79,    80,    81,    82,    83,    84,    85,    86,
-      91,     0,     0,     0,     0,     0,     0,     0,     0,    72,
-      73,    74,    75,    76,    77,    78,    79,    80,    81,    82,
-      83,    84,    85,    86,    42,    96,    43,    44,     0,     0,
-      42,     0,    43,    44,     0,     0,     0,     0,     0,    45,
-      46,     0,     0,     0,    47,    45,    46,     0,    93,     0,
-      47,    72,    73,    74,    75,    76,    77,    78,    79,    80,
-      81,    82,    83,    84,    85,    86,   115,     0,     0,    72,
-      73,    74,    75,    76,    77,    78,    79,    80,    81,    82,
-      83,    84,    85,    86,   116,     0,     0,    72,    73,    74,
-      75,    76,    77,    78,    79,    80,    81,    82,    83,    84,
-      85,    86,   124,     0,     0,    72,    73,    74,    75,    76,
-      77,    78,    79,    80,    81,    82,    83,    84,    85,    86,
+      54,    13,    58,    25,    20,    86,    60,   120,     7,    63,
+      64,    65,    87,     7,   121,    21,     1,     2,    33,    96,
+      34,    35,     8,    15,    59,    24,    50,     8,    89,    90,
+      22,    51,    23,    36,    37,    97,    49,    85,    38,    17,
+      18,    99,   100,   101,   102,   103,   104,   105,   106,   107,
+     108,   109,   110,   111,   112,   113,    22,    26,    27,    28,
+      55,     1,     2,    29,    56,    30,    31,    32,    83,    61,
+      33,    62,    34,    35,    73,    74,    75,    76,    77,    78,
+      79,    80,    81,    82,    84,    36,    37,    17,    66,   122,
+      38,   123,   124,   125,    51,    88,    94,    35,    26,    27,
+      28,   129,     1,     2,    29,   115,    30,    31,    48,     1,
+       2,    33,   116,    34,    35,    77,    78,    79,    80,    81,
+      82,     1,     2,    81,    82,     3,    36,    37,    26,    27,
+      28,    38,     1,     2,    29,   119,    30,    31,    92,   127,
+     128,    33,    14,    34,    35,   114,    79,    80,    81,    82,
+      95,     0,     0,     0,     0,     0,    36,    37,    26,    27,
+      28,    38,     1,     2,    29,     0,    30,    31,     0,     0,
+       0,    33,    57,    34,    35,     0,     0,    33,     0,    34,
+      35,     0,     0,     0,     0,     0,    36,    37,     0,    67,
+       0,    38,    36,    37,     0,     0,     0,    38,    68,    69,
+      70,    71,    72,    73,    74,    75,    76,    77,    78,    79,
+      80,    81,    82,    91,     0,     0,     0,     0,     0,     0,
+       0,     0,    68,    69,    70,    71,    72,    73,    74,    75,
+      76,    77,    78,    79,    80,    81,    82,    33,     0,    34,
+      35,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,    36,    37,     0,    93,     0,    38,    68,    69,
+      70,    71,    72,    73,    74,    75,    76,    77,    78,    79,
+      80,    81,    82,   117,     0,     0,    68,    69,    70,    71,
       72,    73,    74,    75,    76,    77,    78,    79,    80,    81,
-      82,    83,    84,    85,    86,    74,    75,    76,    77,    78,
-      79,    80,    81,    82,    83,    84,    85,    86,    75,    76,
-      77,    78,    79,    80,    81,    82,    83,    84,    85,    86
+      82,   118,     0,     0,    68,    69,    70,    71,    72,    73,
+      74,    75,    76,    77,    78,    79,    80,    81,    82,   126,
+       0,     0,    68,    69,    70,    71,    72,    73,    74,    75,
+      76,    77,    78,    79,    80,    81,    82,    68,    69,    70,
+      71,    72,    73,    74,    75,    76,    77,    78,    79,    80,
+      81,    82,    70,    71,    72,    73,    74,    75,    76,    77,
+      78,    79,    80,    81,    82,    71,    72,    73,    74,    75,
+      76,    77,    78,    79,    80,    81,    82
 };
 
 static const yytype_int8 yycheck[] =
 {
-      35,     0,    38,     0,    15,    18,    42,    11,     5,    45,
-      46,    47,    16,    24,    18,    19,     7,     8,    10,    14,
-      18,    16,    19,    59,    60,    17,    17,    31,    32,    34,
-      66,    11,    36,    30,    19,    40,    72,    73,    74,    75,
-      76,    77,    78,    79,    80,    81,    82,    83,    84,    85,
-      86,    10,    14,    14,    16,     3,     4,     5,    17,     7,
-       8,     9,     0,    11,    12,    13,    15,     5,    16,    12,
-      18,    19,    29,    30,    31,    32,    33,    34,   114,    12,
-     115,   116,   118,    31,    32,     7,     8,    16,    36,    11,
-     125,     3,     4,     5,     4,     7,     8,     9,    16,    11,
-      12,    13,    10,    11,    16,    16,    18,    19,    25,    26,
-      27,    28,    29,    30,    31,    32,    33,    34,    15,    31,
-      32,     3,     4,     5,    36,     7,     8,     9,     6,    11,
-      12,    13,     7,     8,    16,    11,    18,    19,    31,    32,
-      33,    34,    10,    11,    18,    19,    33,    34,     5,    31,
-      32,     3,     4,     5,    36,     7,     8,     9,    30,    11,
-      12,    65,    -1,    -1,    16,    -1,    18,    19,    -1,    -1,
-      -1,    -1,    -1,    -1,    -1,    -1,    11,    -1,    -1,    31,
-      32,    -1,    -1,    -1,    36,    20,    21,    22,    23,    24,
-      25,    26,    27,    28,    29,    30,    31,    32,    33,    34,
-      11,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    20,
-      21,    22,    23,    24,    25,    26,    27,    28,    29,    30,
-      31,    32,    33,    34,    16,    17,    18,    19,    -1,    -1,
-      16,    -1,    18,    19,    -1,    -1,    -1,    -1,    -1,    31,
-      32,    -1,    -1,    -1,    36,    31,    32,    -1,    17,    -1,
-      36,    20,    21,    22,    23,    24,    25,    26,    27,    28,
-      29,    30,    31,    32,    33,    34,    17,    -1,    -1,    20,
-      21,    22,    23,    24,    25,    26,    27,    28,    29,    30,
-      31,    32,    33,    34,    17,    -1,    -1,    20,    21,    22,
+      26,     0,    29,    17,    11,    10,    33,    10,     0,    36,
+      37,    38,    17,     5,    17,    11,     7,     8,    16,    17,
+      18,    19,     0,    18,    31,    18,    17,     5,    55,    56,
+      14,    23,    16,    31,    32,    62,    19,    51,    36,    10,
+      11,    68,    69,    70,    71,    72,    73,    74,    75,    76,
+      77,    78,    79,    80,    81,    82,    14,     3,     4,     5,
+      16,     7,     8,     9,    16,    11,    12,    13,    15,    14,
+      16,    16,    18,    19,    25,    26,    27,    28,    29,    30,
+      31,    32,    33,    34,    12,    31,    32,    10,    11,   116,
+      36,   117,   118,   120,    86,     4,    18,    19,     3,     4,
+       5,   127,     7,     8,     9,    12,    11,    12,    13,     7,
+       8,    16,    16,    18,    19,    29,    30,    31,    32,    33,
+      34,     7,     8,    33,    34,    11,    31,    32,     3,     4,
+       5,    36,     7,     8,     9,    15,    11,    12,    13,     6,
+      11,    16,     5,    18,    19,    86,    31,    32,    33,    34,
+      61,    -1,    -1,    -1,    -1,    -1,    31,    32,     3,     4,
+       5,    36,     7,     8,     9,    -1,    11,    12,    -1,    -1,
+      -1,    16,    11,    18,    19,    -1,    -1,    16,    -1,    18,
+      19,    -1,    -1,    -1,    -1,    -1,    31,    32,    -1,    11,
+      -1,    36,    31,    32,    -1,    -1,    -1,    36,    20,    21,
+      22,    23,    24,    25,    26,    27,    28,    29,    30,    31,
+      32,    33,    34,    11,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    20,    21,    22,    23,    24,    25,    26,    27,
+      28,    29,    30,    31,    32,    33,    34,    16,    -1,    18,
+      19,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    31,    32,    -1,    17,    -1,    36,    20,    21,
+      22,    23,    24,    25,    26,    27,    28,    29,    30,    31,
+      32,    33,    34,    17,    -1,    -1,    20,    21,    22,    23,
+      24,    25,    26,    27,    28,    29,    30,    31,    32,    33,
+      34,    17,    -1,    -1,    20,    21,    22,    23,    24,    25,
+      26,    27,    28,    29,    30,    31,    32,    33,    34,    17,
+      -1,    -1,    20,    21,    22,    23,    24,    25,    26,    27,
+      28,    29,    30,    31,    32,    33,    34,    20,    21,    22,
       23,    24,    25,    26,    27,    28,    29,    30,    31,    32,
-      33,    34,    17,    -1,    -1,    20,    21,    22,    23,    24,
-      25,    26,    27,    28,    29,    30,    31,    32,    33,    34,
-      20,    21,    22,    23,    24,    25,    26,    27,    28,    29,
-      30,    31,    32,    33,    34,    22,    23,    24,    25,    26,
-      27,    28,    29,    30,    31,    32,    33,    34,    23,    24,
-      25,    26,    27,    28,    29,    30,    31,    32,    33,    34
+      33,    34,    22,    23,    24,    25,    26,    27,    28,    29,
+      30,    31,    32,    33,    34,    23,    24,    25,    26,    27,
+      28,    29,    30,    31,    32,    33,    34
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
@@ -686,42 +702,42 @@ static const yytype_int8 yycheck[] =
 static const yytype_uint8 yystos[] =
 {
        0,     7,     8,    11,    40,    41,    42,    43,    44,    46,
-      47,     0,    42,    18,    45,    10,    11,    11,    14,    16,
-      18,    45,    19,    17,    43,    48,    49,    15,    12,    45,
-      10,    17,    50,    49,    12,     3,     4,     5,     9,    11,
-      12,    13,    16,    18,    19,    31,    32,    36,    43,    44,
-      51,    52,    53,    54,    55,    56,    57,    50,    51,    16,
-      16,    11,    55,    50,    55,    14,    16,    55,    55,    55,
-      11,    11,    20,    21,    22,    23,    24,    25,    26,    27,
-      28,    29,    30,    31,    32,    33,    34,    13,     4,    55,
-      55,    11,    13,    17,    18,    56,    17,    55,    58,    55,
-      55,    55,    55,    55,    55,    55,    55,    55,    55,    55,
-      55,    55,    55,    55,    16,    17,    17,    15,    10,    17,
-      55,    51,    51,    55,    17,     6,    11,    51
+      47,    48,    49,     0,    42,    18,    45,    10,    11,    52,
+      52,    11,    14,    16,    18,    45,     3,     4,     5,     9,
+      11,    12,    13,    16,    18,    19,    31,    32,    36,    43,
+      44,    53,    54,    55,    56,    57,    58,    59,    13,    19,
+      17,    43,    50,    51,    53,    16,    16,    11,    57,    52,
+      57,    14,    16,    57,    57,    57,    11,    11,    20,    21,
+      22,    23,    24,    25,    26,    27,    28,    29,    30,    31,
+      32,    33,    34,    15,    12,    45,    10,    17,     4,    57,
+      57,    11,    13,    17,    18,    58,    17,    57,    60,    57,
+      57,    57,    57,    57,    57,    57,    57,    57,    57,    57,
+      57,    57,    57,    57,    51,    12,    16,    17,    17,    15,
+      10,    17,    57,    53,    53,    57,    17,     6,    11,    53
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
        0,    39,    40,    41,    41,    42,    42,    42,    42,    43,
-      43,    44,    44,    45,    45,    46,    46,    47,    47,    48,
-      48,    49,    50,    50,    51,    51,    51,    51,    51,    51,
-      51,    51,    52,    53,    53,    54,    54,    55,    55,    55,
-      55,    55,    55,    55,    55,    55,    55,    55,    55,    55,
-      55,    55,    55,    55,    55,    55,    55,    55,    55,    56,
-      56,    57,    57,    58,    58
+      43,    44,    44,    45,    45,    46,    46,    47,    48,    49,
+      49,    50,    50,    51,    52,    52,    53,    53,    53,    53,
+      53,    53,    53,    53,    54,    55,    55,    56,    56,    57,
+      57,    57,    57,    57,    57,    57,    57,    57,    57,    57,
+      57,    57,    57,    57,    57,    57,    57,    57,    57,    57,
+      57,    58,    58,    59,    59,    60,    60
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
 static const yytype_uint8 yyr2[] =
 {
        0,     2,     1,     2,     1,     2,     2,     1,     1,     1,
-       1,     3,     2,     4,     1,     7,     8,     4,     5,     1,
-       3,     2,     0,     2,     1,     2,     2,     1,     1,     3,
-       2,     1,     3,     5,     7,     5,     7,     3,     3,     3,
-       2,     3,     3,     3,     3,     3,     3,     3,     3,     3,
-       3,     3,     3,     2,     2,     4,     3,     1,     1,     1,
-       1,     3,     4,     3,     1
+       1,     3,     2,     4,     1,     3,     3,     5,     6,     4,
+       5,     1,     3,     2,     0,     2,     1,     2,     2,     1,
+       1,     3,     2,     1,     3,     5,     7,     5,     7,     3,
+       3,     3,     2,     3,     3,     3,     3,     3,     3,     3,
+       3,     3,     3,     3,     3,     2,     2,     4,     3,     1,
+       1,     1,     1,     3,     4,     3,     1
 };
 
 
@@ -1307,12 +1323,12 @@ yyparse (void)
   yychar = YYEMPTY; /* Cause a token to be read.  */
 
 /* User initialization code.  */
-#line 32 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1429  */
+#line 40 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1429  */
 {
 	yydebug = true;
 }
 
-#line 1316 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1429  */
+#line 1332 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1429  */
   yylsp[0] = yylloc;
   goto yysetstate;
 
@@ -1499,73 +1515,355 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 87 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
-    { print_symbol_table(); }
-#line 1505 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 99 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { print_all_symbol_tables(); }
+#line 1521 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 3:
+#line 103 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { print_all_symbol_tables(); }
+#line 1527 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 4:
+#line 104 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { print_all_symbol_tables(); }
+#line 1533 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 5:
+#line 108 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { add_sbl((yyvsp[-1].sblElement), false, false); }
+#line 1539 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 103 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 115 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { (yyval.rtype) = FUNC_RETURN_TYPE_INT; }
-#line 1511 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1545 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 104 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+#line 116 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
     { (yyval.rtype) = FUNC_RETURN_TYPE_VOID; }
-#line 1517 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1551 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 108 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
-    { add_var((yyvsp[0].id)); }
-#line 1523 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 120 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { (yyvsp[0].sblElement)->next = (yyvsp[-2].sblElement); (yyval.sblElement) = (yyvsp[0].sblElement); }
+#line 1557 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 109 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
-    { add_var((yyvsp[0].id)); }
-#line 1529 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 121 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { checkIfNotVoid((yyvsp[-1].rtype)); (yyval.sblElement) = (yyvsp[0].sblElement); }
+#line 1563 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 113 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
-    { add_arr((yyvsp[-3].id), (yyvsp[-1].i)); }
-#line 1535 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 124 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { (yyval.sblElement) = init_sbl((yyvsp[-3].id), (yyvsp[-1].i), SYMBOL_TYPE_ARRAY); }
+#line 1569 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 114 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
-    { (yyval.id) = (yyvsp[0].id); }
-#line 1541 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 125 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { (yyval.sblElement) = init_sbl((yyvsp[0].id), 0, SYMBOL_TYPE_VAR); }
+#line 1575 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 118 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
-    { add_fun((yyvsp[-5].id), (yyvsp[-6].rtype), 0); }
-#line 1547 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 129 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { add_to_global_stmt_list((yyvsp[-1].stmt_list)); numberOfScopes++;  /* only increment numberOfScopes as last operation! */ }
+#line 1581 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 119 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
-    { add_fun((yyvsp[-6].id), (yyvsp[-7].rtype), (yyvsp[-4].i)); }
-#line 1553 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 130 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { add_to_global_stmt_list((yyvsp[-1].stmt_list)); numberOfScopes++;  /* only increment numberOfScopes as last operation! */ }
+#line 1587 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 17:
+#line 134 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { add_fun((yyvsp[-3].id), (yyvsp[-4].rtype), 0, true); checkReturnType((yyvsp[-4].rtype), (yyvsp[-3].id)); }
+#line 1593 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 18:
+#line 138 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { add_fun((yyvsp[-4].id), (yyvsp[-5].rtype), (yyvsp[-2].paramList)->numberOfParameters, true); add_sbl((yyvsp[-2].paramList)->symbols, true, true); checkReturnType((yyvsp[-5].rtype), (yyvsp[-4].id)); }
+#line 1599 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 128 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
-    { (yyval.i) = 1; }
-#line 1559 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 142 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { add_fun((yyvsp[-2].id), (yyvsp[-3].rtype), 0, true); numberOfScopes++; /* only increment numberOfScopes as last operation! */ }
+#line 1605 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 129 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
-    { (yyval.i) = (yyvsp[-2].i) + 1; }
-#line 1565 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 143 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { add_fun((yyvsp[-3].id), (yyvsp[-4].rtype), (yyvsp[-1].paramList)->numberOfParameters, false); add_sbl((yyvsp[-1].paramList)->symbols, true, true); numberOfScopes++; /* only increment numberOfScopes as last operation! */ }
+#line 1611 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 21:
+#line 147 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { (yyval.paramList) = init_param_list(1, (yyvsp[0].sblElement)); }
+#line 1617 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 22:
+#line 148 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { (yyvsp[0].sblElement)->next = (yyvsp[-2].paramList)->symbols; (yyval.paramList)->numberOfParameters++; (yyval.paramList)->symbols = (yyvsp[0].sblElement);}
+#line 1623 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 23:
+#line 152 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { checkIfNotVoid((yyvsp[-1].rtype)); (yyval.sblElement) = (yyvsp[0].sblElement); }
+#line 1629 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 25:
+#line 157 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { string_statements_together((yyvsp[0].stmt_list), (yyvsp[-1].stmt_list)); (yyval.stmt_list) = (yyvsp[0].stmt_list); }
+#line 1635 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 27:
+#line 162 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { add_sbl((yyvsp[-1].sblElement), true, false); (yyval.stmt_list) = stmt_from_var_decl((yyvsp[-1].sblElement)); }
+#line 1641 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 28:
+#line 163 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { (yyval.stmt_list) = stmt_from_expr((yyvsp[-1].pValue)); }
+#line 1647 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 29:
+#line 164 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { (yyval.stmt_list) = (yyvsp[0].stmt_list); }
+#line 1653 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 30:
+#line 165 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { (yyval.stmt_list) = (yyvsp[0].stmt_list); }
+#line 1659 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 31:
+#line 166 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { checkFuncReturn((yyvsp[-1].pValue)); (yyval.stmt_list) = stmt_from_return((yyvsp[-1].pValue)); }
+#line 1665 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 32:
+#line 167 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { checkVoidReturn(); (yyval.stmt_list) = stmt_from_return(NULL); }
+#line 1671 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 35:
+#line 176 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { checkSingleExpr((yyvsp[-2].pValue)); (yyval.stmt_list) = stmt_from_cond((yyvsp[-2].pValue), (yyvsp[0].stmt_list), NULL); }
+#line 1677 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 36:
+#line 177 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { checkSingleExpr((yyvsp[-4].pValue)); (yyval.stmt_list) = stmt_from_cond((yyvsp[-4].pValue), (yyvsp[-2].stmt_list), (yyvsp[0].stmt_list)); }
+#line 1683 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 37:
+#line 181 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { checkSingleExpr((yyvsp[-2].pValue)); (yyval.stmt_list) = stmt_from_loop((yyvsp[-2].pValue), (yyvsp[0].stmt_list), false); }
+#line 1689 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 38:
+#line 182 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { checkSingleExpr((yyvsp[-2].pValue)); (yyval.stmt_list) = stmt_from_loop((yyvsp[-2].pValue), (yyvsp[-5].stmt_list), true); }
+#line 1695 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 39:
+#line 186 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { checkExpr((yyvsp[-2].pValue), (yyvsp[0].pValue)); set_expr_details("=", (yyvsp[-2].pValue), (yyvsp[0].pValue)); (yyval.pValue) = (yyvsp[-2].pValue); }
+#line 1701 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 40:
+#line 187 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { checkRVal((yyvsp[-2].pValue), (yyvsp[0].pValue)); set_expr_details("||", (yyvsp[-2].pValue), (yyvsp[0].pValue)); (yyval.pValue) = (yyvsp[-2].pValue); }
+#line 1707 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 41:
+#line 188 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { checkRVal((yyvsp[-2].pValue), (yyvsp[0].pValue)); set_expr_details("", (yyvsp[-2].pValue), (yyvsp[0].pValue)); (yyval.pValue) = (yyvsp[-2].pValue); }
+#line 1713 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 42:
+#line 189 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { checkSingleExpr((yyvsp[0].pValue)); set_expr_details("!", (yyvsp[0].pValue), NULL); (yyval.pValue) = (yyvsp[0].pValue); }
+#line 1719 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 43:
+#line 190 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { checkRVal((yyvsp[-2].pValue), (yyvsp[0].pValue)); set_expr_details("==", (yyvsp[-2].pValue), (yyvsp[0].pValue)); (yyval.pValue) = (yyvsp[-2].pValue); }
+#line 1725 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 44:
+#line 191 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { checkRVal((yyvsp[-2].pValue), (yyvsp[0].pValue)); set_expr_details("!=", (yyvsp[-2].pValue), (yyvsp[0].pValue)); (yyval.pValue) = (yyvsp[-2].pValue); }
+#line 1731 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 45:
+#line 192 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { checkRVal((yyvsp[-2].pValue), (yyvsp[0].pValue)); set_expr_details("<", (yyvsp[-2].pValue), (yyvsp[0].pValue)); (yyval.pValue) = (yyvsp[-2].pValue); }
+#line 1737 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 46:
+#line 193 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { checkRVal((yyvsp[-2].pValue), (yyvsp[0].pValue)); set_expr_details("<=", (yyvsp[-2].pValue), (yyvsp[0].pValue)); (yyval.pValue) = (yyvsp[-2].pValue); }
+#line 1743 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 47:
+#line 194 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { checkRVal((yyvsp[-2].pValue), (yyvsp[0].pValue)); set_expr_details(">=", (yyvsp[-2].pValue), (yyvsp[0].pValue)); (yyval.pValue) = (yyvsp[-2].pValue); }
+#line 1749 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 48:
+#line 195 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { checkRVal((yyvsp[-2].pValue), (yyvsp[0].pValue)); set_expr_details(">", (yyvsp[-2].pValue), (yyvsp[0].pValue)); (yyval.pValue) = (yyvsp[-2].pValue); }
+#line 1755 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 49:
+#line 196 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { checkRVal((yyvsp[-2].pValue), (yyvsp[0].pValue)); set_expr_details("+", (yyvsp[-2].pValue), (yyvsp[0].pValue)); (yyval.pValue) = (yyvsp[-2].pValue); }
+#line 1761 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 50:
+#line 197 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { checkRVal((yyvsp[-2].pValue), (yyvsp[0].pValue)); set_expr_details("-", (yyvsp[-2].pValue), (yyvsp[0].pValue)); (yyval.pValue) = (yyvsp[-2].pValue); }
+#line 1767 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 51:
+#line 198 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { checkRVal((yyvsp[-2].pValue), (yyvsp[0].pValue)); set_expr_details("<<", (yyvsp[-2].pValue), (yyvsp[0].pValue)); (yyval.pValue) = (yyvsp[-2].pValue); }
+#line 1773 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 52:
+#line 199 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { checkRVal((yyvsp[-2].pValue), (yyvsp[0].pValue)); set_expr_details(">>", (yyvsp[-2].pValue), (yyvsp[0].pValue)); (yyval.pValue) = (yyvsp[-2].pValue); }
+#line 1779 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 53:
+#line 200 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { checkRVal((yyvsp[-2].pValue), (yyvsp[0].pValue)); set_expr_details("*", (yyvsp[-2].pValue), (yyvsp[0].pValue)); (yyval.pValue) = (yyvsp[-2].pValue); }
+#line 1785 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 54:
+#line 201 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { checkRVal((yyvsp[-2].pValue), (yyvsp[0].pValue)); set_expr_details("/", (yyvsp[-2].pValue), (yyvsp[0].pValue)); (yyval.pValue) = (yyvsp[-2].pValue); }
+#line 1791 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 55:
+#line 202 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { checkSingleExpr((yyvsp[0].pValue)); set_expr_details("-", (yyvsp[0].pValue), NULL); (yyval.pValue) = (yyvsp[0].pValue); }
+#line 1797 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 56:
+#line 203 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { checkSingleExpr((yyvsp[0].pValue)); set_expr_details("+", (yyvsp[0].pValue), NULL); (yyval.pValue) = (yyvsp[0].pValue); }
+#line 1803 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 57:
+#line 204 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { (yyval.pValue) = valueFromArray((yyvsp[-3].id)); }
+#line 1809 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 58:
+#line 205 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { (yyval.pValue) = (yyvsp[-1].pValue); }
+#line 1815 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 59:
+#line 206 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { (yyval.pValue) = (yyvsp[0].pValue); }
+#line 1821 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 60:
+#line 207 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { (yyval.pValue) = (yyvsp[0].pValue); }
+#line 1827 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 61:
+#line 211 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { (yyval.pValue) = valueFromNum((yyvsp[0].i)); }
+#line 1833 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 62:
+#line 212 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { (yyval.pValue) = valueFromId((yyvsp[0].id)); }
+#line 1839 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 63:
+#line 216 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { checkZeroParams((yyvsp[-2].id)); (yyval.pValue) = valueFromFunction((yyvsp[-2].id)); }
+#line 1845 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 64:
+#line 217 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { checkParams((yyvsp[-3].id), (yyvsp[-1].pValue)); (yyval.pValue) = valueFromFunctionWithParameterList((yyvsp[-3].id), (yyvsp[-1].pValue)); }
+#line 1851 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 65:
+#line 221 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { (yyvsp[0].pValue)->next = (yyvsp[-2].pValue); (yyval.pValue) = allocFunctionParameter((yyvsp[0].pValue)); }
+#line 1857 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+    break;
+
+  case 66:
+#line 222 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1646  */
+    { (yyval.pValue) = allocFunctionParameter((yyvsp[0].pValue)); }
+#line 1863 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
     break;
 
 
-#line 1569 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
+#line 1867 "/home/vagrant/GitHub/Compiler/build/src//parser.y.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1800,8 +2098,10 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 206 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1906  */
+#line 225 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1906  */
 
+int numberOfScopes = 1;
+int label_counter = 0;
 
 void yyerror (const char *msg)
 {

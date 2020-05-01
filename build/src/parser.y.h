@@ -40,10 +40,14 @@
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 13 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1909  */
-#include "symbol_table.h"
+#line 15 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1909  */
+ #include "symbol_table.h" 
+#line 16 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1909  */
+ #include "type_checks.h" 
+#line 17 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1909  */
+ #include "stmt_list.h" 
 
-#line 47 "/home/vagrant/GitHub/Compiler/build/src//parser.y.h" /* yacc.c:1909  */
+#line 51 "/home/vagrant/GitHub/Compiler/build/src//parser.y.h" /* yacc.c:1909  */
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -94,13 +98,18 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 15 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1909  */
+#line 19 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1909  */
 
   int i;
   char *id;
   func_return_type rtype;
+  symbol_table_element* sblElement;
+  parameter_list* paramList;
+  value value;
+  value* pValue;
+  stmt_list_element* stmt_list;
 
-#line 104 "/home/vagrant/GitHub/Compiler/build/src//parser.y.h" /* yacc.c:1909  */
+#line 113 "/home/vagrant/GitHub/Compiler/build/src//parser.y.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;
