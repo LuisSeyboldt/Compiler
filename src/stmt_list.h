@@ -75,6 +75,7 @@ extern stmt_list_element* stmt_from_loop(value* cond_expr, stmt_list_element* lo
 extern stmt_list_element* stmt_from_return(value* expr);
 extern void set_expr_details(char* op, value* currentExpr, value* nextExpr);
 extern stmt_list_element* create_empty_stmt ();
+extern char* slice_expressions(value* rvals, stmt_list_element* stmts);
 
 extern void print_intermediate_code (char* file_string);
 extern void init_first_stmt ();

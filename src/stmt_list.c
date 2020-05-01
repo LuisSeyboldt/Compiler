@@ -122,8 +122,9 @@
 
 stmt_list_element* stmt_from_expr(value* expr)
 {
-    stmt_list_element* expressions;
-    char convert_arr[255];
+    stmt_list_element* expressions = NULL;  // statement list to be returned 
+    char convert_arr[255];           // array for int to char conversions
+
     // All cases with assign operation on the left
     if(!strcmp(expr->stmt_operator, "="))
     {
@@ -156,11 +157,106 @@ stmt_list_element* stmt_from_expr(value* expr)
                     strcpy(expressions->stmt.stmt_expr->operand1, convert_arr);
                 }
             }
+            else // case: more elements on the right side
+            {
+                char* last_tmp_var = slice_expressions(current_expr, expressions);
+            }
 
         }
     }
 
     return expressions;
+}
+
+char* slice_expressions(value* rvals, stmt_list_element* stmts)
+{
+    static int numberOfTmps = 0;
+    char convert_arr[255];
+    char tmp_name[255];
+    strcpy(tmp_name, "temp_");
+
+    if(rvals->next_expr != NULL)
+    {
+        // new statement
+        stmt_list_element* new_stmt;
+        new_stmt = malloc(sizeof(stmt_list_element));
+        new_stmt->stmt.stmt_expr = init_stmt_expr();
+        new_stmt->next = NULL;
+        new_stmt->scope = numberOfScopes;
+        new_stmt->type = STMT_TYPE_TMP_DEC;
+
+        // create new tmp statement
+        // set destination to new tmp var
+        sprintf(convert_arr, "%d", numberOfTmps);
+        strcat(tmp_name, convert_arr);
+        strcpy(new_stmt->stmt.stmt_expr->dest, tmp_name);
+
+        // set operator
+        strcpy(new_stmt->stmt.stmt_expr->op, rvals->stmt_operator);
+
+        // set operand1 
+        if(rvals->valueType == VALUE_TYPE_VALUE)
+        {
+            sprintf(convert_arr, "%d", rvals->value.rval);
+            strcpy(new_stmt->stmt.stmt_expr->operand1, convert_arr);
+        }
+        else if (rvals->valueType == VALUE_TYPE_SYMBOL)
+        {
+            strcpy(new_stmt->stmt.stmt_expr->operand1, rvals->value.element->id);
+        }
+
+        // set operand2
+        if(rvals->next_expr->valueType == VALUE_TYPE_VALUE)
+        {
+            sprintf(convert_arr, "%d", rvals->next_expr->value.rval);
+            strcpy(new_stmt->stmt.stmt_expr->operand2, convert_arr);
+        }
+        else if (rvals->next_expr->valueType == VALUE_TYPE_SYMBOL)
+        {
+            strcpy(new_stmt->stmt.stmt_expr->operand2, rvals->next_expr->value.element->id);
+        }
+
+        // add new temp declaration to stmt list
+        // if first call then overwrite the parameter, else append to the end
+        if(stmts == NULL)
+        {
+            stmts = new_stmt;
+        }
+        else
+        {
+            string_statements_together(stmts, new_stmt);
+        }
+
+        // termination condition: eg. rvals: 1 + 2 || no third value
+        if(rvals->next_expr->next_expr == NULL)
+        {
+            return new_stmt->stmt.stmt_expr->dest;
+        }
+        else // 
+        {
+            value* tmp_value = malloc(sizeof(value)); 
+            tmp_value->isTemp = true;
+            tmp_value->next = NULL;
+            tmp_value->next_expr = NULL;
+            tmp_value->stmt_operator = malloc(sizeof(char[255]));
+            tmp_value->valueType = VALUE_TYPE_SYMBOL;
+            tmp_value->value.element = malloc(sizeof(symbol_table_element));
+            
+            strcpy(tmp_value->value.element->id, tmp_name);
+            strcpy(tmp_value->stmt_operator, rvals->next_expr->stmt_operator);
+
+            tmp_value->next_expr = rvals->next_expr->next_expr;
+            free(rvals->next_expr);
+            free(rvals);
+
+            return slice_expressions(tmp_value, stmts);
+        }
+    }
+    else
+    {
+        err("Error: internal error");
+        return NULL;
+    }
 }
 
 stmt_expr* init_stmt_expr()
