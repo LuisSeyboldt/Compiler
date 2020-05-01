@@ -16,8 +16,8 @@ typedef union stmt_union
 
 typedef enum stmt_enum 
 {
-    STMT_TYPE_EMPTY,
     STMT_TYPE_COND,
+    STMT_TYPE_EMPTY,
     STMT_TYPE_LOOP,
     STMT_TYPE_EXPR,
     STMT_TYPE_RETURN,
@@ -67,6 +67,7 @@ extern int label_counter;
 
 extern stmt_expr* init_stmt_expr();
 extern void add_to_list(stmt_list_element* list, stmt_list_element* element);
+extern void string_statements_together(stmt_list_element* stmt_list, stmt_list_element* stmt);
 extern stmt_list_element* stmt_from_var_decl(symbol_table_element* var);
 extern stmt_list_element* stmt_from_expr(value* expr);
 extern stmt_list_element* stmt_from_cond(value* cond_expr, stmt_list_element* true_list, stmt_list_element* false_list);

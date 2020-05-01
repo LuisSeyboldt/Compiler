@@ -3,7 +3,7 @@
 
 #include <string.h>
 
-stmt_list_element* stmt_from_expr(value* expr)
+/*stmt_list_element* stmt_from_expr(value* expr)
 {
     if(expr->next_expr == NULL)
     {
@@ -56,7 +56,7 @@ stmt_list_element* stmt_from_expr(value* expr)
                 char tmp_id[255];
 
                 sprintf(convert_arr, "%d", numberOfTemps);
-                strcpy(tmp_id, "tmp_1");
+                strcpy(tmp_id, "tmp_");
                 strcat(tmp_id, convert_arr);     
 
                 strcpy(tmp_stmt->stmt.stmt_expr->dest, tmp_id);
@@ -83,7 +83,15 @@ stmt_list_element* stmt_from_expr(value* expr)
                 }
                 else if(current_value->valueType == VALUE_TYPE_SYMBOL)
                 {
-                    strcpy(tmp_stmt->stmt.stmt_expr->operand2, current_value->next_expr->value.element->id);
+                    if(current_value->next_expr->valueType == VALUE_TYPE_SYMBOL)
+                    {
+                        strcpy(tmp_stmt->stmt.stmt_expr->operand2, current_value->next_expr->value.element->id);
+                    }
+                    else
+                    {
+                        sprintf(convert_arr, "%d", current_value->next_expr->value.rval);
+                        strcpy(tmp_stmt->stmt.stmt_expr->operand2, convert_arr);
+                    }
                 }
 
                 symbol_table_element* tmp_var = init_sbl(tmp_id, 0, SYMBOL_TYPE_VAR);
@@ -109,6 +117,53 @@ stmt_list_element* stmt_from_expr(value* expr)
     }
 
     return new_stmt_list;
+}
+*/ 
+
+stmt_list_element* stmt_from_expr(value* expr)
+{
+    stmt_list_element* expressions;
+    char convert_arr[255];
+    // All cases with assign operation on the left
+    if(!strcmp(expr->stmt_operator, "="))
+    {
+        // check if there is a right side
+        if(expr->next_expr != NULL)
+        {
+            value* current_expr = expr->next_expr;
+
+            // case e.g: i = 0;  || only one element on the right side
+            if( current_expr->next_expr == NULL)
+            {
+                expressions = malloc(sizeof(stmt_list_element));
+                expressions->stmt.stmt_expr = init_stmt_expr();
+                expressions->next = NULL;
+                expressions->scope = numberOfScopes;
+                expressions->type = STMT_TYPE_EXPR;
+
+                // set stmt_expr details
+                strcpy(expressions->stmt.stmt_expr->dest, expr->value.element->id);
+                strcpy(expressions->stmt.stmt_expr->op, expr->stmt_operator);
+
+                // set operand1 of stmt_expr according to type of right side (var or num)
+                if(current_expr->valueType == VALUE_TYPE_SYMBOL)
+                {
+                    strcpy(expressions->stmt.stmt_expr->operand1, current_expr->value.element->id);
+                }
+                else if(current_expr->valueType == VALUE_TYPE_VALUE)
+                {
+                    sprintf(convert_arr, "%d", current_expr->value.rval);
+                    strcpy(expressions->stmt.stmt_expr->operand1, convert_arr);
+                }
+            }
+            while(true)
+            {
+
+            }
+        }
+    }
+
+    return expressions;
 }
 
 stmt_expr* init_stmt_expr()
@@ -236,7 +291,7 @@ stmt_list_element* stmt_from_var_decl(symbol_table_element* var)
     stmt_list_element* new_element = malloc(sizeof(stmt_list_element));
     new_element->next = NULL;
     new_element->scope = numberOfScopes;
-    new_element->type = STMT_TYPE_EMPTY;
+    new_element->type = STMT_TYPE_TMP_DEC;
 
     return new_element;
 }
@@ -563,7 +618,7 @@ void init_first_stmt ()
     first_stmt.stmt.stmt_cond = NULL;
 }
 
-void add_to_stmt_list(stmt_list_element* stmt_list)
+void add_to_global_stmt_list(stmt_list_element* stmt_list)
 {
     stmt_list_element* current_element = &first_stmt;
     while(true)
@@ -575,6 +630,23 @@ void add_to_stmt_list(stmt_list_element* stmt_list)
         else
         {
             current_element->next = stmt_list;
+            break;
+        }
+    }
+}
+
+void string_statements_together(stmt_list_element* stmt_list, stmt_list_element* stmt)
+{
+    stmt_list_element* current_element = stmt_list;
+    while(true)
+    {
+        if(current_element->next != NULL)
+        {
+            current_element = current_element->next;
+        }
+        else
+        {
+            current_element->next = stmt;
             break;
         }
     }

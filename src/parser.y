@@ -126,8 +126,8 @@ identifier_declaration
      ;
 
 function_definition
-     : function_definition_start_wo_params stmt_list BRACE_CLOSE                               { add_to_stmt_list($2); numberOfScopes++;  /* only increment numberOfScopes as last operation! */ }
-     | function_definition_start stmt_list BRACE_CLOSE                                         { add_to_stmt_list($2); numberOfScopes++;  /* only increment numberOfScopes as last operation! */ }
+     : function_definition_start_wo_params stmt_list BRACE_CLOSE                               { add_to_global_stmt_list($2); numberOfScopes++;  /* only increment numberOfScopes as last operation! */ }
+     | function_definition_start stmt_list BRACE_CLOSE                                         { add_to_global_stmt_list($2); numberOfScopes++;  /* only increment numberOfScopes as last operation! */ }
      ;
 
 function_definition_start_wo_params
@@ -154,7 +154,7 @@ function_parameter
 									
 stmt_list
      : /* empty: epsilon */
-     | stmt_list stmt                                       { $2->next = $1; $$ = $2; }
+     | stmt_list stmt                                       { string_statements_together($2, $1); $$ = $2; }
      ;
 
 stmt
