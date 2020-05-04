@@ -470,42 +470,41 @@ void print_stmt_expr (FILE *fp, stmt_expr* stmt_expr)
 void print_while_loop (FILE *fp, stmt_loop* stmt_loop, int function_scope)
 {
 
-    print_statements(fp, function_scope, stmt_loop->cond_stmt_list);
-
     int top_label = label_counter++;
     int loop_body = label_counter++;
     int after_loop = label_counter++;
 
     fprintf(fp, "label%d:\n", top_label);
+    print_statements(fp, function_scope, stmt_loop->cond_stmt_list);
 
     fprintf(fp, "if (%s)\n{\ngoto label%d;\n}\ngoto label%d;\n", stmt_loop->cond_id, loop_body, after_loop);
     
-    fprintf(fp, "label%d\n", loop_body);
+    fprintf(fp, "label%d:\n", loop_body);
     print_statements(fp, function_scope, stmt_loop->loop_list);
     fprintf(fp, "goto label%d;\n", top_label);
     
-    fprintf(fp, "label%d\n", after_loop);
+    fprintf(fp, "label%d:\n", after_loop);
 
 }
 
 void print_do_while_loop (FILE *fp, stmt_loop* stmt_loop, int function_scope)
 {
 
-    print_statements(fp, function_scope, stmt_loop->cond_stmt_list);
-
     int loop_body = label_counter++;
     int cond_label = label_counter++;
     int after_loop = label_counter++;
 
-    fprintf(fp, "label%d\n", loop_body);
+    fprintf(fp, "label%d:\n", loop_body);
     print_statements(fp, function_scope, stmt_loop->loop_list);
     fprintf(fp, "goto label%d;\n", cond_label);
     
     fprintf(fp, "label%d:\n", cond_label);
 
+    print_statements(fp, function_scope, stmt_loop->cond_stmt_list);
+
     fprintf(fp, "if (%s)\n{\ngoto label%d;\n}\ngoto label%d;\n", stmt_loop->cond_id, loop_body, after_loop);
 
-    fprintf(fp, "label%d\n", after_loop);
+    fprintf(fp, "label%d:\n", after_loop);
 
 }
 
