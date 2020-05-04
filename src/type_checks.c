@@ -10,6 +10,7 @@ value* valueFromSbl(symbol_table_element* sbl)
     new_val->valueType = VALUE_TYPE_SYMBOL;
     new_val->stmt_operator = malloc(sizeof(char[255]));
     new_val->next = NULL;
+    new_val->index = NULL;
 
     return new_val;
 }
@@ -23,6 +24,7 @@ value* valueFromId(char* id)
     new_val->next_expr = NULL;
     new_val->isTemp = false; 
     new_val->stmt_operator = malloc(sizeof(char[255]));
+    new_val->index = NULL;
 
     return new_val;
 }
@@ -36,11 +38,12 @@ value* valueFromNum(int num)
     new_val->next_expr = NULL;
     new_val->isTemp = false; 
     new_val->stmt_operator = malloc(sizeof(char[255]));
+    new_val->index = NULL;
 
     return new_val;
 }
 
-value* valueFromArray(char *id)
+value* valueFromArray(char *id, value* index)
 {
     value* new_val = malloc(sizeof(value));
     new_val->value.element = get_element_in_namespace(id);
@@ -49,6 +52,7 @@ value* valueFromArray(char *id)
     new_val->next_expr = NULL;
     new_val->isTemp = false; 
     new_val->stmt_operator = malloc(sizeof(char[255]));
+    new_val->index = index;
 
     return new_val;
 }
@@ -62,6 +66,7 @@ value* valueFromFunction(char *id)
     new_val->next_expr = NULL;
     new_val->isTemp = false; 
     new_val->stmt_operator = malloc(sizeof(char[255]));
+    new_val->index = NULL;
 
     return new_val;
 }

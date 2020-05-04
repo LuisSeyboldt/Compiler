@@ -29,6 +29,9 @@ typedef struct value_struct
     char* stmt_operator;
     bool isTemp;
     struct value_struct* next_expr;
+    
+    // for arrays
+    struct value_struct* index;
 } value;
 
 void caseLval(value* expr);
@@ -36,7 +39,7 @@ void err(char* msg);
 extern void checkReturnType(func_return_type rType, char* id);
 extern value* valueFromId(char* id);
 extern value* valueFromNum(int num);
-extern value* valueFromArray(char *id);
+extern value* valueFromArray(char *id, value* index);
 extern value* valueFromFunction(char *id);
 extern value* valueFromSbl(symbol_table_element* sbl);
 extern void checkExpr(value* expr1, value* expr2);

@@ -43,6 +43,19 @@ stmt_list_element* stmt_from_expr(value* expr)
                     sprintf(convert_arr, "%d", current_expr->value.rval);
                     strcpy(expressions->stmt.stmt_expr->operand1, convert_arr);
                 }
+                else if(current_expr->valueType == VALUE_TYPE_ARR_ELEMENT)
+                {
+                    if(current_expr->index->valueType == VALUE_TYPE_VALUE)
+                    {
+                        sprintf(convert_arr, "%s[%d]", current_expr->value.element->id, current_expr->index->value.rval);
+                        strcpy(expressions->stmt.stmt_expr->operand1, convert_arr);
+                    }
+                    else if (current_expr->index->valueType == VALUE_TYPE_SYMBOL)
+                    {
+                        sprintf(convert_arr, "%s[%s]", current_expr->value.element->id, current_expr->index->value.element->id);
+                        strcpy(expressions->stmt.stmt_expr->operand1, convert_arr);
+                    }
+                }
             }
             else // case: more elements on the right side
             {
@@ -90,6 +103,19 @@ stmt_list_element* stmt_from_expr(value* expr)
                 {
                     sprintf(convert_arr, "%d", current_expr->value.rval);
                     strcpy(expressions->stmt.stmt_expr->operand1, convert_arr);
+                }
+                else if(current_expr->valueType == VALUE_TYPE_ARR_ELEMENT)
+                {
+                    if(current_expr->index->valueType == VALUE_TYPE_VALUE)
+                    {
+                        sprintf(convert_arr, "%s[%d]", current_expr->value.element->id, current_expr->index->value.rval);
+                        strcpy(expressions->stmt.stmt_expr->operand1, convert_arr);
+                    }
+                    else if (current_expr->index->valueType == VALUE_TYPE_SYMBOL)
+                    {
+                        sprintf(convert_arr, "%s[%s]", current_expr->value.element->id, current_expr->index->value.element->id);
+                        strcpy(expressions->stmt.stmt_expr->operand1, convert_arr);
+                    }
                 }
             }
             else // case: more elements on the right side
@@ -140,6 +166,19 @@ char* slice_expressions(value* rvals, stmt_list_element* stmts)
         {
             strcpy(new_stmt->stmt.stmt_expr->operand1, rvals->value.element->id);
         }
+        else if(rvals->valueType == VALUE_TYPE_ARR_ELEMENT)
+        {
+            if(rvals->index->valueType == VALUE_TYPE_VALUE)
+            {
+                sprintf(convert_arr, "%s[%d]", rvals->value.element->id, rvals->index->value.rval);
+                strcpy(new_stmt->stmt.stmt_expr->operand1, convert_arr);
+            }
+            else if (rvals->index->valueType == VALUE_TYPE_SYMBOL)
+            {
+                sprintf(convert_arr, "%s[%s]", rvals->value.element->id, rvals->index->value.element->id);
+                strcpy(new_stmt->stmt.stmt_expr->operand1, convert_arr);
+            }
+        }
 
         // set operand2
         if(rvals->next_expr->valueType == VALUE_TYPE_VALUE)
@@ -150,6 +189,19 @@ char* slice_expressions(value* rvals, stmt_list_element* stmts)
         else if (rvals->next_expr->valueType == VALUE_TYPE_SYMBOL)
         {
             strcpy(new_stmt->stmt.stmt_expr->operand2, rvals->next_expr->value.element->id);
+        }
+        else if(rvals->valueType == VALUE_TYPE_ARR_ELEMENT)
+        {
+            if(rvals->index->valueType == VALUE_TYPE_VALUE)
+            {
+                sprintf(convert_arr, "%s[%d]", rvals->value.element->id, rvals->index->value.rval);
+                strcpy(new_stmt->stmt.stmt_expr->operand2, convert_arr);
+            }
+            else if (rvals->index->valueType == VALUE_TYPE_SYMBOL)
+            {
+                sprintf(convert_arr, "%s[%s]", rvals->value.element->id, rvals->index->value.element->id);
+                strcpy(new_stmt->stmt.stmt_expr->operand2, convert_arr);
+            }
         }
 
         numberOfTmps++;
@@ -269,6 +321,7 @@ stmt_list_element* stmt_from_cond(value* cond_expr, stmt_list_element* true_list
     new_element->type = STMT_TYPE_COND;
     new_element->stmt.stmt_cond = init_stmt_cond();
     new_element->stmt.stmt_cond->cond_stmt_list = cond_list;
+    char convert_arr[255];
 
     if(!strcmp(cond_expr->stmt_operator, ""))
     {
@@ -279,9 +332,21 @@ stmt_list_element* stmt_from_cond(value* cond_expr, stmt_list_element* true_list
 
         if(cond_expr->valueType == VALUE_TYPE_VALUE)
         {
-            char convert_arr[255];
             sprintf(convert_arr, "%d", cond_expr->value.rval);
             strcpy(new_element->stmt.stmt_cond->cond_id, convert_arr);
+        }
+        else if(cond_expr->valueType == VALUE_TYPE_ARR_ELEMENT)
+        {
+            if(cond_expr->index->valueType == VALUE_TYPE_VALUE)
+            {
+                sprintf(convert_arr, "%s[%d]", cond_expr->value.element->id, cond_expr->index->value.rval);
+                strcpy(new_element->stmt.stmt_cond->cond_id, convert_arr);
+            }
+            else if (cond_expr->index->valueType == VALUE_TYPE_SYMBOL)
+            {
+                sprintf(convert_arr, "%s[%s]", cond_expr->value.element->id, cond_expr->index->value.element->id);
+                strcpy(new_element->stmt.stmt_cond->cond_id, convert_arr);
+            }
         }
     }
     else
@@ -311,6 +376,8 @@ stmt_list_element* stmt_from_loop(value* cond_expr, stmt_list_element* loop_list
     new_element->type = STMT_TYPE_LOOP;
     new_element->stmt.stmt_loop = init_stmt_loop();
     new_element->stmt.stmt_loop->cond_stmt_list = cond_list;
+    char convert_arr[255];
+
     if(!strcmp(cond_expr->stmt_operator, ""))
     {
         if(cond_expr->valueType == VALUE_TYPE_SYMBOL)
@@ -320,9 +387,21 @@ stmt_list_element* stmt_from_loop(value* cond_expr, stmt_list_element* loop_list
 
         if(cond_expr->valueType == VALUE_TYPE_VALUE)
         {
-            char convert_arr[255];
             sprintf(convert_arr, "%d", cond_expr->value.rval);
             strcpy(new_element->stmt.stmt_loop->cond_id, convert_arr);
+        }
+        else if(cond_expr->valueType == VALUE_TYPE_ARR_ELEMENT)
+        {
+            if(cond_expr->index->valueType == VALUE_TYPE_VALUE)
+            {
+                sprintf(convert_arr, "%s[%d]", cond_expr->value.element->id, cond_expr->index->value.rval);
+                strcpy(new_element->stmt.stmt_loop->cond_id, convert_arr);
+            }
+            else if (cond_expr->index->valueType == VALUE_TYPE_SYMBOL)
+            {
+                sprintf(convert_arr, "%s[%s]", cond_expr->value.element->id, cond_expr->index->value.element->id);
+                strcpy(new_element->stmt.stmt_loop->cond_id, convert_arr);
+            }
         }
     }
     else
@@ -355,10 +434,23 @@ stmt_list_element* stmt_from_return(value* expr)
         {
             strcpy(new_element->stmt.stmt_return->return_id, expr->value.element->id);
         }
-        else
+        else if (expr->valueType == VALUE_TYPE_VALUE)
         {
             sprintf(convert_arr, "%d" ,expr->value.rval);
             strcpy(new_element->stmt.stmt_return->return_id, convert_arr);
+        }
+        else if(expr->valueType == VALUE_TYPE_ARR_ELEMENT)
+        {
+            if(expr->index->valueType == VALUE_TYPE_VALUE)
+            {
+                sprintf(convert_arr, "%s[%d]", expr->value.element->id, expr->index->value.rval);
+                strcpy(new_element->stmt.stmt_return->return_id, convert_arr);
+            }
+            else if (expr->index->valueType == VALUE_TYPE_SYMBOL)
+            {
+                sprintf(convert_arr, "%s[%s]", expr->value.element->id, expr->index->value.element->id);
+                strcpy(new_element->stmt.stmt_return->return_id, convert_arr);
+            }
         }
     }
     else
@@ -404,9 +496,6 @@ void set_expr_details (char* op, value* currentExpr, value* nextExpr)
 
 void print_function_header (FILE *fp, symbol_table_element *currentElement)
 {
-
-    print_all_symbol_tables();
-
     if (currentElement->return_type == FUNC_RETURN_TYPE_INT)
         fprintf(fp, "int ");
     if (currentElement->return_type == FUNC_RETURN_TYPE_VOID)

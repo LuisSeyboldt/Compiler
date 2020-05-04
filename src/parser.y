@@ -201,7 +201,7 @@ expression
      | expression DIV expression             { checkRVal($1, $3); set_expr_details("/", $1, $3); $$ = $1; }
      | MINUS expression %prec UNARY_MINUS    { checkSingleExpr($2); set_expr_details("-", $2, NULL); $$ = $2; }
      | PLUS expression %prec UNARY_PLUS      { checkSingleExpr($2); set_expr_details("+", $2, NULL); $$ = $2; }
-     | ID BRACKET_OPEN primary BRACKET_CLOSE { $$ = valueFromArray($1); }
+     | ID BRACKET_OPEN primary BRACKET_CLOSE { $$ = valueFromArray($1, $3); }
      | PARA_OPEN expression PARA_CLOSE       { $$ = $2; }
      | function_call                         { $$ = $1; }
      | primary                               { $$ = $1; }
