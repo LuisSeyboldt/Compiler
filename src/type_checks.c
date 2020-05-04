@@ -232,7 +232,7 @@ void err(char* msg)
     exit(1);
 }
 
-extern value* valueFromFunctionWithParameterList(char *id, value *firstParamListElement)
+value* valueFromFunctionWithParameterList(char *id, value *firstParamListElement)
 {
 
     value* new_value = valueFromFunction(id);

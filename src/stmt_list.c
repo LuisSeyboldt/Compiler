@@ -68,7 +68,23 @@ stmt_list_element* stmt_from_expr(value* expr)
                 new_stmt->scope = numberOfScopes;
                 new_stmt->type = STMT_TYPE_EXPR;
 
-                strcpy(new_stmt->stmt.stmt_expr->dest, expr->value.element->id);
+                if(expr->valueType == VALUE_TYPE_SYMBOL)
+                {
+                    strcpy(new_stmt->stmt.stmt_expr->dest, expr->value.element->id);
+                }
+                else if (expr->valueType == VALUE_TYPE_ARR_ELEMENT)
+                {
+                    if(expr->index->valueType == VALUE_TYPE_VALUE)
+                    {
+                        sprintf(convert_arr, "%s[%d]", expr->value.element->id, expr->index->value.rval);
+                        strcpy(new_stmt->stmt.stmt_expr->dest, convert_arr);
+                    }
+                    else if (expr->index->valueType == VALUE_TYPE_SYMBOL)
+                    {
+                        sprintf(convert_arr, "%s[%s]", expr->value.element->id, expr->index->value.element->id);
+                        strcpy(new_stmt->stmt.stmt_expr->dest, convert_arr);
+                    }
+                }
                 strcpy(new_stmt->stmt.stmt_expr->op, "=");
                 strcpy(new_stmt->stmt.stmt_expr->operand1, last_tmp_var);
                 strcpy(new_stmt->stmt.stmt_expr->operand2, "");
@@ -190,16 +206,16 @@ char* slice_expressions(value* rvals, stmt_list_element* stmts)
         {
             strcpy(new_stmt->stmt.stmt_expr->operand2, rvals->next_expr->value.element->id);
         }
-        else if(rvals->valueType == VALUE_TYPE_ARR_ELEMENT)
+        else if(rvals->next_expr->valueType == VALUE_TYPE_ARR_ELEMENT)
         {
-            if(rvals->index->valueType == VALUE_TYPE_VALUE)
+            if(rvals->next_expr->index->valueType == VALUE_TYPE_VALUE)
             {
-                sprintf(convert_arr, "%s[%d]", rvals->value.element->id, rvals->index->value.rval);
+                sprintf(convert_arr, "%s[%d]", rvals->next_expr->value.element->id, rvals->next_expr->index->value.rval);
                 strcpy(new_stmt->stmt.stmt_expr->operand2, convert_arr);
             }
-            else if (rvals->index->valueType == VALUE_TYPE_SYMBOL)
+            else if (rvals->next_expr->index->valueType == VALUE_TYPE_SYMBOL)
             {
-                sprintf(convert_arr, "%s[%s]", rvals->value.element->id, rvals->index->value.element->id);
+                sprintf(convert_arr, "%s[%s]", rvals->next_expr->value.element->id, rvals->next_expr->index->value.element->id);
                 strcpy(new_stmt->stmt.stmt_expr->operand2, convert_arr);
             }
         }
