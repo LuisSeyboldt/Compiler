@@ -143,6 +143,8 @@ stmt_list_element* stmt_from_expr(value* expr)
             // case e.g: i = 0;  || only one element on the right side
             if( current_expr->next_expr == NULL)
             {
+                expressions->type = STMT_TYPE_EXPR;
+
                 // set stmt_expr details
                 strcpy(expressions->stmt.stmt_expr->dest, expr->value.element->id);
                 strcpy(expressions->stmt.stmt_expr->op, expr->stmt_operator);
@@ -385,7 +387,9 @@ stmt_list_element* stmt_from_return(value* expr)
     new_element->type = STMT_TYPE_RETURN;
     new_element->stmt.stmt_return = init_stmt_return();
     new_element->stmt.stmt_return->return_expr_list = return_stmt_list;
-    strcpy(new_element->stmt.stmt_return->return_id, get_last_statement(return_stmt_list)->stmt.stmt_expr->dest);
+
+    new_element->stmt.stmt_return->return_id = malloc(sizeof(expr->value.element->id));    
+    strcpy(new_element->stmt.stmt_return->return_id, expr->value.element->id);
 
 
     return new_element;
@@ -521,15 +525,6 @@ void print_stmt_expr (FILE *fp, stmt_expr* stmt_expr)
 
     if (!strcmp(stmt_expr->operand2, "") && strcmp(stmt_expr->op, "") && !strcmp(stmt_expr->op, "="))
         fprintf (fp, "%s = %s;\n", stmt_expr->dest, stmt_expr->operand1);
-
-    /*if (stmt_expr->operand2 == NULL)
-    {
-        if (stmt_expr->op != NULL)
-        {
-            if (!strcmp(stmt_expr->op, "="))
-                fprintf (fp, "%s = %s;\n", stmt_expr->dest, stmt_expr->operand1);
-        }
-    }*/
 
 }
 
@@ -726,6 +721,8 @@ void print_functions (FILE *fp)
 void print_intermediate_code (char* file_string)
 {
 
+    resverse_stmt_list(&first_stmt);
+
     FILE *fp = 0;
     fp = fopen(file_string, "w+");
 
@@ -792,4 +789,22 @@ stmt_list_element* create_empty_stmt ()
     
     return new_element;
 
+}
+
+void resverse_stmt_list (stmt_list_element **head_ref)
+{
+    stmt_list_element *prev = NULL;
+    stmt_list_element *current = *head_ref;
+    stmt_list_element *next = NULL;
+
+    while (current != NULL)
+    {
+        next = current->next;
+
+        current->next = prev;
+
+        prev = current;
+        current = next;
+    }
+    *head_ref = prev;
 }

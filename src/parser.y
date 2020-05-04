@@ -163,8 +163,8 @@ stmt
      | expression SEMICOLON                                 { $$ = stmt_from_expr($1); }
      | stmt_conditional                                     { $$ = $1; }
      | stmt_loop                                            { $$ = $1; }
-     | RETURN expression SEMICOLON                          { checkFuncReturn($2); $$ = create_empty_stmt(); /*$$ = stmt_from_return($2);*/ }
-     | RETURN SEMICOLON                                     { checkVoidReturn(); $$ = create_empty_stmt(); /*$$ = stmt_from_return(NULL);*/ }
+     | RETURN expression SEMICOLON                          { checkFuncReturn($2); /*$$ = create_empty_stmt();*/ $$ = stmt_from_return($2); }
+     | RETURN SEMICOLON                                     { checkVoidReturn(); /*$$ = create_empty_stmt();*/ $$ = stmt_from_return(NULL); }
      | SEMICOLON /* empty statement */                      { $$ = create_empty_stmt(); }
      ;
 
