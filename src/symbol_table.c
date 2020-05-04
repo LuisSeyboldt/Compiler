@@ -123,7 +123,10 @@ void add_fun (char* id, func_return_type rtype, unsigned int param_count, bool d
             {
                 // reduce the number of scopes to prevent duplicate entries in symbol table for definition and declaration
                 new_symbol->function_scope = found_function->function_scope;
-                numberOfScopes--;
+                //numberOfScopes--;
+                jumpBack = true;
+                oldScope = numberOfScopes;
+                numberOfScopes = found_function->function_scope;
                 delete_elements_of_scope(found_function->function_scope);
             }
         }
@@ -652,4 +655,14 @@ symbol_table_element *get_frist_parameter_of_func(int functionScope)
     
     return NULL;
 
+}
+
+void checkJumpBack()
+{
+    if (jumpBack)
+    {
+        numberOfScopes = oldScope;
+        oldScope = 0;
+        jumpBack = false;
+    }
 }

@@ -55,6 +55,9 @@ typedef struct parameter_list
 symbol_table_element first_element;
 extern int numberOfScopes;
 
+extern int oldScope;
+extern bool jumpBack;
+
 extern symbol_table_element* get_function_from_scope (int scope);
 extern parameter_list* init_param_list(int paramCount, symbol_table_element* symbols);
 extern symbol_table_element *get_last_table_element();
@@ -74,5 +77,6 @@ extern char* get_ID_of_scope(int scope);
 extern bool scope_has_elements(int scope);
 extern symbol_table_element *get_element_in_scope(char *id, int scope);
 extern symbol_table_element *get_frist_parameter_of_func(int functionScope);
+extern void checkJumpBack();
 
 #endif

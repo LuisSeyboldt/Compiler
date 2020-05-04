@@ -405,6 +405,8 @@ void set_expr_details (char* op, value* currentExpr, value* nextExpr)
 void print_function_header (FILE *fp, symbol_table_element *currentElement)
 {
 
+    print_all_symbol_tables();
+
     if (currentElement->return_type == FUNC_RETURN_TYPE_INT)
         fprintf(fp, "int ");
     if (currentElement->return_type == FUNC_RETURN_TYPE_VOID)
@@ -423,7 +425,7 @@ void print_function_header (FILE *fp, symbol_table_element *currentElement)
         while (true)
         {
 
-            if (currentDefiniedElement->next == NULL || currentDefiniedElement->isParam == false)
+            if (currentDefiniedElement->isParam == false)
                 break;
             
             if (!first_param)
@@ -441,6 +443,11 @@ void print_function_header (FILE *fp, symbol_table_element *currentElement)
                 first_param = false;
                 currentDefiniedElement = currentDefiniedElement->next;
             }
+            else 
+            {
+                break;
+            }
+            
 
         }
         
