@@ -286,6 +286,7 @@ stmt_list_element* stmt_from_loop(value* cond_expr, stmt_list_element* loop_list
     stmt_list_element* cond_list = stmt_from_expr(cond_expr);
     stmt_list_element* new_element = malloc(sizeof(stmt_list_element));
     reverse_stmt_list(&cond_list);
+    reverse_stmt_list(&loop_list);
 
     new_element->next = NULL;
     new_element->scope = numberOfScopes;
