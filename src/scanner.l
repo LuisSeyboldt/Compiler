@@ -41,7 +41,11 @@ int						{ return INT; }
 %                       { return MOD; }
 (!)                     { return LOGICAL_NOT; }
 [0-9]+                  { yylval.i = atoi(yytext); return NUM; }
+<<<<<<< Updated upstream
 do					{ return DO; }
+=======
+do					    { return DO; }
+>>>>>>> Stashed changes
 while					{ return WHILE; }
 if						{ return IF; }
 else 					{ return ELSE; }

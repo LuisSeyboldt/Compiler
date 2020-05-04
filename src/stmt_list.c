@@ -293,7 +293,24 @@ stmt_list_element* stmt_from_loop(value* cond_expr, stmt_list_element* loop_list
     new_element->type = STMT_TYPE_LOOP;
     new_element->stmt.stmt_loop = init_stmt_loop();
     new_element->stmt.stmt_loop->cond_stmt_list = cond_list;
-    strcpy(new_element->stmt.stmt_loop->cond_id, get_last_statement(cond_list)->stmt.stmt_expr->dest);
+    if(!strcmp(cond_expr->stmt_operator, ""))
+    {
+        if(cond_expr->valueType == VALUE_TYPE_SYMBOL)
+        {
+            strcpy(new_element->stmt.stmt_loop->cond_id, cond_expr->value.element->id);
+        }
+
+        if(cond_expr->valueType == VALUE_TYPE_VALUE)
+        {
+            char convert_arr[255];
+            sprintf(convert_arr, "%d", cond_expr->value.rval);
+            strcpy(new_element->stmt.stmt_loop->cond_id, convert_arr);
+        }
+    }
+    else
+    {
+        strcpy(new_element->stmt.stmt_loop->cond_id, get_last_statement(cond_list)->stmt.stmt_expr->dest);
+    }
     new_element->stmt.stmt_loop->loop_list = loop_list;
     new_element->stmt.stmt_loop->do_while = doWhile;
 
