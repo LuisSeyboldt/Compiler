@@ -91,7 +91,7 @@
 %type<sblElement> identifier_declaration variable_declaration function_parameter
 %type<paramList> function_parameter_list
 %type<pValue> function_call_parameters expression primary function_call
-%type<stmt_list> stmt_list stmt stmt_conditional stmt_loop
+%type<stmt_list> stmt_list stmt stmt_conditional stmt_loop stmt_block
 
 %%
 
@@ -158,7 +158,7 @@ stmt_list
      ;
 
 stmt
-     : stmt_block
+     : stmt_block                                           { $$ = $1; }
      | variable_declaration SEMICOLON                       { add_sbl($1, true, false); $$ = create_empty_stmt()/*stmt_from_var_decl($1)*/; }
      | expression SEMICOLON                                 { $$ = stmt_from_expr($1); }
      | stmt_conditional                                     { $$ = $1; }
@@ -169,7 +169,7 @@ stmt
      ;
 
 stmt_block
-     : BRACE_OPEN stmt_list BRACE_CLOSE
+     : BRACE_OPEN stmt_list BRACE_CLOSE                     { $$ = $2; }
      ;
 	
 stmt_conditional

@@ -120,6 +120,11 @@ void checkRVal(value* expr1, value* expr2)
     // can not compare a array with something
     if(expr1->valueType == VALUE_TYPE_SYMBOL)
     {
+        if(expr1->value.element == NULL)
+        {
+            err("ERROR: Unknown variable");
+        }
+
         if(expr1->value.element->type == SYMBOL_TYPE_ARRAY)
         {
             err("ERROR: Array can not be assigned");
@@ -127,6 +132,10 @@ void checkRVal(value* expr1, value* expr2)
     }
     if(expr2->valueType == VALUE_TYPE_SYMBOL)
     {
+        if(expr2->value.element == NULL)
+        {
+            err("ERROR: Unknown variable");
+        }
         if(expr2->value.element->type == SYMBOL_TYPE_ARRAY)
         {
             err("ERROR: Can not assign array");

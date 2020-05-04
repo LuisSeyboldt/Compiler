@@ -3,122 +3,6 @@
 
 #include <string.h>
 
-/*stmt_list_element* stmt_from_expr(value* expr)
-{
-    if(expr->next_expr == NULL)
-    {
-        stmt_list_element* new_element = malloc(sizeof(stmt_list_element));
-        new_element->next = NULL;
-        new_element->scope = numberOfScopes;
-        new_element->type = STMT_TYPE_EXPR;
-        new_element->stmt.stmt_expr = init_stmt_expr();
-        if(expr->valueType == VALUE_TYPE_SYMBOL)
-        {
-            strcpy(new_element->stmt.stmt_expr->dest, expr->value.element->id);
-        }
-        else if(expr->valueType == VALUE_TYPE_VALUE)
-        {
-            char convert_arr[255];
-            sprintf(convert_arr, "%d", expr->value.rval);
-        }
-
-        return new_element;
-    }
-    
-    stmt_list_element* new_stmt_list = malloc(sizeof(stmt_list_element));
-    new_stmt_list->next = NULL;
-    new_stmt_list->scope = numberOfScopes;
-    new_stmt_list->type = STMT_TYPE_EMPTY;
-    new_stmt_list->stmt.stmt_expr = NULL;
-
-    value* current_value = expr;
-    value* prev = NULL;
-    int numberOfTemps = 0;
-    while(true)
-    {
-        if(current_value->next_expr != NULL)
-        {
-            if(current_value->next_expr->next_expr != NULL)
-            {
-                prev = current_value;
-                current_value = current_value->next_expr;
-            }
-            else 
-            {
-                // create statement for temp variable
-                stmt_list_element* tmp_stmt = malloc(sizeof(stmt_list_element));
-                tmp_stmt->next = NULL;
-                tmp_stmt->scope = numberOfScopes;
-                tmp_stmt->type = STMT_TYPE_TMP_DEC;
-                tmp_stmt->stmt.stmt_expr = init_stmt_expr();
-
-                char convert_arr[255]; 
-                char tmp_id[255];
-
-                sprintf(convert_arr, "%d", numberOfTemps);
-                strcpy(tmp_id, "tmp_");
-                strcat(tmp_id, convert_arr);     
-
-                strcpy(tmp_stmt->stmt.stmt_expr->dest, tmp_id);
-                strcpy(tmp_stmt->stmt.stmt_expr->op, current_value->stmt_operator);
-                numberOfTemps++;
-
-
-                if(current_value->valueType == VALUE_TYPE_VALUE)
-                {
-                    sprintf(convert_arr, "%d", current_value->value.rval);
-                    strcpy(tmp_stmt->stmt.stmt_expr->operand1, convert_arr);
-                    strcpy(tmp_id, convert_arr);
-                }
-                else if(current_value->valueType == VALUE_TYPE_SYMBOL)
-                {
-                    strcpy(tmp_stmt->stmt.stmt_expr->operand1, current_value->value.element->id);
-                    strcpy(tmp_id, convert_arr);
-                }
-
-                if(current_value->next_expr->valueType == VALUE_TYPE_VALUE)
-                {
-                    sprintf(convert_arr, "%d", current_value->next_expr->value.rval);
-                    strcpy(tmp_stmt->stmt.stmt_expr->operand2, convert_arr);
-                }
-                else if(current_value->valueType == VALUE_TYPE_SYMBOL)
-                {
-                    if(current_value->next_expr->valueType == VALUE_TYPE_SYMBOL)
-                    {
-                        strcpy(tmp_stmt->stmt.stmt_expr->operand2, current_value->next_expr->value.element->id);
-                    }
-                    else
-                    {
-                        sprintf(convert_arr, "%d", current_value->next_expr->value.rval);
-                        strcpy(tmp_stmt->stmt.stmt_expr->operand2, convert_arr);
-                    }
-                }
-
-                symbol_table_element* tmp_var = init_sbl(tmp_id, 0, SYMBOL_TYPE_VAR);
-                value* tmp_expr = valueFromSbl(tmp_var);
-
-                if(prev != NULL)
-                {
-                    prev->next_expr = tmp_expr;
-                    add_to_list(new_stmt_list, tmp_stmt);
-                }
-                else
-                {
-                    strcpy(tmp_stmt->stmt.stmt_expr->dest, current_value->value.element->id);
-                    add_to_list(new_stmt_list, tmp_stmt);
-                    break;
-                }
-                // reset the loop and clean memory
-                free(current_value->next_expr->next_expr);
-                free(current_value->next_expr);
-                current_value = expr;
-            }
-        }
-    }
-
-    return new_stmt_list;
-}
-*/ 
 
 stmt_list_element* stmt_from_expr(value* expr)
 {
@@ -181,7 +65,42 @@ stmt_list_element* stmt_from_expr(value* expr)
 
         }
     }
+    else    // not a '=' as first operator
+    {
+        // check if there is more than one operand
+        if(expr->next_expr != NULL)
+        {
+            value* current_expr = expr;
 
+            // case e.g: i + 1;  || only two operands
+            if( current_expr->next_expr == NULL)
+            {
+                expressions->type = STMT_TYPE_EXPR;
+
+                // set stmt_expr details
+                strcpy(expressions->stmt.stmt_expr->dest, expr->value.element->id);
+                strcpy(expressions->stmt.stmt_expr->op, expr->stmt_operator);
+
+                // set operand1 of stmt_expr according to type of right side (var or num)
+                if(current_expr->valueType == VALUE_TYPE_SYMBOL)
+                {
+                    strcpy(expressions->stmt.stmt_expr->operand1, current_expr->value.element->id);
+                }
+                else if(current_expr->valueType == VALUE_TYPE_VALUE)
+                {
+                    sprintf(convert_arr, "%d", current_expr->value.rval);
+                    strcpy(expressions->stmt.stmt_expr->operand1, convert_arr);
+                }
+            }
+            else // case: more elements on the right side
+            {
+                slice_expressions(current_expr, expressions);
+            }
+
+        }
+    }
+
+    reverse_stmt_list(&expressions);
     return expressions;
 }
 
@@ -235,8 +154,7 @@ char* slice_expressions(value* rvals, stmt_list_element* stmts)
 
         numberOfTmps++;
 
-        // add new temp declaration to stmt list
-        // if first call then overwrite the parameter, else append to the end
+        // append new statement to stmts
         string_statements_together(stmts, new_stmt);
 
 
@@ -344,6 +262,7 @@ stmt_list_element* stmt_from_cond(value* cond_expr, stmt_list_element* true_list
 {
     stmt_list_element* cond_list = stmt_from_expr(cond_expr);
     stmt_list_element* new_element = malloc(sizeof(stmt_list_element));
+    reverse_stmt_list(&cond_list);
 
     new_element->next = NULL;
     new_element->scope = numberOfScopes;
@@ -351,9 +270,11 @@ stmt_list_element* stmt_from_cond(value* cond_expr, stmt_list_element* true_list
     new_element->stmt.stmt_cond = init_stmt_cond();
     new_element->stmt.stmt_cond->cond_stmt_list = cond_list;
     strcpy(new_element->stmt.stmt_cond->cond_id,  get_last_statement(cond_list)->stmt.stmt_expr->dest);
+    reverse_stmt_list(&true_list);
     new_element->stmt.stmt_cond->true_list = true_list;
     if(false_list != NULL)
     {
+        reverse_stmt_list(&false_list);
         new_element->stmt.stmt_cond->false_list = false_list;
     }
 
@@ -364,6 +285,7 @@ stmt_list_element* stmt_from_loop(value* cond_expr, stmt_list_element* loop_list
 {
     stmt_list_element* cond_list = stmt_from_expr(cond_expr);
     stmt_list_element* new_element = malloc(sizeof(stmt_list_element));
+    reverse_stmt_list(&cond_list);
 
     new_element->next = NULL;
     new_element->scope = numberOfScopes;
@@ -381,6 +303,7 @@ stmt_list_element* stmt_from_return(value* expr)
 {
     stmt_list_element* new_element = malloc(sizeof(stmt_list_element));
     stmt_list_element* return_stmt_list = stmt_from_expr(expr);
+    reverse_stmt_list(return_stmt_list);
 
     new_element->next = NULL;
     new_element->scope = numberOfScopes;
@@ -388,9 +311,24 @@ stmt_list_element* stmt_from_return(value* expr)
     new_element->stmt.stmt_return = init_stmt_return();
     new_element->stmt.stmt_return->return_expr_list = return_stmt_list;
 
-    new_element->stmt.stmt_return->return_id = malloc(sizeof(expr->value.element->id));    
-    strcpy(new_element->stmt.stmt_return->return_id, expr->value.element->id);
-
+    new_element->stmt.stmt_return->return_id = malloc(sizeof(char[255]));
+    char convert_arr[255];
+    if(!strcmp(expr->stmt_operator, ""))
+    {
+        if(expr->valueType == VALUE_TYPE_SYMBOL)
+        {
+            strcpy(new_element->stmt.stmt_return->return_id, expr->value.element->id);
+        }
+        else
+        {
+            sprintf(convert_arr, "%d" ,expr->value.rval);
+            strcpy(new_element->stmt.stmt_return->return_id, convert_arr);
+        }
+    }
+    else
+    {
+        strcpy(new_element->stmt.stmt_return->return_id, get_last_statement(return_stmt_list)->stmt.stmt_expr->dest);
+    }
 
     return new_element;
 }
@@ -721,7 +659,7 @@ void print_functions (FILE *fp)
 void print_intermediate_code (char* file_string)
 {
 
-    resverse_stmt_list(&first_stmt);
+    reverse_stmt_list(&first_stmt);
 
     FILE *fp = 0;
     fp = fopen(file_string, "w+");
@@ -791,7 +729,7 @@ stmt_list_element* create_empty_stmt ()
 
 }
 
-void resverse_stmt_list (stmt_list_element **head_ref)
+void reverse_stmt_list (stmt_list_element **head_ref)
 {
     stmt_list_element *prev = NULL;
     stmt_list_element *current = *head_ref;
