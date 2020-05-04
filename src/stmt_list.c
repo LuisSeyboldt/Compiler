@@ -56,6 +56,10 @@ stmt_list_element* stmt_from_expr(value* expr)
                         strcpy(expressions->stmt.stmt_expr->operand1, convert_arr);
                     }
                 }
+                else if(current_expr->valueType == VALUE_TYPE_FUNCTION_CALL)
+                {
+                    copy_function_call(&expressions->stmt.stmt_expr->operand1, current_expr);
+                }
             }
             else // case: more elements on the right side
             {
@@ -133,6 +137,10 @@ stmt_list_element* stmt_from_expr(value* expr)
                         strcpy(expressions->stmt.stmt_expr->operand1, convert_arr);
                     }
                 }
+                else if(current_expr->valueType == VALUE_TYPE_FUNCTION_CALL)
+                {
+                    copy_function_call(&expressions->stmt.stmt_expr->operand1, current_expr);
+                }
             }
             else // case: more elements on the right side
             {
@@ -144,6 +152,83 @@ stmt_list_element* stmt_from_expr(value* expr)
 
     reverse_stmt_list(&expressions);
     return expressions;
+}
+
+void copy_function_call(char** destination, value* function_call)
+{
+    char convert_arr[255];
+    char function_call_name[255];
+    strcpy(function_call_name, "");
+    strcat(function_call_name, function_call->value.element->id);
+    strcat(function_call_name, "(");
+    value* current_element = function_call;
+
+    bool isFirst = true;
+    while(true)
+    {
+        if(current_element->next == NULL)
+        {
+            strcat(function_call_name, ")");
+            strcpy(*(destination), function_call_name);
+            break;
+        }
+        else
+        {
+            current_element = current_element->next;
+            if(current_element->valueType == VALUE_TYPE_SYMBOL)
+            {
+                if(!isFirst)
+                {
+                    strcat(function_call_name, ", ");
+                }
+                strcat(function_call_name, current_element->value.element->id);
+                isFirst = false;
+            }
+            else if(current_element->valueType == VALUE_TYPE_VALUE)
+            {
+                if(!isFirst)
+                {
+                    strcat(function_call_name, ", ");
+                }
+                sprintf(convert_arr, "%d", current_element->value.rval);
+                strcat(function_call_name, convert_arr);
+                isFirst = false;
+            }
+            else if(current_element->valueType == VALUE_TYPE_ARR_ELEMENT)
+            {
+                if(!isFirst)
+                {
+                    strcat(function_call_name, ", ");
+                }
+
+                if(current_element->index->valueType == VALUE_TYPE_VALUE)
+                {
+                    sprintf(convert_arr, "%s[%d]", current_element->value.element->id, current_element->index->value.rval);
+                }
+                else if (current_element->index->valueType == VALUE_TYPE_SYMBOL)
+                {
+                    sprintf(convert_arr, "%s[%s]", current_element->value.element->id, current_element->index->value.element->id);
+                }                    
+
+                strcat(function_call_name, convert_arr);
+                isFirst = false;
+
+            }
+            else if(current_element->valueType == VALUE_TYPE_FUNCTION_CALL)
+            {
+                if(!isFirst)
+                {
+                    strcat(function_call_name, ", ");
+                }
+
+                char tmp[255]; 
+                copy_function_call(&tmp, current_element);
+                strcat(function_call_name, tmp);
+                isFirst = false;
+            }
+        }
+    }
+    
 }
 
 char* slice_expressions(value* rvals, stmt_list_element* stmts)
@@ -195,6 +280,10 @@ char* slice_expressions(value* rvals, stmt_list_element* stmts)
                 strcpy(new_stmt->stmt.stmt_expr->operand1, convert_arr);
             }
         }
+        else if(rvals->valueType == VALUE_TYPE_FUNCTION_CALL)
+        {
+            copy_function_call(&new_stmt->stmt.stmt_expr->operand1, rvals);
+        }
 
         // set operand2
         if(rvals->next_expr->valueType == VALUE_TYPE_VALUE)
@@ -218,6 +307,10 @@ char* slice_expressions(value* rvals, stmt_list_element* stmts)
                 sprintf(convert_arr, "%s[%s]", rvals->next_expr->value.element->id, rvals->next_expr->index->value.element->id);
                 strcpy(new_stmt->stmt.stmt_expr->operand2, convert_arr);
             }
+        }
+        else if(rvals->next_expr->valueType == VALUE_TYPE_FUNCTION_CALL)
+        {
+            copy_function_call(&new_stmt->stmt.stmt_expr->operand2, rvals->next_expr);
         }
 
         numberOfTmps++;
@@ -364,6 +457,10 @@ stmt_list_element* stmt_from_cond(value* cond_expr, stmt_list_element* true_list
                 strcpy(new_element->stmt.stmt_cond->cond_id, convert_arr);
             }
         }
+        else if (cond_expr->valueType == VALUE_TYPE_FUNCTION_CALL)
+        {
+            copy_function_call(&new_element->stmt.stmt_cond->cond_id, cond_expr);
+        }
     }
     else
     {
@@ -419,6 +516,10 @@ stmt_list_element* stmt_from_loop(value* cond_expr, stmt_list_element* loop_list
                 strcpy(new_element->stmt.stmt_loop->cond_id, convert_arr);
             }
         }
+        else if(cond_expr->valueType == VALUE_TYPE_FUNCTION_CALL)
+        {
+            copy_function_call(&new_element->stmt.stmt_loop->cond_id, cond_expr);
+        }
     }
     else
     {
@@ -467,6 +568,10 @@ stmt_list_element* stmt_from_return(value* expr)
                 sprintf(convert_arr, "%s[%s]", expr->value.element->id, expr->index->value.element->id);
                 strcpy(new_element->stmt.stmt_return->return_id, convert_arr);
             }
+        }
+        else if(expr->valueType == VALUE_TYPE_FUNCTION_CALL)
+        {
+            copy_function_call(&new_element->stmt.stmt_return->return_id, expr);
         }
     }
     else

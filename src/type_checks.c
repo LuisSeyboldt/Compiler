@@ -307,8 +307,8 @@ value* valueFromFunctionWithParameterList(char *id, value *firstParamListElement
 
     }
 
-    cleanFunctionParameterMemory (firstParamListElement);
-
+    //cleanFunctionParameterMemory (firstParamListElement);
+    new_value->next = firstParamListElement;
     return new_value;
 
 }

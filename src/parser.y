@@ -218,8 +218,8 @@ function_call
       ;
 
 function_call_parameters
-     : function_call_parameters COMMA expression       { $3->next = $1; $$ = allocFunctionParameter($3); }
-     | expression                                      { $$ = allocFunctionParameter($1); }
+     : function_call_parameters COMMA expression       { $3->next = $1; $$ = $3; }
+     | expression                                      { $$ = $1; }
      ;
 
 %%
