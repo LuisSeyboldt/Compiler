@@ -200,7 +200,7 @@ void checkIfNotVoid(func_return_type type)
 {
     if(type == FUNC_RETURN_TYPE_VOID)
     {
-        err("ERROR: Return type void not allowed here");
+        err("ERROR: Type void not allowed here");
     }
 
     return;
@@ -212,7 +212,6 @@ void checkReturnType(func_return_type rType, char* id)
     if(function->type != SYMBOL_TYPE_FUNC)
     {
         err("ERROR: No function with matching name");
-        
     }
     
     if(function->return_type != rType)
@@ -437,7 +436,7 @@ void checkVoidReturn()
 
     if(func->return_type != FUNC_RETURN_TYPE_VOID)
     {
-        err("ERROR: cannot return a value from void function");
+        err("ERROR: cannot return void from non-void function");
     }
 
     return;
