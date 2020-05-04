@@ -79,7 +79,7 @@ extern char* slice_expressions(value* rvals, stmt_list_element* stmts);
 
 extern void print_intermediate_code (char* file_string);
 extern void init_first_stmt ();
-extern void add_to_stmt_list(stmt_list_element* stmt_list);
+extern void add_to_global_stmt_list(stmt_list_element* stmt_list);
 void print_statements (FILE *fp, int function_scope, stmt_list_element *first_element);
 void reverse_stmt_list ();
 

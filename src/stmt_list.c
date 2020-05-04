@@ -269,7 +269,25 @@ stmt_list_element* stmt_from_cond(value* cond_expr, stmt_list_element* true_list
     new_element->type = STMT_TYPE_COND;
     new_element->stmt.stmt_cond = init_stmt_cond();
     new_element->stmt.stmt_cond->cond_stmt_list = cond_list;
-    strcpy(new_element->stmt.stmt_cond->cond_id,  get_last_statement(cond_list)->stmt.stmt_expr->dest);
+
+    if(!strcmp(cond_expr->stmt_operator, ""))
+    {
+        if(cond_expr->valueType == VALUE_TYPE_SYMBOL)
+        {
+            strcpy(new_element->stmt.stmt_cond->cond_id, cond_expr->value.element->id);
+        }
+
+        if(cond_expr->valueType == VALUE_TYPE_VALUE)
+        {
+            char convert_arr[255];
+            sprintf(convert_arr, "%d", cond_expr->value.rval);
+            strcpy(new_element->stmt.stmt_cond->cond_id, convert_arr);
+        }
+    }
+    else
+    {
+        strcpy(new_element->stmt.stmt_cond->cond_id,  get_last_statement(cond_list)->stmt.stmt_expr->dest);
+    }
     reverse_stmt_list(&true_list);
     new_element->stmt.stmt_cond->true_list = true_list;
     if(false_list != NULL)
