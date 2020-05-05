@@ -30,7 +30,25 @@ stmt_list_element* stmt_from_expr(value* expr)
                 expressions->type = STMT_TYPE_EXPR;
 
                 // set stmt_expr details
-                strcpy(expressions->stmt.stmt_expr->dest, expr->value.element->id);
+                if(expr->valueType == VALUE_TYPE_SYMBOL)
+                {
+                    strcpy(expressions->stmt.stmt_expr->dest, expr->value.element->id);
+                }
+                else if(expr->valueType == VALUE_TYPE_ARR_ELEMENT)
+                {
+                    if(expr->index->valueType == VALUE_TYPE_VALUE)
+                    {
+                        sprintf(convert_arr, "%s[%d]", expr->value.element->id, expr->index->value.rval);
+                        strcpy(expressions->stmt.stmt_expr->dest, convert_arr);
+                    }
+                    else if (expr->index->valueType == VALUE_TYPE_SYMBOL)
+                    {
+                        sprintf(convert_arr, "%s[%s]", expr->value.element->id, expr->index->value.element->id);
+                        strcpy(expressions->stmt.stmt_expr->dest, convert_arr);
+                    }
+                }
+
+                // set operator
                 strcpy(expressions->stmt.stmt_expr->op, expr->stmt_operator);
 
                 // set operand1 of stmt_expr according to type of right side (var or num)
@@ -535,7 +553,7 @@ stmt_list_element* stmt_from_return(value* expr)
 {
     stmt_list_element* new_element = malloc(sizeof(stmt_list_element));
     stmt_list_element* return_stmt_list = stmt_from_expr(expr);
-    reverse_stmt_list(return_stmt_list);
+    reverse_stmt_list(&return_stmt_list);
 
     new_element->next = NULL;
     new_element->scope = numberOfScopes;

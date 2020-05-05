@@ -25,7 +25,7 @@ int						{ return INT; }
 ; 						{ return SEMICOLON; }
 (==)                    { return EQ; }
 (=)                     { return ASSIGN; }
-[||]                    { return LOGICAL_OR; }
+\|\|                      { return LOGICAL_OR; }
 (&&)                    { return LOGICAL_AND; }
 (!=)                    { return NE; }
 (<=)                    { return LSEQ; }
