@@ -789,15 +789,15 @@ void print_cond (FILE *fp, stmt_cond *stmt_cond, int function_scope)
 
     fprintf(fp, "if (%s)\n{\ngoto label%d;\n}\ngoto label%d;\n", stmt_cond->cond_id, true_label, false_label);
 
-    fprintf(fp, "label%d\n", true_label);
+    fprintf(fp, "label%d:\n", true_label);
     print_statements(fp, function_scope, stmt_cond->true_list);
     fprintf(fp, "goto label%d;\n", after_label);
 
-    fprintf(fp, "label%d\n", false_label);
+    fprintf(fp, "label%d:\n", false_label);
     print_statements(fp, function_scope, stmt_cond->false_list);
     fprintf(fp, "goto label%d;\n", after_label);
 
-    fprintf(fp, "label%d\n", after_label);
+    fprintf(fp, "label%d:\n", after_label);
 
 }
 
