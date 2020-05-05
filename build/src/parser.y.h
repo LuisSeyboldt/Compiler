@@ -30,8 +30,8 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-#ifndef YY_YY_HOME_VAGRANT_COMPILER_BUILD_SRC_PARSER_Y_H_INCLUDED
-# define YY_YY_HOME_VAGRANT_COMPILER_BUILD_SRC_PARSER_Y_H_INCLUDED
+#ifndef YY_YY_HOME_VAGRANT_GITHUB_COMPILER_BUILD_SRC_PARSER_Y_H_INCLUDED
+# define YY_YY_HOME_VAGRANT_GITHUB_COMPILER_BUILD_SRC_PARSER_Y_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 1
@@ -40,14 +40,14 @@
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 15 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1909  */
+#line 15 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1909  */
  #include "symbol_table.h" 
-#line 16 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1909  */
+#line 16 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1909  */
  #include "type_checks.h" 
-#line 17 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1909  */
+#line 17 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1909  */
  #include "stmt_list.h" 
 
-#line 51 "/home/vagrant/Compiler/build/src//parser.y.h" /* yacc.c:1909  */
+#line 51 "/home/vagrant/GitHub/Compiler/build/src//parser.y.h" /* yacc.c:1909  */
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -98,7 +98,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 19 "/home/vagrant/Compiler/src//parser.y" /* yacc.c:1909  */
+#line 19 "/home/vagrant/GitHub/Compiler/src//parser.y" /* yacc.c:1909  */
 
   int i;
   char *id;
@@ -109,7 +109,7 @@ union YYSTYPE
   value* pValue;
   stmt_list_element* stmt_list;
 
-#line 113 "/home/vagrant/Compiler/build/src//parser.y.h" /* yacc.c:1909  */
+#line 113 "/home/vagrant/GitHub/Compiler/build/src//parser.y.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -136,4 +136,4 @@ extern YYSTYPE yylval;
 extern YYLTYPE yylloc;
 int yyparse (void);
 
-#endif /* !YY_YY_HOME_VAGRANT_COMPILER_BUILD_SRC_PARSER_Y_H_INCLUDED  */
+#endif /* !YY_YY_HOME_VAGRANT_GITHUB_COMPILER_BUILD_SRC_PARSER_Y_H_INCLUDED  */

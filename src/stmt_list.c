@@ -552,49 +552,60 @@ stmt_list_element* stmt_from_loop(value* cond_expr, stmt_list_element* loop_list
 stmt_list_element* stmt_from_return(value* expr)
 {
     stmt_list_element* new_element = malloc(sizeof(stmt_list_element));
-    stmt_list_element* return_stmt_list = stmt_from_expr(expr);
-    reverse_stmt_list(&return_stmt_list);
+    
+    stmt_list_element* return_stmt_list = NULL;
+    
+    if (expr != NULL)
+    {
+        return_stmt_list = stmt_from_expr(expr);
+        reverse_stmt_list(&return_stmt_list);
+    }
 
     new_element->next = NULL;
     new_element->scope = numberOfScopes;
     new_element->type = STMT_TYPE_RETURN;
     new_element->stmt.stmt_return = init_stmt_return();
-    new_element->stmt.stmt_return->return_expr_list = return_stmt_list;
 
-    new_element->stmt.stmt_return->return_id = malloc(sizeof(char[255]));
-    char convert_arr[255];
-    if(!strcmp(expr->stmt_operator, ""))
+    if (expr != NULL)
     {
-        if(expr->valueType == VALUE_TYPE_SYMBOL)
+        new_element->stmt.stmt_return->return_expr_list = return_stmt_list;
+
+        new_element->stmt.stmt_return->return_id = malloc(sizeof(char[255]));
+        char convert_arr[255];
+        if(!strcmp(expr->stmt_operator, ""))
         {
-            strcpy(new_element->stmt.stmt_return->return_id, expr->value.element->id);
-        }
-        else if (expr->valueType == VALUE_TYPE_VALUE)
-        {
-            sprintf(convert_arr, "%d" ,expr->value.rval);
-            strcpy(new_element->stmt.stmt_return->return_id, convert_arr);
-        }
-        else if(expr->valueType == VALUE_TYPE_ARR_ELEMENT)
-        {
-            if(expr->index->valueType == VALUE_TYPE_VALUE)
+            if(expr->valueType == VALUE_TYPE_SYMBOL)
             {
-                sprintf(convert_arr, "%s[%d]", expr->value.element->id, expr->index->value.rval);
+                strcpy(new_element->stmt.stmt_return->return_id, expr->value.element->id);
+            }
+            else if (expr->valueType == VALUE_TYPE_VALUE)
+            {
+                sprintf(convert_arr, "%d" ,expr->value.rval);
                 strcpy(new_element->stmt.stmt_return->return_id, convert_arr);
             }
-            else if (expr->index->valueType == VALUE_TYPE_SYMBOL)
+            else if(expr->valueType == VALUE_TYPE_ARR_ELEMENT)
             {
-                sprintf(convert_arr, "%s[%s]", expr->value.element->id, expr->index->value.element->id);
-                strcpy(new_element->stmt.stmt_return->return_id, convert_arr);
+                if(expr->index->valueType == VALUE_TYPE_VALUE)
+                {
+                    sprintf(convert_arr, "%s[%d]", expr->value.element->id, expr->index->value.rval);
+                    strcpy(new_element->stmt.stmt_return->return_id, convert_arr);
+                }
+                else if (expr->index->valueType == VALUE_TYPE_SYMBOL)
+                {
+                    sprintf(convert_arr, "%s[%s]", expr->value.element->id, expr->index->value.element->id);
+                    strcpy(new_element->stmt.stmt_return->return_id, convert_arr);
+                }
+            }
+            else if(expr->valueType == VALUE_TYPE_FUNCTION_CALL)
+            {
+                copy_function_call(&new_element->stmt.stmt_return->return_id, expr);
             }
         }
-        else if(expr->valueType == VALUE_TYPE_FUNCTION_CALL)
+        else
         {
-            copy_function_call(&new_element->stmt.stmt_return->return_id, expr);
+            strcpy(new_element->stmt.stmt_return->return_id, get_last_statement(return_stmt_list)->stmt.stmt_expr->dest);
         }
-    }
-    else
-    {
-        strcpy(new_element->stmt.stmt_return->return_id, get_last_statement(return_stmt_list)->stmt.stmt_expr->dest);
+
     }
 
     return new_element;
