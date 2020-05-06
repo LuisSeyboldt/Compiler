@@ -86,7 +86,7 @@ void checkExpr(value* expr1, value* expr2)
         }
         else 
         {
-            err("ERROR: mismatched types");
+            yyerror("ERROR: mismatched types");
         }
         break;
     case VALUE_TYPE_ARR_ELEMENT:
@@ -94,7 +94,7 @@ void checkExpr(value* expr1, value* expr2)
         break; 
     
     default:
-        err("ERROR: unkown error");
+        yyerror("ERROR: unkown error");
         break;
     }
 }
@@ -105,7 +105,7 @@ void checkSingleExpr(value* expr)
     {
         if(expr->value.element->type == SYMBOL_TYPE_ARRAY)
         {
-            err("ERROR: Array not allowed here");
+            yyerror("ERROR: Array not allowed here");
         }
     }
 
@@ -113,7 +113,7 @@ void checkSingleExpr(value* expr)
     {
         if(expr->value.element->return_type == FUNC_RETURN_TYPE_VOID)
         {
-            err("ERROR: Return type void not allowed here");
+            yyerror("ERROR: Return type void not allowed here");
         }
     }
 
@@ -127,23 +127,23 @@ void checkRVal(value* expr1, value* expr2)
     {
         if(expr1->value.element == NULL)
         {
-            err("ERROR: Unknown variable");
+            yyerror("ERROR: Unknown variable");
         }
 
         if(expr1->value.element->type == SYMBOL_TYPE_ARRAY)
         {
-            err("ERROR: Array can not be assigned");
+            yyerror("ERROR: Array can not be assigned");
         }
     }
     if(expr2->valueType == VALUE_TYPE_SYMBOL)
     {
         if(expr2->value.element == NULL)
         {
-            err("ERROR: Unknown variable");
+            yyerror("ERROR: Unknown variable");
         }
         if(expr2->value.element->type == SYMBOL_TYPE_ARRAY)
         {
-            err("ERROR: Can not assign array");
+            yyerror("ERROR: Can not assign array");
         }
     }
 
@@ -152,14 +152,14 @@ void checkRVal(value* expr1, value* expr2)
     {
         if(expr1->value.element->return_type == FUNC_RETURN_TYPE_VOID)
         {
-            err("ERROR: Return type void not allowed here");
+            yyerror("ERROR: Return type void not allowed here");
         }
     }
     if(expr2->valueType == VALUE_TYPE_FUNCTION_CALL)
     {
         if(expr2->value.element->return_type == FUNC_RETURN_TYPE_VOID)
         {
-            err("ERROR: Return type void not allowed here");
+            yyerror("ERROR: Return type void not allowed here");
         }
     }
 
@@ -173,7 +173,7 @@ void caseLval(value* expr)
     {
         if(expr->value.element->return_type != FUNC_RETURN_TYPE_INT)
         {
-            err("ERROR: Return type void not allowed here");
+            yyerror("ERROR: Return type void not allowed here");
         }
         else
         {
@@ -192,7 +192,7 @@ void caseLval(value* expr)
         }
         else
         {
-            err("ERROR: Types do not match");
+            yyerror("ERROR: Types do not match");
         }
     }
     if (expr->valueType == VALUE_TYPE_ARR_ELEMENT)
@@ -205,7 +205,7 @@ void checkIfNotVoid(func_return_type type)
 {
     if(type == FUNC_RETURN_TYPE_VOID)
     {
-        err("ERROR: Type void not allowed here");
+        yyerror("ERROR: Type void not allowed here");
     }
 
     return;
@@ -216,21 +216,15 @@ void checkReturnType(func_return_type rType, char* id)
     symbol_table_element* function = get_element_in_namespace(id);
     if(function->type != SYMBOL_TYPE_FUNC)
     {
-        err("ERROR: No function with matching name");
+        yyerror("ERROR: No function with matching name");
     }
     
     if(function->return_type != rType)
     {
-        err("ERROR: declaration type does not match definition type");
+        yyerror("ERROR: declaration type does not match definition type");
     }
 
 } 
-
-void err(char* msg)
-{
-    fprintf(stderr,"%s", msg);
-    exit(1);
-}
 
 value* valueFromFunctionWithParameterList(char *id, value *firstParamListElement)
 {
@@ -259,7 +253,7 @@ value* valueFromFunctionWithParameterList(char *id, value *firstParamListElement
     // check if number matches function definition
     if (numberOfParamInCall != new_value->value.element->param_count)
     {
-        err ("Error: Number of parameters in function call does not match number of parameters of the called function!\n Aborting!\n");
+        yyerror ("Error: Number of parameters in function call does not match number of parameters of the called function!\n Aborting!\n");
     }
 
     // get first parameter
@@ -275,7 +269,7 @@ value* valueFromFunctionWithParameterList(char *id, value *firstParamListElement
         if (!compareParameters(currentDefiniedElement, currentCallElement) || 
         currentDefiniedElement->scope != new_value->value.element->function_scope)
         {
-            err ("Error: Parameter type of called function does not match parameter!\n Aborting!\n");
+            yyerror ("Error: Parameter type of called function does not match parameter!\n Aborting!\n");
         }
 
         if (currentDefiniedElement->next == NULL)
@@ -290,14 +284,6 @@ value* valueFromFunctionWithParameterList(char *id, value *firstParamListElement
             !currentDefiniedElement->next->isParam))
                 break;
         }
-
-        /*if (currentCallElement->next == 0 && 
-        (currentDefiniedElement->next->scope != new_value->value.element->function_scope || 
-        !currentDefiniedElement->next->isParam || 
-        currentDefiniedElement->next == NULL))
-        {
-            break;
-        }*/
 
         if (currentCallElement->next != 0 && currentDefiniedElement->next != 0)
         {
@@ -321,7 +307,7 @@ bool compareParameters (symbol_table_element *definiedParameter, value* callPara
         if (definiedParameter->type == SYMBOL_TYPE_VAR && definiedParameter->isParam)
             return true;
         else 
-            err("Error: RVAL cannot be assigned to non int parameter in function call!\n Aborting!\n");
+            yyerror("Error: RVAL cannot be assigned to non int parameter in function call!\n Aborting!\n");
     }
 
     if (callParameter->valueType == VALUE_TYPE_FUNCTION_CALL)
@@ -331,7 +317,7 @@ bool compareParameters (symbol_table_element *definiedParameter, value* callPara
             definiedParameter->isParam)
             return true;
         else 
-            err("Error: Function return value is incompatible with parameter!\n Aborting!\n");
+            yyerror("Error: Function return value is incompatible with parameter!\n Aborting!\n");
     }
 
     if (callParameter->valueType == VALUE_TYPE_ARR_ELEMENT)
@@ -340,7 +326,7 @@ bool compareParameters (symbol_table_element *definiedParameter, value* callPara
             definiedParameter->isParam)
             return true;
         else 
-            err ("Error: Array element type does not match parameter type!\n Aborting!\n");
+            yyerror ("Error: Array element type does not match parameter type!\n Aborting!\n");
     }
 
     if (definiedParameter->type == callParameter->value.element->type &&
@@ -395,7 +381,7 @@ void checkFuncReturn(value* returnExpr)
     symbol_table_element* func = get_function_from_scope(numberOfScopes);
     if(func == NULL)
     {
-        err("ERROR: Function not found");
+        yyerror("ERROR: Function not found");
     }
 
     // return value is array element or rValue
@@ -403,7 +389,7 @@ void checkFuncReturn(value* returnExpr)
     {
         if(func->return_type != FUNC_RETURN_TYPE_INT)
         {
-            err("ERROR: function return type does not match return value");
+            yyerror("ERROR: function return type does not match return value");
         }
     }
 
@@ -413,7 +399,7 @@ void checkFuncReturn(value* returnExpr)
         //array
         if(returnExpr->value.element->type == SYMBOL_TYPE_ARRAY)
         {
-            err("ERROR: cannot return a array");
+            yyerror("ERROR: cannot return a array");
         }
 
         // var
@@ -421,7 +407,7 @@ void checkFuncReturn(value* returnExpr)
         {
             if(func->return_type != FUNC_RETURN_TYPE_INT)
             {
-                err("ERROR: function return type does not match return value");
+                yyerror("ERROR: function return type does not match return value");
             }
         }
     }
@@ -436,12 +422,12 @@ void checkVoidReturn()
 
     if(func == NULL)
     {
-        err("ERROR: function not found");
+        yyerror("ERROR: function not found");
     }
 
     if(func->return_type != FUNC_RETURN_TYPE_VOID)
     {
-        err("ERROR: cannot return void from non-void function");
+        yyerror("ERROR: cannot return void from non-void function");
     }
 
     return;
@@ -454,14 +440,14 @@ void checkParams(char* id, value* params)
     symbol_table_element* func = get_element_in_namespace(id);
     if(func == NULL)
     {
-        err("ERROR: function not found");
+        yyerror("ERROR: function not found");
     }
 
     value* currentCallParam = params;
     symbol_table_element* currentFuncParam = func->next;
     if(currentFuncParam == NULL || !currentFuncParam->isParam)
     {
-        err("ERROR: function has no parameters");
+        yyerror("ERROR: function has no parameters");
     }
 
     for(int i = 0; i < func->param_count; i++)
@@ -471,14 +457,14 @@ void checkParams(char* id, value* params)
         {
             if(currentCallParam->value.element->type != currentFuncParam->type)
             {
-                err("ERROR: function call parameters types do not match function declaration");
+                yyerror("ERROR: function call parameters types do not match function declaration");
             }
 
             if(currentFuncParam->type == SYMBOL_TYPE_ARRAY)
             {
                 if(currentCallParam->value.element->length != currentFuncParam->length)
                 {
-                    err("ERROR: array parameter size does not match function declaration");
+                    yyerror("ERROR: array parameter size does not match function declaration");
                 }
             }
 
@@ -488,13 +474,13 @@ void checkParams(char* id, value* params)
                 // function has no more parameters but there are more call arguments
                 if(!currentFuncParam->next->isParam && currentCallParam->next != NULL)
                 {
-                    err("ERROR: mismatched number of parameters");
+                    yyerror("ERROR: mismatched number of parameters");
                 }
 
                 // function has another parameter, but there are no more call parameters
                 if(currentFuncParam->next->isParam && currentCallParam->next == NULL)
                 {
-                    err("ERROR: mismatched number of parameters");
+                    yyerror("ERROR: mismatched number of parameters");
                 }
 
                 // set current params to next params
@@ -508,7 +494,7 @@ void checkParams(char* id, value* params)
             {
                 if(currentCallParam->next != NULL)
                 {
-                    err("ERROR: mismatched number of parameters");
+                    yyerror("ERROR: mismatched number of parameters");
                 }
             }
         }
@@ -517,7 +503,7 @@ void checkParams(char* id, value* params)
         {
             if(currentFuncParam->type != SYMBOL_TYPE_VAR)
             {
-                err("ERROR: function call parameters types do not match function declaration");
+                yyerror("ERROR: function call parameters types do not match function declaration");
             }
         }
     }
@@ -528,11 +514,11 @@ void checkZeroParams(char* id)
     symbol_table_element* func = get_element_in_namespace(id);
     if(func == NULL)
     {
-        err("ERROR: function not found");
+        yyerror("ERROR: function not found");
     }
 
     if(func->param_count != 0)
     {
-        err("ERROR: function declaration defines no parameters");
+        yyerror("ERROR: function declaration defines no parameters");
     }
 }
