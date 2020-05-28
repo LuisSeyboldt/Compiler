@@ -248,10 +248,11 @@ void copy_function_call(char** destination, value* function_call)
                     strcat(function_call_name, ", ");
                 }
 
-                char tmp[255]; 
+                char* tmp = malloc(sizeof(char[255])); 
                 copy_function_call(&tmp, current_element);
                 strcat(function_call_name, tmp);
                 isFirst = false;
+                free(tmp);
             }
         }
     }
@@ -260,7 +261,7 @@ void copy_function_call(char** destination, value* function_call)
 
 char* slice_expressions(value* rvals, stmt_list_element* stmts)
 {
-    static int numberOfTmps = 0;
+    //static int numberOfTmps = 0;
     char convert_arr[255];
     char tmp_name[255];
     strcpy(tmp_name, "temp_");

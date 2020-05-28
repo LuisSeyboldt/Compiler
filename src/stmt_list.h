@@ -64,6 +64,7 @@ typedef struct stmt_expr_struct
 
 stmt_list_element first_stmt;
 extern int label_counter;
+extern int numberOfTmps;
 
 extern stmt_expr* init_stmt_expr();
 extern void add_to_list(stmt_list_element* list, stmt_list_element* element);
