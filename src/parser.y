@@ -7,9 +7,11 @@
      int yylex();
 	// System includes
 	#include <stdbool.h>
+     #include <stdlib.h>
 	
 	// Project-specific includes
 	#include "diag.h"
+     #include "parser.y.h"
 %}
 
 %code requires { #include "symbol_table.h" }
@@ -232,4 +234,5 @@ bool jumpBack = false;
 void yyerror (const char *msg)
 {
 	COMPILER_ERROR(INVALID_SYNTAX, 0, "(%d.%d-%d.%d): %s\n", yylloc.first_line, yylloc.first_column, yylloc.last_line, yylloc.last_column, msg);
+     exit(1);
 }

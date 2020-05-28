@@ -5,6 +5,16 @@
 %{
 	// Project-specific includes
 	#include "parser.y.h"
+
+	int column = 0;
+
+	#define YY_USER_ACTION { \
+		yylloc.first_line = yylineno; \
+		yylloc.last_line = yylineno; \
+		yylloc.first_column = column; \
+		yylloc.last_column = column + yyleng - 1; \
+		column += yyleng; \
+	}
 %}
 
 /* 
@@ -21,11 +31,12 @@
 
 %%
 
+\n 						{ column = 0; }
 int						{ return INT; }
 ; 						{ return SEMICOLON; }
 (==)                    { return EQ; }
 (=)                     { return ASSIGN; }
-\|\|                      { return LOGICAL_OR; }
+\|\|                    { return LOGICAL_OR; }
 (&&)                    { return LOGICAL_AND; }
 (!=)                    { return NE; }
 (<=)                    { return LSEQ; }
