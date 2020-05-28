@@ -166,6 +166,15 @@ stmt_list_element* stmt_from_expr(value* expr)
             }
 
         }
+        else
+        {
+            if(expr->valueType == VALUE_TYPE_FUNCTION_CALL)
+            {
+                strcpy(expressions->stmt.stmt_expr->op, "func");
+                copy_function_call(&expressions->stmt.stmt_expr->dest, expr);
+                expressions->type = STMT_TYPE_EXPR;
+            }
+        }
     }
 
     reverse_stmt_list(&expressions);
