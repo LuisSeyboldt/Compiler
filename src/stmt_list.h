@@ -83,6 +83,6 @@ extern void init_first_stmt ();
 extern void add_to_global_stmt_list(stmt_list_element* stmt_list);
 void copy_function_call(char** destination, value* function_call);
 void print_statements (FILE *fp, int function_scope, stmt_list_element *first_element);
-void reverse_stmt_list ();
+extern void reverse_stmt_list ();
 
 #endif
