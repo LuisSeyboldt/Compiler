@@ -740,6 +740,8 @@ void print_stmt_expr (FILE *fp, stmt_expr* stmt_expr)
     // print function call
     if (!strcmp(stmt_expr->op, "func"))
         fprintf (fp, "%s;\n", stmt_expr->dest);
+    else 
+    {
 
     if (strcmp(stmt_expr->operand2, "") && strcmp(stmt_expr->op, "") && strcmp(stmt_expr->op, "="))
         fprintf (fp, "%s = %s %s %s;\n", stmt_expr->dest, stmt_expr->operand1, stmt_expr->op, stmt_expr->operand2);
@@ -749,6 +751,8 @@ void print_stmt_expr (FILE *fp, stmt_expr* stmt_expr)
 
     if (!strcmp(stmt_expr->operand2, "") && strcmp(stmt_expr->op, "") && !strcmp(stmt_expr->op, "="))
         fprintf (fp, "%s = %s;\n", stmt_expr->dest, stmt_expr->operand1);
+        
+    }
 
 }
 
