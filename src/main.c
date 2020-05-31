@@ -8,6 +8,7 @@
 #include "main.h"
 #include "symbol_table.h"
 #include "stmt_list.h"
+#include "machinecode.h"
 
 /* Constants */
 static const char *C_EXT = ".c";
@@ -281,6 +282,8 @@ int main (int argc, char *argv[]) {
 
   if (cc_options.ir_file != NULL)
     print_intermediate_code(cc_options.ir_file);
+
+  print_machine_code(cc_options.output_file);
 
   rm_cleanup_resources(&resource_mgr);
   cleanMem();
