@@ -276,6 +276,10 @@ char* slice_expressions(value* rvals, stmt_list_element* stmts)
         new_stmt->scope = numberOfScopes;
         new_stmt->type = STMT_TYPE_TMP_DEC;
 
+        // get the function that is currently parsed and increment the number of temporary elements
+        symbol_table_element *function = get_function_from_scope(numberOfScopes);
+        function->numberOfTmpVars++;
+
         // create new tmp statement
         // set destination to new tmp var
         sprintf(convert_arr, "%d", numberOfTmps);

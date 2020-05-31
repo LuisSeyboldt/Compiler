@@ -34,6 +34,7 @@ typedef struct symbol_table_struct
     unsigned int param_count; // parameter count of the function
     int function_scope;
     bool definied;
+    int numberOfTmpVars;
 
     int scope; // scope of the symbol (0 is global)
 

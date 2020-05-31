@@ -90,6 +90,7 @@ void add_fun (char* id, func_return_type rtype, unsigned int param_count, bool d
     new_symbol->definied = definition;
     new_symbol->function_scope = numberOfScopes;
     new_symbol->isParam = false;
+    new_symbol->numberOfTmpVars = 0;
 
     // if the element is already in the namsepace: do not add to symbol table 
     /*if (element_in_namespace(new_symbol))
@@ -442,6 +443,9 @@ void print_symbol_table (int scope)
 
                 fprintf(fp, "Parameter count: %d\n", currentElement->param_count);
                 fprintf(stderr, "Parameter count: %d\n", currentElement->param_count);
+                
+                fprintf(fp, "Number of temporary variables: %d\n", currentElement->numberOfTmpVars);
+                fprintf(stderr, "Number of temporary variables: %d\n", currentElement->numberOfTmpVars);
                 break;
 
                 case SYMBOL_TYPE_ARRAY:
