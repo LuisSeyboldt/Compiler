@@ -363,6 +363,7 @@ char* slice_expressions(value* rvals, stmt_list_element* stmts)
         }
         else // recursive call
         {
+            // init tmp value for recursive call
             value* tmp_value = malloc(sizeof(value)); 
             tmp_value->isTemp = true;
             tmp_value->next = NULL;
@@ -471,6 +472,7 @@ stmt_list_element* stmt_from_cond(value* cond_expr, stmt_list_element* true_list
     new_element->stmt.stmt_cond->cond_stmt_list = cond_list;
     char convert_arr[255];
 
+    // copy values in new stmt_list_element
     if(!strcmp(cond_expr->stmt_operator, ""))
     {
         if(cond_expr->valueType == VALUE_TYPE_SYMBOL)
@@ -530,6 +532,7 @@ stmt_list_element* stmt_from_loop(value* cond_expr, stmt_list_element* loop_list
     new_element->stmt.stmt_loop->cond_stmt_list = cond_list;
     char convert_arr[255];
 
+    // copy values in new stmt_list_element
     if(!strcmp(cond_expr->stmt_operator, ""))
     {
         if(cond_expr->valueType == VALUE_TYPE_SYMBOL)
@@ -587,6 +590,7 @@ stmt_list_element* stmt_from_return(value* expr)
     new_element->type = STMT_TYPE_RETURN;
     new_element->stmt.stmt_return = init_stmt_return();
 
+    // copy values in new stmt_list_element
     if (expr != NULL)
     {
         new_element->stmt.stmt_return->return_expr_list = return_stmt_list;
