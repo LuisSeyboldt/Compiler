@@ -665,13 +665,17 @@ void set_expr_details (char* op, value* currentExpr, value* nextExpr)
     curr->next_expr = nextExpr;
 }
 
+// prints the function header
 void print_function_header (FILE *fp, symbol_table_element *currentElement)
 {
+
+    // check what return type a function has
     if (currentElement->return_type == FUNC_RETURN_TYPE_INT)
         fprintf(fp, "int ");
     if (currentElement->return_type == FUNC_RETURN_TYPE_VOID)
         fprintf(fp, "void ");
 
+    // print the function name
     fprintf (fp, "%s (", currentElement->id);
     
     // print param list if there are any
@@ -685,6 +689,7 @@ void print_function_header (FILE *fp, symbol_table_element *currentElement)
         while (true)
         {
 
+            // don't print anything if there are no parameters 
             if (currentDefiniedElement->isParam == false)
                 break;
             
@@ -717,6 +722,7 @@ void print_function_header (FILE *fp, symbol_table_element *currentElement)
 
 }
 
+// print all global variables
 void print_global_elements(FILE *fp)
 {
     symbol_table_element *currentElement = &first_element;
@@ -755,6 +761,8 @@ void print_global_elements(FILE *fp)
     }
 }
 
+// prints a stmt_expr
+// this is either a function call, an assignment or a calculation
 void print_stmt_expr (FILE *fp, stmt_expr* stmt_expr)
 {
 
@@ -777,19 +785,23 @@ void print_stmt_expr (FILE *fp, stmt_expr* stmt_expr)
 
 }
 
+// prints a while loop
 void print_while_loop (FILE *fp, stmt_loop* stmt_loop, int function_scope)
 {
 
+    // counter for the lables that are used
     int top_label = label_counter++;
     int loop_body = label_counter++;
     int after_loop = label_counter++;
 
     fprintf(fp, "label%d:\n", top_label);
+    // prints all statements that are used for the calculation of the loop condition
     print_statements(fp, function_scope, stmt_loop->cond_stmt_list);
 
     fprintf(fp, "if (%s)\n{\ngoto label%d;\n}\ngoto label%d;\n", stmt_loop->cond_id, loop_body, after_loop);
     
     fprintf(fp, "label%d:\n", loop_body);
+    // prints all statements in the loop
     print_statements(fp, function_scope, stmt_loop->loop_list);
     fprintf(fp, "goto label%d;\n", top_label);
     
@@ -797,9 +809,11 @@ void print_while_loop (FILE *fp, stmt_loop* stmt_loop, int function_scope)
 
 }
 
+// print do while loop
 void print_do_while_loop (FILE *fp, stmt_loop* stmt_loop, int function_scope)
 {
 
+    // counter for the lables that are used
     int loop_body = label_counter++;
     int cond_label = label_counter++;
     int after_loop = label_counter++;
@@ -821,8 +835,10 @@ void print_do_while_loop (FILE *fp, stmt_loop* stmt_loop, int function_scope)
 void print_cond (FILE *fp, stmt_cond *stmt_cond, int function_scope)
 {
 
+    // prints all statements that are used for the calculation of the if condition
     print_statements(fp, function_scope, stmt_cond->cond_stmt_list);
 
+    // counter for the lables that are used
     int true_label = label_counter++;
     int false_label = label_counter++;
     int after_label = label_counter++;
@@ -841,6 +857,7 @@ void print_cond (FILE *fp, stmt_cond *stmt_cond, int function_scope)
 
 }
 
+// this function can print any type of statement
 void print_statements (FILE *fp, int function_scope, stmt_list_element *first_stmt_of_block)
 {
 
@@ -898,6 +915,7 @@ void print_statements (FILE *fp, int function_scope, stmt_list_element *first_st
 
 }
 
+// print local variables of a function
 void print_local_variables (FILE *fp, int function_scope)
 {
 
@@ -930,6 +948,7 @@ void print_local_variables (FILE *fp, int function_scope)
 
 }
 
+// prints all function
 void print_functions (FILE *fp)
 {
 
@@ -966,6 +985,7 @@ void print_functions (FILE *fp)
 
 }
 
+// print intermediate code
 void print_intermediate_code (char* file_string)
 {
 
@@ -1007,6 +1027,7 @@ void add_to_global_stmt_list(stmt_list_element* stmt_list)
     }
 }
 
+// concatenates statements
 void string_statements_together(stmt_list_element* stmt_list, stmt_list_element* stmt)
 {
     stmt_list_element* current_element = stmt_list;
@@ -1039,6 +1060,7 @@ stmt_list_element* create_empty_stmt ()
 
 }
 
+// reverses a given statements list
 void reverse_stmt_list (stmt_list_element **head_ref)
 {
     stmt_list_element *prev = NULL;

@@ -34,11 +34,12 @@ symbol_table_element* init_sbl (char* id, int length, symbol_type type)
 //add symbol to symbol table
 void add_sbl(symbol_table_element* symbol, bool isLocal, bool isParam)
 {
+    // sets the correct function scope if the symbol is local
     if(isLocal)
     {
         set_scope(symbol, numberOfScopes, isParam);
     }
-    else
+    else // otherwise the global scope is set
     {
         set_scope(symbol, 0, isParam);
     }
@@ -52,6 +53,7 @@ void add_sbl(symbol_table_element* symbol, bool isLocal, bool isParam)
         exit(1);
     }
 
+    // the element is appended to the symbol table
     symbol_table_element *last = get_last_table_element();
     last->next = symbol;
 
@@ -77,7 +79,7 @@ void set_scope(symbol_table_element* symbols, int scope, bool isParam)
     return;
 }
 
-//add functio to symbol table
+//add function to symbol table
 void add_fun (char* id, func_return_type rtype, unsigned int param_count, bool definition)
 {
     symbol_table_element *new_symbol;
@@ -94,14 +96,6 @@ void add_fun (char* id, func_return_type rtype, unsigned int param_count, bool d
     new_symbol->function_scope = numberOfScopes;
     new_symbol->isParam = false;
     new_symbol->numberOfTmpVars = 0;
-
-    // if the element is already in the namsepace: do not add to symbol table 
-    /*if (element_in_namespace(new_symbol))
-    {
-        fprintf(stderr, "Duplicate definition of function!\n");
-        free(new_symbol);
-        exit(1);
-    }*/
 
     // if definition: check for existing entries
         // if definition exists: error duplicate definition
@@ -149,14 +143,19 @@ void add_fun (char* id, func_return_type rtype, unsigned int param_count, bool d
         }
     }
 
+    // append the symbol to the symbol table
     symbol_table_element *last = get_last_table_element();
     last->next = new_symbol;
 
-    //print_all_symbol_tables();
 }
 
+// this function deletes all elements of a specified scope
 void delete_elements_of_scope (int scope)
 {
+
+    // two iterators are needed: one for the current element and one for the previous element
+    // when the current element is deleted the next element is appended to the previous one 
+    // to ensure that the linked list stays intact
     symbol_table_element *currentElement = &first_element, *prev = 0;
 
     while (true)
@@ -266,7 +265,7 @@ symbol_table_element *get_last_table_element()
 
 }
 
-extern bool element_in_namespace_scope (symbol_table_element *element, int scope)
+bool element_in_namespace_scope (symbol_table_element *element, int scope)
 {
 
     symbol_table_element *currentElement = &first_element;
@@ -308,6 +307,7 @@ bool element_in_namespace(symbol_table_element *element)
 
 }
 
+// gets the symbol table element for an id
 symbol_table_element *get_element_in_namespace (char* id)
 {
 
@@ -315,6 +315,8 @@ symbol_table_element *get_element_in_namespace (char* id)
 
     while (true)
     {
+
+        // only check an elememt id if it has a value
         if(currentElement->id != 0)
         {
             if (!strcmp(id, currentElement->id))
@@ -324,11 +326,12 @@ symbol_table_element *get_element_in_namespace (char* id)
             }
         }
 
-            if (currentElement->next == 0)
-                return NULL;
+        // iterate through the symbol table
+        if (currentElement->next == 0)
+            return NULL;
 
-            if (currentElement->next != 0)
-                currentElement = currentElement->next; 
+        if (currentElement->next != 0)
+            currentElement = currentElement->next; 
 
     }
     
@@ -337,6 +340,7 @@ symbol_table_element *get_element_in_namespace (char* id)
 
 }
 
+// get the function element with a specified scope
 symbol_table_element* get_function_from_scope (int scope)
 {
     symbol_table_element *currentElement = &first_element;
@@ -366,20 +370,24 @@ symbol_table_element* get_function_from_scope (int scope)
     return NULL;
 }
 
+// print all symbol tables
 void print_all_symbol_tables()
 {
     for (int i = 0; i < numberOfScopes; i++)
         print_symbol_table (i);
 }
 
+// print a symbol table with a specified scope
 void print_symbol_table (int scope)
 {
 
+    // only print the table if it has elements
     if (!scope_has_elements(scope))
         return;
 
     symbol_table_element *currentElement = &first_element;
     
+    // create new file for the symbol table
     FILE *fp = 0;
     
     char fileString[128];
@@ -607,6 +615,7 @@ bool scope_has_elements(int scope)
     return false;
 }
 
+// get elemnt with specified id in a specified scope
 symbol_table_element *get_element_in_scope(char *id, int scope)
 {
 
@@ -623,11 +632,11 @@ symbol_table_element *get_element_in_scope(char *id, int scope)
             }
         }
 
-            if (currentElement->next == 0)
-                return NULL;
+        if (currentElement->next == 0)
+            return NULL;
 
-            if (currentElement->next != 0)
-                currentElement = currentElement->next; 
+        if (currentElement->next != 0)
+            currentElement = currentElement->next; 
 
     }
     
