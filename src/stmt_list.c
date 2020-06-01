@@ -194,14 +194,19 @@ void copy_function_call(char** destination, value* function_call)
     while(true)
     {
         if(current_element->next == NULL)
-        {
+        {   
+            //copy last element
             strcat(function_call_name, ")");
             strcpy(*(destination), function_call_name);
+            //leave after last element
             break;
         }
         else
-        {
+        {   
+            //copy n-1 elements
+
             current_element = current_element->next;
+            //check different types and copy
             if(current_element->valueType == VALUE_TYPE_SYMBOL)
             {
                 if(!isFirst)
@@ -429,11 +434,13 @@ stmt_loop* init_stmt_loop()
 void add_to_list(stmt_list_element* list, stmt_list_element* element)
 {
     stmt_list_element* current_element = list;
+    //skip to the end of the list
     while(current_element->next != NULL)
     {
         current_element = current_element->next;
     }
 
+    //insert at the end of the list
     if(current_element->next == NULL)
     {
         current_element->next = element;

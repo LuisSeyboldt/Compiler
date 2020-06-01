@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+//create parameter list
 parameter_list* init_param_list(int paramCount, symbol_table_element* symbols)
 {
     parameter_list* new_param_list = malloc(sizeof(parameter_list));
@@ -11,6 +12,7 @@ parameter_list* init_param_list(int paramCount, symbol_table_element* symbols)
     return new_param_list;
 }
 
+//create symbol tabel element
 symbol_table_element* init_sbl (char* id, int length, symbol_type type)
 {
     symbol_table_element *new_symbol;
@@ -29,6 +31,7 @@ symbol_table_element* init_sbl (char* id, int length, symbol_type type)
     return new_symbol;
 }
 
+//add symbol to symbol table
 void add_sbl(symbol_table_element* symbol, bool isLocal, bool isParam)
 {
     if(isLocal)
@@ -74,7 +77,7 @@ void set_scope(symbol_table_element* symbols, int scope, bool isParam)
     return;
 }
 
-
+//add functio to symbol table
 void add_fun (char* id, func_return_type rtype, unsigned int param_count, bool definition)
 {
     symbol_table_element *new_symbol;
@@ -241,6 +244,7 @@ symbol_table_element* check_for_existing_function(symbol_table_element* new_func
     return 0;
 }
 
+//get last symbol table element
 symbol_table_element *get_last_table_element()
 {
 
@@ -248,7 +252,7 @@ symbol_table_element *get_last_table_element()
     
     do 
     {
-
+        //next element=last element?
         if (currentElement->next != 0)
             currentElement = currentElement->next;
 

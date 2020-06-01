@@ -1,6 +1,8 @@
 #include "type_checks.h"
 #include "symbol_table.h"
 
+//pointer on values from various types
+
 value* valueFromSbl(symbol_table_element* sbl)
 {
     value* new_val = malloc(sizeof(value));
@@ -201,6 +203,7 @@ void caseLval(value* expr)
     }
 }
 
+//check for return type void
 void checkIfNotVoid(func_return_type type)
 {
     if(type == FUNC_RETURN_TYPE_VOID)
@@ -211,6 +214,7 @@ void checkIfNotVoid(func_return_type type)
     return;
 }
 
+//check return type of function
 void checkReturnType(func_return_type rType, char* id)
 {
     symbol_table_element* function = get_element_in_namespace(id);
@@ -299,6 +303,7 @@ value* valueFromFunctionWithParameterList(char *id, value *firstParamListElement
 
 }
 
+//compare type of values and parameters
 bool compareParameters (symbol_table_element *definiedParameter, value* callParameter)
 {
 
@@ -337,6 +342,7 @@ bool compareParameters (symbol_table_element *definiedParameter, value* callPara
 
 }
 
+//copy function parameter
 value* allocFunctionParameter (value* someValue)
 {
     value *valuePtr = malloc (sizeof(someValue));
@@ -364,6 +370,7 @@ void cleanFunctionParameterMemory (value *firstFunctionCallParameter)
         }
         else
         {
+            //clean the last existing element
             if (current_element != NULL)
             {
                 free(current_element);
@@ -445,6 +452,8 @@ void checkParams(char* id, value* params)
 
     value* currentCallParam = params;
     symbol_table_element* currentFuncParam = func->next;
+
+    //check availability of parameters
     if(currentFuncParam == NULL || !currentFuncParam->isParam)
     {
         yyerror("ERROR: function has no parameters");
@@ -509,6 +518,7 @@ void checkParams(char* id, value* params)
     }
 }
 
+//check for null parameters
 void checkZeroParams(char* id)
 {
     symbol_table_element* func = get_element_in_namespace(id);
